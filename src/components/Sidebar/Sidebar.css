@@ -107,3 +107,12 @@
   font-size: 13px;
   font-weight: 600;
 }
+
+.menu-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.menu-link li {
+  list-style: none;
+}

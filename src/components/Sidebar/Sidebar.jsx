@@ -14,6 +14,8 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 
+import { Link } from "react-router-dom";
+
 export default function Sidebar() {
   return (
     <div className="sidebar">
@@ -28,48 +30,63 @@ export default function Sidebar() {
         </div>
 
         <ul className="menu">
-          <li className="active">
-            <FiGrid /> Dashboard
+          <li>
+            <Link to="/dashboard" className="menu-link">
+              <FiGrid />
+              Dashboard
+            </Link>
           </li>
 
           <li>
-            <FiUsers /> Employees
+            <Link to="/employees" className="menu-link">
+              <FiUsers />
+              Employees
+            </Link>
           </li>
 
           <li>
-            <FiCalendar /> Attendance
+            <FiCalendar />
+            Attendance
           </li>
 
           <li>
-            <FiCalendar /> Leave Management
+            <FiCalendar />
+            Leave Management
           </li>
 
           <li>
-            <FiDollarSign /> Payroll
+            <FiDollarSign />
+            Payroll
           </li>
 
           <li>
-            <FiShield /> Roles & Permissions
+            <FiShield />
+            Roles & Permissions
           </li>
 
           <li>
-            <FiBarChart2 /> Reports & Analytics
+            <FiBarChart2 />
+            Reports & Analytics
           </li>
 
           <li>
-            <FiFileText /> Documents
+            <FiFileText />
+            Documents
           </li>
 
           <li>
-            <FiBriefcase /> Recruitment
+            <FiBriefcase />
+            Recruitment
           </li>
 
           <li>
-            <FiWifi /> Biometric Sync
+            <FiWifi />
+            Biometric Sync
           </li>
 
           <li>
-            <FiSettings /> Settings
+            <FiSettings />
+            Settings
           </li>
         </ul>
       </div>

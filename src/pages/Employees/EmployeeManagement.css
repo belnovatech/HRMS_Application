@@ -1,0 +1,347 @@
+/* =========================
+   PAGE
+========================= */
+
+.employee-page {
+  padding: 18px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.employee-header {
+  margin-bottom: 18px;
+}
+
+.employee-header p {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.employee-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 18px;
+
+  border: 1px solid #e5e7eb;
+}
+
+.toolbar .search-box {
+  width: 320px;
+  height: 42px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 12px;
+
+  background: #fff;
+}
+
+.toolbar .search-box svg {
+  color: #6b7280;
+}
+
+.toolbar .search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  font-size: 13px;
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.toolbar-right select {
+  height: 42px;
+  padding: 0 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  background: white;
+  cursor: pointer;
+}
+
+.filter-btn,
+.export-btn,
+.add-btn {
+  height: 42px;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 16px;
+
+  border-radius: 10px;
+  cursor: pointer;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.filter-btn {
+  background: #f3f4f6;
+}
+
+.export-btn {
+  background: #f3f4f6;
+}
+
+.add-btn {
+  background: #1677ff;
+  color: white;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.employee-table {
+  background: white;
+
+  border-radius: 16px;
+  overflow: hidden;
+
+  border: 1px solid #e5e7eb;
+}
+
+.employee-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table thead {
+  background: #f9fafb;
+}
+
+.employee-table th {
+  text-align: left;
+  padding: 16px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: #6b7280;
+}
+
+.employee-table td {
+  padding: 16px;
+  border-top: 1px solid #f1f5f9;
+
+  font-size: 13px;
+  color: #374151;
+}
+
+/* =========================
+   EMPLOYEE INFO
+========================= */
+
+.employee-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.employee-info .avatar {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.employee-info h4 {
+  font-size: 14px;
+  margin-bottom: 2px;
+  color: #111827;
+}
+
+.employee-info span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status {
+  padding: 6px 12px;
+  border-radius: 30px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.active {
+  background: #ecfdf3;
+  color: #16a34a;
+}
+
+.status.inactive {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.status.on-leave {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.actions svg {
+  cursor: pointer;
+  font-size: 16px;
+  color: #6b7280;
+  transition: 0.2s;
+}
+
+.actions svg:hover {
+  color: #1677ff;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.table-footer {
+  padding: 16px 20px;
+
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-footer span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination button {
+  width: 36px;
+  height: 36px;
+
+  border: 1px solid #d1d5db;
+  background: white;
+
+  border-radius: 8px;
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+.pagination button.active {
+  background: #1677ff;
+  color: white;
+  border-color: #1677ff;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+
+  .toolbar {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .toolbar .search-box {
+    width: 100%;
+  }
+
+  .toolbar-right {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .employee-page {
+    padding: 10px;
+  }
+
+  .employee-header h2 {
+    font-size: 20px;
+  }
+
+  .employee-table {
+    overflow-x: auto;
+  }
+
+  .employee-table table {
+    min-width: 1000px;
+  }
+
+  .table-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .toolbar-right {
+    width: 100%;
+  }
+
+  .toolbar-right button,
+  .toolbar-right select {
+    flex: 1;
+  }
+}

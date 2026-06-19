@@ -1,0 +1,380 @@
+/* =========================
+   PAGE
+========================= */
+
+.add-employee-page {
+  padding: 20px 30px;
+  background: #f5f7fb;
+  min-height: calc(100vh - 70px);
+}
+
+.page-title {
+  margin-bottom: 18px;
+}
+
+.page-title p {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.page-title h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.employee-form-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* =========================
+   STEPPER
+========================= */
+
+.stepper-card {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 32px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+}
+
+.step-item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.step-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 19px;
+  left: 62%;
+  width: 76%;
+  height: 2px;
+  background: #dbe3ef;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: white;
+  color: #6b7280;
+
+  font-weight: 700;
+
+  margin: auto;
+  margin-bottom: 8px;
+
+  position: relative;
+  z-index: 2;
+}
+
+.step-circle.active {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.step-circle.completed {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.step-item span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.step-circle.active + span,
+.step-circle.completed + span {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* =========================
+   FORM CARD
+========================= */
+
+.form-card {
+  background: white;
+
+  max-width: 1100px;
+  margin: 0 auto 24px;
+
+  border-radius: 20px;
+  padding: 32px;
+
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
+}
+
+.form-card h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+
+  margin-bottom: 28px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grid label {
+  margin-bottom: 8px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #6b7280;
+}
+
+.form-grid input,
+.form-grid select {
+  width: 100%;
+  height: 52px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+
+  padding: 0 16px;
+
+  font-size: 14px;
+  background: white;
+
+  outline: none;
+  transition: 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #2563eb;
+}
+
+/* =========================
+   DOCUMENTS
+========================= */
+
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 20px;
+}
+
+.upload-box {
+  min-height: 150px;
+
+  border: 2px dashed #d7dde7;
+  border-radius: 18px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  transition: .2s;
+}
+
+.upload-box:hover {
+  border-color: #2563eb;
+  background: #f8fbff;
+}
+
+.upload-box svg {
+  font-size: 34px;
+  color: #9ca3af;
+  margin-bottom: 12px;
+}
+
+.upload-box span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* =========================
+   REVIEW
+========================= */
+
+.review-box {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.review-box p {
+  margin: 10px 0;
+  font-size: 15px;
+}
+
+.review-box strong {
+  color: #111827;
+}
+
+/* =========================
+   SUCCESS MESSAGE
+========================= */
+
+.success-box {
+  margin-top: 20px;
+
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+
+  border-radius: 14px;
+  padding: 16px;
+
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.form-footer {
+  margin-top: 30px;
+  padding-top: 24px;
+
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-right {
+  display: flex;
+  gap: 12px;
+}
+
+.cancel-btn,
+.next-btn,
+.submit-btn {
+  height: 48px;
+
+  padding: 0 24px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.cancel-btn {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #6b7280;
+}
+
+.cancel-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.next-btn {
+  border: none;
+  background: #2563eb;
+  color: white;
+}
+
+.submit-btn {
+  border: none;
+  background: #22c55e;
+  color: white;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 992px) {
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stepper-card {
+    overflow-x: auto;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .add-employee-page {
+    padding: 15px;
+  }
+
+  .form-card {
+    padding: 20px;
+  }
+
+  .form-card h2 {
+    font-size: 18px;
+  }
+
+  .step-item span {
+    font-size: 11px;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-right {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .next-btn,
+  .submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

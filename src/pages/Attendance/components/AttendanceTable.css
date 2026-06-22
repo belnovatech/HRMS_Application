@@ -1,0 +1,44 @@
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th {
+  text-align: left;
+  padding: 18px 24px;
+  background: #fafafa;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.attendance-table td {
+  padding: 20px 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.present {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+.late {
+  background: #fff7ed;
+  color: #d97706;
+}
+
+.on-leave {
+  background: #fef3c7;
+  color: #ca8a04;
+}
+
+.wfh {
+  background: #eff6ff;
+  color: #2563eb;
+}

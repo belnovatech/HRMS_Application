@@ -1,0 +1,18 @@
+.placeholder-card {
+  background: white;
+  min-height: 350px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.placeholder-card h2 {
+  margin-bottom: 10px;
+}
+
+.placeholder-card p {
+  color: #6b7280;
+}

@@ -44,15 +44,18 @@ export default function Sidebar() {
             </Link>
           </li>
 
-          <li>
-            <FiCalendar />
-            Attendance
-          </li>
-
-          <li>
-            <FiCalendar />
-            Leave Management
-          </li>
+  <li>
+  <Link to="/attendance" className="menu-link">
+    <FiCalendar />
+    Attendance
+  </Link>
+</li>
+  <li>
+  <Link to="/leave-management" className="menu-link">
+    <FiCalendar />
+    Leave Management
+  </Link>
+</li>
 
           <li>
             <FiDollarSign />

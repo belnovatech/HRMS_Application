@@ -1,0 +1,61 @@
+.leave-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f3f5f9;
+}
+
+.leave-main {
+  flex: 1;
+  overflow-y: auto;
+  margin-left: 240px;
+}
+
+.leave-container {
+  padding: 24px;
+}
+
+.leave-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #8b95a7;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.separator {
+  color: #c0c7d2;
+}
+
+.leave-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 24px;
+}
+
+.leave-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  border: none;
+  background: transparent;
+  padding: 12px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #6b7280;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background: #2563eb;
+  color: white;
+}
+
+.leave-content {
+  width: 100%;
+}

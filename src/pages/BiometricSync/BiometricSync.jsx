@@ -2,15 +2,11 @@ import "./BiometricSync.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Header from "../../components/Header/Header";
 import {
-  FiSearch,
-  FiMoon,
-  FiBell,
   FiPlus,
   FiRefreshCw,
   FiSettings,
   FiTrash2,
   FiCpu,
-  FiChevronRight,
 } from "react-icons/fi";
 
 export default function BiometricSync() {

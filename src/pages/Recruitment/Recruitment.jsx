@@ -12,7 +12,7 @@ import {
 export default function Recruitment() {
   const [showModal, setShowModal] = useState(false);
 
-  const [jobs, setJobs] = useState([
+  const [jobs] = useState([
     {
       id: 1,
       title: "Senior Frontend Developer",

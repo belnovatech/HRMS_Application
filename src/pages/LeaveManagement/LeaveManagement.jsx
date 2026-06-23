@@ -41,18 +41,13 @@ export default function LeaveManagement() {
       <Sidebar />
 
       <div className="leave-main">
-        <Header />
+       <Header
+  title="Leave Management"
+  breadcrumb="Leave Management"
+/>
 
         <div className="leave-container">
-          <div className="leave-breadcrumb">
-            <span>Home</span>
-            <span className="separator">›</span>
-            <span>Leave</span>
-          </div>
 
-          <h1 className="leave-title">
-            Leave Management
-          </h1>
 
           <div className="leave-tabs">
             <button

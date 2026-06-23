@@ -168,12 +168,17 @@ export default function EmployeeManagement() {
     );
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar />
+<div className="dashboard-layout">
+  <Sidebar />
 
-      <div className="dashboard-content">
+  <div className="employees-main">
+    <Header
+      title="Employees"
+      breadcrumb="Employees"
+    />
 
-        <Header />
+  {/* page content */}
+
 
         <div className="employee-page">
 
@@ -356,6 +361,6 @@ export default function EmployeeManagement() {
         </div>
 
       </div>
-    </div>
-  );
+      </div>
+  )
 }

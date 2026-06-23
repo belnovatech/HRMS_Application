@@ -1,0 +1,68 @@
+.payroll-main {
+  margin-left: 240px;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.payroll-container {
+  padding: 24px;
+  background: #f5f7fb;
+  box-sizing: border-box;
+}
+
+.payroll-tabs {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.payroll-tabs button {
+  border: none;
+  background: transparent;
+  padding: 12px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.payroll-tabs button.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.payroll-content {
+  width: 100%;
+}
+
+.payroll-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.payroll-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+@media (max-width: 1200px) {
+  .payroll-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .payroll-main {
+    margin-left: 0;
+  }
+
+  .payroll-container {
+    padding: 16px;
+  }
+}

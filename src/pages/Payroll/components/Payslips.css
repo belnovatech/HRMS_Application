@@ -1,0 +1,26 @@
+.payslip-card {
+  background: white;
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+}
+
+.payslip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.print-btn {
+  border: none;
+  background: #1677ff;
+  color: white;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 30px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}

@@ -37,16 +37,13 @@ export default function Attendance() {
       <Sidebar />
 
       <div className="attendance-main">
-        <Header />
+        <Header
+  title="Attendance"
+  breadcrumb="Attendance"
+/>
 
         <div className="attendance-container">
-          <div className="attendance-breadcrumb">
-            <span>Home</span>
-            <span className="separator">›</span>
-            <span>Attendance</span>
-          </div>
 
-          <h1 className="attendance-title">Attendance</h1>
 
           <div className="attendance-tabs">
             <button

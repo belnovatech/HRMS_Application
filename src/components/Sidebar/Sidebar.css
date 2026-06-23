@@ -6,113 +6,162 @@
   top: 0;
   left: 0;
 
-  background: #fff;
+  background: #ffffff;
   border-right: 1px solid #e5e7eb;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
- overflow: hidden;
+  overflow: hidden;
   z-index: 1000;
 }
 
+/* =========================
+   TOP SECTION
+========================= */
 
-
+.sidebar-content {
+  flex: 1;
+}
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 18px 20px;
+  gap: 10px;
+
+  padding: 14px 16px;
 }
 
 .logo-icon {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
+
   border-radius: 12px;
   background: #2563eb;
   color: white;
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .logo h3 {
-  font-size: 15px;
+  margin: 0;
+  font-size: 14px;
   font-weight: 700;
   color: #111827;
+  line-height: 1.2;
 }
 
 .logo p {
+  margin: 0;
   font-size: 11px;
   color: #6b7280;
 }
 
+/* =========================
+   MENU
+========================= */
+
 .menu {
   list-style: none;
-  padding: 8px;
+  padding: 4px 8px;
+  margin: 0;
 }
 
 .menu li {
+  margin-bottom: 2px;
+}
+
+.menu-link {
   display: flex;
   align-items: center;
   gap: 10px;
 
-  padding: 12px 16px;
-  margin-bottom: 4px;
+  padding: 9px 12px;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
-  color: #6b7280;
+  text-decoration: none;
+  color: #667085;
+
   font-size: 13px;
   font-weight: 500;
 
-  cursor: pointer;
-  transition: .2s;
+  transition: all 0.2s ease;
 }
 
-.menu li svg {
-  font-size: 16px;
+.menu-link svg {
+  font-size: 17px;
+  min-width: 17px;
 }
 
-.menu li:hover {
+.menu-link:hover {
   background: #eff6ff;
   color: #2563eb;
 }
 
-.menu li.active {
+.menu-link.active {
   background: #dbeafe;
   color: #2563eb;
   font-weight: 600;
 }
 
-.logout {
-  margin: 12px;
-  padding: 12px;
+/* =========================
+   LOGOUT
+========================= */
 
-  border-radius: 12px;
+.logout {
+  margin: 10px;
+  padding: 10px 14px;
+
+  border-radius: 10px;
 
   background: #fef2f2;
   color: #ef4444;
 
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 
   font-size: 13px;
   font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.menu-link {
-  text-decoration: none;
-  color: inherit;
+.logout:hover {
+  background: #fee2e2;
 }
 
-.menu-link li {
-  list-style: none;
+.logout svg {
+  font-size: 16px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .menu-link {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .logo h3 {
+    font-size: 13px;
+  }
+
+  .logo p {
+    font-size: 10px;
+  }
 }

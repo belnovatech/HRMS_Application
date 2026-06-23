@@ -74,7 +74,10 @@ export default function Dashboard() {
       <Sidebar />
 
       <div className="dashboard-content">
-        <Header />
+         <Header
+    title="Executive Dashboard"
+    breadcrumb="Dashboard"
+  />
 
         {/* STATS */}
         <div className="stats-grid">

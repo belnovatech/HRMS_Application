@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -16,7 +16,7 @@ import ReportsAnalytics from "./pages/Reports/ReportsAnalytics";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Login */}
         <Route path="/" element={<Login />} />
@@ -70,7 +70,7 @@ function App() {
         {/* Settings */}
         <Route path="/settings" element={<Settings />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

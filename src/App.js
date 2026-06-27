@@ -13,7 +13,8 @@ import RolesPermissions from "./pages/RolesPermissions/RolesPermissions";
 import Recruitment from "./pages/Recruitment/Recruitment";
 import Settings from "./pages/Settings/Settings";
 import ReportsAnalytics from "./pages/Reports/ReportsAnalytics";
-
+import SelfService from "./pages/SelfService/SelfService";
+import Manager from "./pages/Manager/Manager";
 function App() {
   return (
     <HashRouter>
@@ -23,7 +24,10 @@ function App() {
 
         {/* Dashboard */}
         <Route path="/dashboard" element={<Dashboard />} />
+ <Route path="/self-service" element={<SelfService />} />
 
+  {/* Manager */}
+  <Route path="/manager" element={<Manager />} />
         {/* Employee Management */}
         <Route path="/employees" element={<EmployeeManagement />} />
         <Route path="/employees/add" element={<AddEmployee />} />

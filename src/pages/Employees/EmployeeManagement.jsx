@@ -226,15 +226,13 @@ export default function EmployeeManagement() {
                 Export
               </button>
 
-              <button
-                className="add-btn"
-                onClick={() =>
-                  navigate("/add-employee")
-                }
-              >
-                <FiPlus />
-                Add Employee
-              </button>
+ <button
+  className="add-btn"
+  onClick={() => navigate("/employees/add")}
+>
+  <FiPlus />
+  Add Employee
+</button>
 
             </div>
           </div>

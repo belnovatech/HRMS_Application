@@ -1,0 +1,375 @@
+/* ===========================
+   MANAGER PAGE
+=========================== */
+.main-content {
+    margin-left: 240px;   /* same as sidebar width */
+    min-height: 100vh;
+    background: #f5f7fb;
+}
+.manager-page {
+  padding: 24px;
+  background: #f5f7fb;
+  min-height: calc(100vh - 70px);
+}
+
+/* ===========================
+   KPI CARDS
+=========================== */
+
+.manager-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin-bottom: 28px;
+}
+
+.manager-stat-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
+  transition: .25s;
+}
+
+.manager-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, .10);
+}
+
+.manager-stat-card p {
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: #7d7d7d;
+  margin-bottom: 8px;
+}
+
+.manager-stat-card h2 {
+  font-size: 42px;
+  color: #1f1f1f;
+  font-weight: 700;
+}
+
+.icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 28px;
+}
+
+.users {
+  background: #edf5ff;
+  color: #1f6fff;
+}
+
+.success {
+  background: #eef9e8;
+  color: #52c41a;
+}
+
+.warning {
+  background: #fff4e5;
+  color: #faad14;
+}
+
+.purple {
+  background: #f3efff;
+  color: #6f5ef9;
+}
+
+/* ===========================
+   GRID
+=========================== */
+
+.manager-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 24px;
+}
+
+.manager-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 28px;
+
+  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+
+.manager-card h2 {
+  font-size: 30px;
+  color: #222;
+  margin-bottom: 26px;
+}
+
+/* ===========================
+   TEAM
+=========================== */
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.team-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.team-left .avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.team-left h3 {
+  font-size: 19px;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.team-left span {
+  color: #777;
+  font-size: 16px;
+}
+
+.team-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.status {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.active {
+  background: #effce7;
+  color: #52c41a;
+}
+
+.leave {
+  background: #fff3df;
+  color: #fa8c16;
+}
+
+.performance {
+  text-align: right;
+}
+
+.performance strong {
+  display: block;
+  font-size: 22px;
+  color: #111;
+}
+
+.performance small {
+  color: #777;
+  font-size: 15px;
+}
+
+/* ===========================
+   APPROVALS
+=========================== */
+
+.approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.approval-row {
+  border: 1px solid #ececec;
+  border-radius: 18px;
+  padding: 18px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: .25s;
+}
+
+.approval-row:hover {
+  background: #fafcff;
+}
+
+.approval-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.approval-avatar {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  background: #20c4c4;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.approval-left h3 {
+  font-size: 18px;
+  color: #222;
+  margin-bottom: 3px;
+}
+
+.approval-left span {
+  color: #777;
+  font-size: 15px;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.approve,
+.reject {
+  width: 50px;
+  height: 36px;
+
+  border: none;
+  border-radius: 18px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  transition: .25s;
+
+  color: white;
+  font-size: 20px;
+}
+
+.approve {
+  background: #52c41a;
+}
+
+.approve:hover {
+  background: #43b313;
+}
+
+.reject {
+  background: #ff4d4f;
+}
+
+.reject:hover {
+  background: #e13b3d;
+}
+
+/* ===========================
+   VIEW BUTTON
+=========================== */
+
+.view-btn {
+  width: 100%;
+  margin-top: 10px;
+
+  padding: 14px;
+
+  border-radius: 14px;
+
+  border: 2px solid #2f73f1;
+
+  background: white;
+
+  color: #2f73f1;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: .25s;
+}
+
+.view-btn:hover {
+  background: #2f73f1;
+  color: white;
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 1200px) {
+
+  .manager-stats {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .manager-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width:768px) {
+
+  .manager-page {
+    padding: 16px;
+  }
+
+  .manager-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .team-row,
+  .approval-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .team-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .approval-actions {
+    width: 100%;
+  }
+
+  .approve,
+  .reject {
+    flex: 1;
+  }
+
+}

@@ -1,0 +1,878 @@
+/* ===========================================
+   SELF SERVICE
+=========================================== */
+
+.ss-page{
+    padding:20px;
+    background:#f5f7fb;
+    min-height:100vh;
+}
+
+/* ===========================================
+   HERO
+=========================================== */
+
+.ss-hero{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:linear-gradient(135deg,#2f73f1,#635bff);
+
+    border-radius:18px;
+
+    padding:22px 28px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 8px 20px rgba(47,115,241,.15);
+
+}
+
+.ss-user{
+
+    display:flex;
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.ss-avatar{
+
+    width:68px;
+    height:68px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.18);
+
+    color:#fff;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:28px;
+    font-weight:700;
+
+}
+
+.ss-good{
+
+    color:#edf3ff;
+    font-size:14px;
+    margin-bottom:4px;
+
+}
+
+.ss-hero h1{
+
+    color:#fff;
+
+    font-size:30px;
+    font-weight:700;
+
+    margin-bottom:4px;
+
+}
+
+.ss-role{
+
+    color:#edf3ff;
+
+    font-size:14px;
+
+}
+
+.ss-checkin{
+
+    text-align:right;
+
+}
+
+.ss-checkin h2{
+
+    color:#fff;
+
+    font-size:42px;
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+.ss-checkin span{
+
+    color:#edf3ff;
+
+    font-size:14px;
+
+}
+
+/* ===========================================
+   STATS
+=========================================== */
+
+.ss-stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:18px;
+
+    margin-bottom:20px;
+
+}
+
+.ss-stat-card{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+
+    transition:.25s;
+
+}
+
+.ss-stat-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 12px 24px rgba(0,0,0,.08);
+
+}
+
+.ss-icon{
+
+    width:46px;
+    height:46px;
+
+    border-radius:14px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:20px;
+
+}
+
+.ss-stat-card small{
+
+    display:block;
+
+    color:#8b8b8b;
+
+    font-size:13px;
+
+    margin-bottom:3px;
+
+}
+
+.ss-stat-card h3{
+
+    font-size:20px;
+
+    color:#222;
+
+    font-weight:700;
+
+}
+
+/* COLORS */
+
+.green{
+
+    background:#eaf8ee;
+    color:#2fb95a;
+
+}
+
+.blue{
+
+    background:#edf5ff;
+    color:#2f73f1;
+
+}
+
+.orange{
+
+    background:#fff3e8;
+    color:#ff9800;
+
+}
+
+.purple{
+
+    background:#f3efff;
+    color:#6958ff;
+
+}
+
+.red{
+
+    background:#ffecec;
+    color:#ff5252;
+
+}
+
+
+/* ===========================================
+   CONTENT GRID
+=========================================== */
+
+.ss-content{
+
+    display:grid;
+    grid-template-columns:1.2fr 1fr 0.9fr;
+    gap:20px;
+
+}
+
+.ss-card{
+
+    background:#fff;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+
+    transition:.25s;
+
+}
+
+.ss-card:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 24px rgba(0,0,0,.08);
+
+}
+
+.ss-card-header{
+
+    margin-bottom:18px;
+
+}
+
+.ss-card-header h3{
+
+    font-size:18px;
+
+    color:#222;
+
+    font-weight:600;
+
+}
+
+/* ===========================================
+   QUICK ACTIONS
+=========================================== */
+
+.ss-actions-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:14px;
+
+}
+
+.ss-action-card{
+
+    background:#fafbfe;
+
+    border:1px solid #edf0f5;
+
+    border-radius:14px;
+
+    height:110px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.ss-action-card:hover{
+
+    background:#ffffff;
+
+    border-color:#d9e4ff;
+
+    transform:translateY(-4px);
+
+    box-shadow:0 10px 18px rgba(0,0,0,.06);
+
+}
+
+.ss-action-icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+
+    margin-bottom:10px;
+
+}
+
+.ss-action-card span{
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#333;
+
+    text-align:center;
+
+    line-height:20px;
+
+    padding:0 8px;
+
+}
+
+/* ===========================================
+   ATTENDANCE
+=========================================== */
+
+.ss-attendance-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.ss-attendance-row{
+
+    background:#f8faff;
+
+    border:1px solid #edf0f5;
+
+    border-radius:12px;
+
+    padding:14px 16px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    transition:.25s;
+
+}
+
+.ss-attendance-row:hover{
+
+    background:#ffffff;
+
+    border-color:#d9e4ff;
+
+}
+
+.ss-attendance-info h4{
+
+    font-size:15px;
+
+    color:#222;
+
+    margin-bottom:4px;
+
+    font-weight:600;
+
+}
+
+.ss-attendance-info p{
+
+    font-size:13px;
+
+    color:#8b8b8b;
+
+}
+
+.ss-status{
+
+    background:#eaf8ee;
+
+    color:#2fb95a;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+/* ===========================================
+   ANNOUNCEMENTS
+=========================================== */
+
+.ss-announcement-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.ss-announcement{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    border:1px solid #edf0f5;
+
+    border-radius:14px;
+
+    padding:14px;
+
+    transition:.25s;
+
+    cursor:pointer;
+
+}
+
+.ss-announcement:hover{
+
+    background:#fafcff;
+
+    border-color:#d9e4ff;
+
+}
+
+.ss-announcement-icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:50%;
+
+    background:#edf5ff;
+
+    color:#2f73f1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:18px;
+
+    flex-shrink:0;
+
+}
+
+.ss-announcement-text{
+
+    flex:1;
+
+}
+
+.ss-announcement-text h4{
+
+    font-size:15px;
+
+    color:#222;
+
+    font-weight:600;
+
+    margin-bottom:4px;
+
+}
+
+.ss-announcement-text span{
+
+    font-size:12px;
+
+    color:#8b8b8b;
+
+}
+
+/* ===========================================
+   1400px
+=========================================== */
+
+@media (max-width:1200px){
+
+    .ss-content{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .ss-card:first-child{
+        grid-column:1/-1;
+    }
+
+    .ss-stats{
+        grid-template-columns:repeat(4,1fr);
+    }
+
+}
+
+/* ===========================================
+   1024px
+=========================================== */
+
+@media (max-width:1024px){
+
+    .ss-page{
+        padding:18px;
+    }
+
+    .ss-hero{
+
+        padding:20px 22px;
+
+    }
+
+    .ss-hero h1{
+
+        font-size:26px;
+
+    }
+
+    .ss-checkin h2{
+
+        font-size:36px;
+
+    }
+
+    .ss-action-card{
+
+        height:100px;
+
+    }
+
+}
+
+/* ===========================================
+   TABLET
+=========================================== */
+
+@media (max-width:768px){
+
+    .ss-page{
+
+        padding:16px;
+
+    }
+
+    .ss-hero{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:18px;
+
+    }
+
+    .ss-user{
+
+        width:100%;
+
+    }
+
+    .ss-checkin{
+
+        width:100%;
+
+        text-align:left;
+
+    }
+
+    .ss-stats{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .ss-content{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .ss-actions-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+/* ===========================================
+   MOBILE
+=========================================== */
+
+@media (max-width:576px){
+
+    .ss-page{
+
+        padding:14px;
+
+    }
+
+    .ss-hero{
+
+        padding:18px;
+
+        border-radius:16px;
+
+    }
+
+    .ss-user{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:14px;
+
+    }
+
+    .ss-avatar{
+
+        width:58px;
+        height:58px;
+
+        font-size:22px;
+
+    }
+
+    .ss-hero h1{
+
+        font-size:22px;
+
+    }
+
+    .ss-good{
+
+        font-size:13px;
+
+    }
+
+    .ss-role{
+
+        font-size:12px;
+
+    }
+
+    .ss-checkin h2{
+
+        font-size:30px;
+
+    }
+
+    .ss-checkin span{
+
+        font-size:13px;
+
+    }
+
+    .ss-stat-card{
+
+        padding:15px;
+
+    }
+
+    .ss-stat-card h3{
+
+        font-size:18px;
+
+    }
+
+    .ss-stat-card small{
+
+        font-size:12px;
+
+    }
+
+    .ss-icon{
+
+        width:42px;
+        height:42px;
+
+        font-size:18px;
+
+    }
+
+    .ss-card{
+
+        padding:16px;
+
+    }
+
+    .ss-card-header h3{
+
+        font-size:17px;
+
+    }
+
+    .ss-actions-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .ss-action-card{
+
+        height:90px;
+
+    }
+
+    .ss-action-icon{
+
+        width:38px;
+        height:38px;
+
+        font-size:16px;
+
+    }
+
+    .ss-action-card span{
+
+        font-size:13px;
+
+    }
+
+    .ss-attendance-row{
+
+        padding:12px;
+
+    }
+
+    .ss-attendance-info h4{
+
+        font-size:14px;
+
+    }
+
+    .ss-attendance-info p{
+
+        font-size:12px;
+
+    }
+
+    .ss-status{
+
+        font-size:11px;
+
+        padding:5px 12px;
+
+    }
+
+    .ss-announcement{
+
+        padding:12px;
+
+    }
+
+    .ss-announcement-icon{
+
+        width:38px;
+
+        height:38px;
+
+        font-size:16px;
+
+    }
+
+    .ss-announcement-text h4{
+
+        font-size:14px;
+
+    }
+
+    .ss-announcement-text span{
+
+        font-size:11px;
+
+    }
+
+}
+
+/* ===========================================
+   SMOOTH TRANSITIONS
+=========================================== */
+
+.ss-card,
+.ss-stat-card,
+.ss-action-card,
+.ss-attendance-row,
+.ss-announcement{
+
+    transition:all .25s ease;
+
+}
+
+/* ===========================================
+   CUSTOM SCROLLBAR
+=========================================== */
+
+.ss-page::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.ss-page::-webkit-scrollbar-thumb{
+
+    background:#cfd6e4;
+
+    border-radius:20px;
+
+}
+
+.ss-page::-webkit-scrollbar-thumb:hover{
+
+    background:#b3bccf;
+
+}

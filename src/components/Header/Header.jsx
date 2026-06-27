@@ -1,11 +1,12 @@
 import "./Header.css";
-
 import {
   FiSearch,
   FiMoon,
   FiBell,
   FiChevronDown,
 } from "react-icons/fi";
+
+import { NavLink } from "react-router-dom";
 
 export default function Header({
   title = "Executive Dashboard",
@@ -19,17 +20,41 @@ export default function Header({
 
           <div className="breadcrumb">
             <span>Home</span>
-
-            <span className="separator">
-              &gt;
-            </span>
-
+            <span className="separator">&gt;</span>
             <span>{breadcrumb}</span>
           </div>
 
-          <h1 className="page-title">
-            {title}
-          </h1>
+          <h1 className="page-title">{title}</h1>
+
+          {/* Portal Tabs */}
+          <div className="portal-tabs">
+            <NavLink
+              to="/dashboard"
+              className={({ isActive }) =>
+                isActive ? "portal-tab active" : "portal-tab"
+              }
+            >
+              Admin
+            </NavLink>
+
+            <NavLink
+              to="/self-service"
+              className={({ isActive }) =>
+                isActive ? "portal-tab active" : "portal-tab"
+              }
+            >
+              Self Service
+            </NavLink>
+
+            <NavLink
+              to="/manager"
+              className={({ isActive }) =>
+                isActive ? "portal-tab active" : "portal-tab"
+              }
+            >
+              Manager
+            </NavLink>
+          </div>
 
         </div>
 
@@ -37,7 +62,6 @@ export default function Header({
 
           <div className="search-box">
             <FiSearch />
-
             <input
               type="text"
               placeholder="Search employees, modules..."
@@ -52,17 +76,11 @@ export default function Header({
 
             <button className="notification-btn">
               <FiBell />
-
-              <span className="notification-badge">
-                2
-              </span>
+              <span className="notification-badge">2</span>
             </button>
 
             <div className="profile">
-
-              <div className="avatar">
-                PS
-              </div>
+              <div className="avatar">PS</div>
 
               <div className="profile-info">
                 <h4>Priya Sharma</h4>
@@ -70,7 +88,6 @@ export default function Header({
               </div>
 
               <FiChevronDown />
-
             </div>
 
           </div>

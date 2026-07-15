@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FiEye,
   FiDownload,
@@ -6,42 +6,67 @@ import {
   FiDollarSign,
 } from "react-icons/fi";
 import "./PayrollHistory.css";
+import { getAllPayslips } from "../../../services/payrollService";
+
+const MONTH_NAMES = [
+  "", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
 
 export default function PayrollHistory() {
   const [selectedPayroll, setSelectedPayroll] =
     useState(null);
 
-  const history = [
-    {
-      month: "Jun 2025",
-      amount: "₹31.2L",
-      employees: 115,
-      status: "Completed",
-    },
-    {
-      month: "May 2025",
-      amount: "₹29.8L",
-      employees: 112,
-      status: "Completed",
-    },
-    {
-      month: "Apr 2025",
-      amount: "₹28.5L",
-      employees: 110,
-      status: "Completed",
-    },
-    {
-      month: "Mar 2025",
-      amount: "₹27.9L",
-      employees: 108,
-      status: "Completed",
-    },
-  ];
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
+  const fetchHistory = async () => {
+    try {
+      const res = await getAllPayslips();
+      const payslips = res.data || [];
+
+      // No dedicated history endpoint exists yet, so payroll cycles
+      // are derived here by grouping payslips by month_id + year_id.
+      // "status" has no real backend field, so it is hardcoded.
+      const grouped = {};
+
+      payslips.forEach((p) => {
+        const key = `${p.month_id}-${p.year_id}`;
+
+        if (!grouped[key]) {
+          grouped[key] = {
+            month: `${MONTH_NAMES[p.month_id] || p.month_id} ${p.year_id}`,
+            amount: 0,
+            employees: 0,
+            status: "Completed",
+          };
+        }
+
+        grouped[key].amount += Number(p.net_pay) || 0;
+        grouped[key].employees += 1;
+      });
+
+      setHistory(Object.values(grouped));
+    } catch (err) {
+      console.error("Failed to fetch payroll history:", err);
+    }
+  };
+
+  const formatAmount = (value) =>
+    `₹${Number(value).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
 
   const downloadReport = (item) => {
     const blob = new Blob(
       [
-        `Payroll Report\nMonth: ${item.month}\nAmount: ${item.amount}`,
+        `Payroll Report\nMonth: ${item.month}\nAmount: ${formatAmount(
+          item.amount
+        )}`,
       ],
       { type: "text/plain" }
     );
@@ -85,7 +110,7 @@ export default function PayrollHistory() {
           <div className="history-center">
             <FiDollarSign />
 
-            <h3>{item.amount}</h3>
+            <h3>{formatAmount(item.amount)}</h3>
           </div>
 
           <div className="history-status">
@@ -124,7 +149,7 @@ export default function PayrollHistory() {
             <div className="modal-info">
               <p>
                 Amount:
-                {selectedPayroll.amount}
+                {formatAmount(selectedPayroll.amount)}
               </p>
 
               <p>

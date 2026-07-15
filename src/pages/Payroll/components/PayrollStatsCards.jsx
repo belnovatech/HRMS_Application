@@ -5,37 +5,51 @@ import {
   Clock3,
   TrendingDown,
 } from "lucide-react";
-const PayrollStatsCards = () => {
-const cards = [
-  {
-    title: "TOTAL PAYROLL",
-    value: "₹31.2L",
-    growth: "+8.2% this month",
-    positive: true,
-    icon: <DollarSign size={22} color="#2563eb" />,
-  },
-  {
-    title: "PAID EMPLOYEES",
-    value: "108",
-    growth: "+3 this month",
-    positive: true,
-    icon: <Users size={22} color="#52c41a" />,
-  },
-  {
-    title: "PENDING",
-    value: "7",
-    growth: "-2 this month",
-    positive: false,
-    icon: <Clock3 size={22} color="#faad14" />,
-  },
-  {
-    title: "TOTAL DEDUCTIONS",
-    value: "₹4.8L",
-    growth: "-1.1% this month",
-    positive: false,
-    icon: <TrendingDown size={22} color="#ff4d4f" />,
-  },
-];
+
+const PayrollStatsCards = ({
+  totalPayroll = "₹31.2L",
+  payrollGrowth = "+8.2% this month",
+  payrollPositive = true,
+  paidEmployees = "108",
+  employeeGrowth = "+3 this month",
+  employeeGrowthPositive = true,
+  pendingCount = "7",
+  pendingGrowth = "-2 this month",
+  pendingPositive = false,
+  totalDeductions = "₹4.8L",
+  deductionGrowth = "-1.1% this month",
+  deductionPositive = false,
+}) => {
+  const cards = [
+    {
+      title: "TOTAL PAYROLL",
+      value: totalPayroll,
+      growth: payrollGrowth,
+      positive: payrollPositive,
+      icon: <DollarSign size={22} color="#2563eb" />,
+    },
+    {
+      title: "PAID EMPLOYEES",
+      value: paidEmployees,
+      growth: employeeGrowth,
+      positive: employeeGrowthPositive,
+      icon: <Users size={22} color="#52c41a" />,
+    },
+    {
+      title: "PENDING",
+      value: pendingCount,
+      growth: pendingGrowth,
+      positive: pendingPositive,
+      icon: <Clock3 size={22} color="#faad14" />,
+    },
+    {
+      title: "TOTAL DEDUCTIONS",
+      value: totalDeductions,
+      growth: deductionGrowth,
+      positive: deductionPositive,
+      icon: <TrendingDown size={22} color="#ff4d4f" />,
+    },
+  ];
 
   return (
     <div className="stats-grid">

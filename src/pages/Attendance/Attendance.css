@@ -1,97 +1,329 @@
-.attendance-layout {
+/* ==========================================================
+   Shell layout: Sidebar (fixed, left) + main content area
+   Adjust the 240px value if your Sidebar's width differs.
+   ========================================================== */
+
+.app-shell {
   display: flex;
   min-height: 100vh;
-  background: #f3f5f9;
 }
 
-.attendance-main {
+.app-main {
   flex: 1;
-  margin-left: 240px; /* Sidebar width */
-  overflow-y: auto;
-}
-
-.attendance-container {
-  padding: 20px;
-}
-.attendance-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f5f7fb;
-}
-
-.attendance-main {
-  flex: 1;
+  margin-left: 240px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
-.attendance-container {
-  padding: 24px 32px;
+@media (max-width: 1024px) {
+  .app-main {
+    margin-left: 72px;
+  }
 }
 
-.attendance-breadcrumb {
+/* ==========================================================
+   Page wrapper
+   Sits inside .app-main, below the Header.
+   ========================================================== */
+
+.all-attendance-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.all-attendance-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #8b8f9c;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-.separator {
-  color: #c0c4cc;
-}
-
-.attendance-title {
-  font-size: 34px;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 24px;
-}
-
-.attendance-tabs {
-  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 24px;
 }
 
-.tab-btn {
+.all-attendance-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.all-attendance-header .subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.refresh-btn:hover {
+  background: #f9fafb;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================
+   Stat cards
+   ========================================================== */
+
+.attendance-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.attendance-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.attendance-card h2 {
+  margin: 10px 0 2px;
+  font-size: 22px;
+}
+
+.attendance-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.card-icon.blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.card-icon.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.card-icon.yellow {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.card-icon.green {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* ==========================================================
+   Toolbar
+   ========================================================== */
+
+.all-attendance-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  flex: 1;
+  min-width: 240px;
+  background: #fff;
+}
+
+.search-box input {
   border: none;
   outline: none;
+  flex: 1;
+  font-size: 14px;
+}
+
+.status-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.status-filters button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
   cursor: pointer;
-  background: transparent;
-  color: #6b7280;
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.25s ease;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
-.tab-btn:hover {
-  background: #edf2ff;
+.status-filters button.active {
+  background: #111827;
+  color: #fff;
+  border-color: #111827;
 }
 
-.tab-btn.active {
-  background: #2563eb;
-  color: white;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+/* ==========================================================
+   Table
+   ========================================================== */
+
+.all-attendance-table-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
 }
 
-.attendance-content {
+/* horizontal scroll on narrow screens (sidebar eats width) */
+.table-scroll {
   width: 100%;
+  overflow-x: auto;
 }
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.attendance-table th,
+.attendance-table td {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #f1f5f9;
+  white-space: nowrap;
+}
+
+.attendance-table th {
+  background: #f9fafb;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.attendance-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.state-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 48px 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.state-message svg {
+  font-size: 24px;
+}
+
+.state-message.error {
+  color: #b91c1c;
+}
+
+.state-message button {
+  margin-top: 4px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+
+.status.checked-in {
+  color: #b45309;
+  background: #fef3c7;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.status.checked-out {
+  color: #15803d;
+  background: #dcfce7;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+/* ==========================================================
+   Responsive tweaks for smaller viewports
+   (useful once the sidebar takes up fixed width)
+   ========================================================== */
 
 @media (max-width: 768px) {
-  .attendance-container {
+  .all-attendance-page {
     padding: 16px;
   }
 
-  .attendance-tabs {
-    overflow-x: auto;
+  .all-attendance-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .attendance-title {
-    font-size: 28px;
+  .refresh-btn {
+    align-self: flex-start;
+  }
+
+  .all-attendance-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-filters {
+    width: 100%;
+  }
+
+  .status-filters button {
+    flex: 1;
   }
 }

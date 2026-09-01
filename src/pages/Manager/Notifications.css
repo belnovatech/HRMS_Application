@@ -1,0 +1,1128 @@
+/* =========================================================
+   NOTIFICATIONS PAGE
+   Completely isolated CSS.
+
+   Every class starts with:
+   notifmgr-
+
+   This prevents conflicts with other HRMS pages.
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.notifmgr-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 1px 30px;
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.notifmgr-header {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.notifmgr-heading {
+  min-width: 0;
+}
+
+.notifmgr-heading h1 {
+  margin: 0;
+
+  color: #202631;
+
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 750;
+
+  letter-spacing: -0.3px;
+}
+
+.notifmgr-heading p {
+  margin: 5px 0 0;
+
+  color: #7f8a9a;
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.notifmgr-header-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+.notifmgr-mark-all,
+.notifmgr-filter-button {
+  height: 35px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 9px;
+
+  font-size: 9.5px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.17s ease,
+    border-color 0.17s ease,
+    color 0.17s ease;
+}
+
+.notifmgr-mark-all {
+  border: 1px solid #dce3eb;
+
+  background: #ffffff;
+
+  color: #536176;
+}
+
+.notifmgr-mark-all:hover:not(:disabled) {
+  background: #f8fafc;
+
+  border-color: #cbd5e1;
+
+  color: #2563eb;
+}
+
+.notifmgr-mark-all:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.notifmgr-filter-button {
+  border: 1px solid #dce3eb;
+
+  background: #ffffff;
+
+  color: #536176;
+}
+
+.notifmgr-filter-button:hover,
+.notifmgr-filter-active {
+  background: #f8fafc;
+
+  border-color: #cbd5e1;
+
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   CATEGORY AREA
+   ========================================================= */
+
+.notifmgr-category-wrapper {
+  width: 100%;
+  min-width: 0;
+
+  margin-bottom: 16px;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+}
+
+.notifmgr-category-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.notifmgr-category-list {
+  width: max-content;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+/* =========================================================
+   CATEGORY CHIP
+   ========================================================= */
+
+.notifmgr-category-chip {
+  height: 26px;
+
+  padding: 0 11px;
+
+  border: 1px solid #e0e6ee;
+
+  border-radius: 999px;
+
+  background: #f8fafc;
+
+  color: #758196;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  font-size: 8.5px;
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background 0.17s ease,
+    border-color 0.17s ease,
+    color 0.17s ease,
+    transform 0.17s ease;
+}
+
+.notifmgr-category-chip:hover {
+  border-color: #cbd5e1;
+
+  background: #f1f5f9;
+
+  color: #475569;
+}
+
+.notifmgr-category-active {
+  border-color: #4f7ff5;
+
+  background: linear-gradient(
+    135deg,
+    #3d7df4,
+    #7354eb
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 2px 6px rgba(
+      79,
+      70,
+      229,
+      0.15
+    );
+}
+
+.notifmgr-category-active:hover {
+  border-color: #4f7ff5;
+
+  background: linear-gradient(
+    135deg,
+    #3d7df4,
+    #7354eb
+  );
+
+  color: #ffffff;
+}
+
+.notifmgr-chip-count {
+  min-width: 14px;
+
+  height: 14px;
+
+  padding: 0 3px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: rgba(
+    255,
+    255,
+    255,
+    0.22
+  );
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 7px;
+}
+
+
+/* =========================================================
+   FILTER PANEL
+   ========================================================= */
+
+.notifmgr-filter-panel {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  margin-bottom: 12px;
+
+  padding: 13px;
+
+  border: 1px solid #dce5f1;
+
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 17px rgba(
+      15,
+      23,
+      42,
+      0.04
+    );
+}
+
+.notifmgr-filter-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 12px;
+}
+
+.notifmgr-filter-title strong {
+  display: block;
+
+  color: #344054;
+
+  font-size: 10px;
+}
+
+.notifmgr-filter-title span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #929eae;
+
+  font-size: 8px;
+}
+
+.notifmgr-filter-close {
+  width: 26px;
+  height: 26px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #f1f5f9;
+
+  color: #64748b;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.notifmgr-filter-close:hover {
+  background: #e2e8f0;
+}
+
+.notifmgr-filter-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.notifmgr-checkbox-option {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #59697d;
+
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+.notifmgr-checkbox-option input {
+  width: 14px;
+  height: 14px;
+
+  margin: 0;
+
+  accent-color: #4f7ff5;
+
+  cursor: pointer;
+}
+
+.notifmgr-clear-filter {
+  height: 29px;
+
+  padding: 0 10px;
+
+  border: 1px solid #dce3eb;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #64748b;
+
+  font-size: 8.5px;
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.notifmgr-clear-filter:hover {
+  background: #f8fafc;
+
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   NOTIFICATION LIST
+   ========================================================= */
+
+.notifmgr-list {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   NOTIFICATION ITEM
+   ========================================================= */
+
+.notifmgr-item {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  padding: 13px;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 11px;
+
+  border: 1px solid #dfe5ed;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    background 0.17s ease,
+    border-color 0.17s ease,
+    box-shadow 0.17s ease,
+    transform 0.17s ease;
+}
+
+.notifmgr-item:hover {
+  border-color: #d4ddea;
+
+  background: #fbfdff;
+
+  box-shadow:
+    0 5px 16px rgba(
+      15,
+      23,
+      42,
+      0.045
+    );
+}
+
+.notifmgr-item-unread {
+  border-color: #d5e2ff;
+
+  background: #fbfcff;
+}
+
+.notifmgr-item-unread:hover {
+  border-color: #c9d9ff;
+
+  background: #f8fbff;
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.notifmgr-icon {
+  position: relative;
+
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+
+  border-radius: 9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* LEAVE */
+
+.notifmgr-icon-leave {
+  background: #eee9ff;
+
+  color: #7c4dff;
+}
+
+
+/* PAYROLL */
+
+.notifmgr-icon-payroll {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+/* ATTENDANCE */
+
+.notifmgr-icon-attendance {
+  background: #e1edff;
+
+  color: #2563eb;
+}
+
+
+/* HR */
+
+.notifmgr-icon-hr {
+  background: #fff3d2;
+
+  color: #d97706;
+}
+
+
+/* SYSTEM */
+
+.notifmgr-icon-system {
+  background: #e9e5ff;
+
+  color: #6d4aff;
+}
+
+
+/* =========================================================
+   UNREAD DOT
+   ========================================================= */
+
+.notifmgr-unread-dot {
+  position: absolute;
+
+  top: -2px;
+  right: -2px;
+
+  width: 7px;
+  height: 7px;
+
+  border: 1.5px solid #ffffff;
+
+  border-radius: 50%;
+
+  background: #8b5cf6;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.notifmgr-content {
+  min-width: 0;
+
+  flex: 1;
+}
+
+
+/* =========================================================
+   TITLE ROW
+   ========================================================= */
+
+.notifmgr-title-row {
+  min-width: 0;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.notifmgr-title-wrapper {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.notifmgr-title-wrapper strong {
+  color: #303b4b;
+
+  font-size: 10.5px;
+
+  line-height: 1.3;
+
+  font-weight: 720;
+}
+
+.notifmgr-title-row time {
+  flex-shrink: 0;
+
+  color: #9aa5b5;
+
+  font-size: 8px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   TYPE BADGES
+   ========================================================= */
+
+.notifmgr-type-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  height: 17px;
+
+  padding: 0 6px;
+
+  border-radius: 999px;
+
+  font-size: 7px;
+
+  font-weight: 700;
+}
+
+
+/* LEAVE */
+
+.notifmgr-type-leave {
+  background: #eee9ff;
+
+  color: #7650dc;
+}
+
+
+/* PAYROLL */
+
+.notifmgr-type-payroll {
+  background: #dcfce7;
+
+  color: #15803d;
+}
+
+
+/* ATTENDANCE */
+
+.notifmgr-type-attendance {
+  background: #dceaff;
+
+  color: #2563eb;
+}
+
+
+/* HR */
+
+.notifmgr-type-hr {
+  background: #fff0c7;
+
+  color: #b45309;
+}
+
+
+/* SYSTEM */
+
+.notifmgr-type-system {
+  background: #ede9fe;
+
+  color: #6d28d9;
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.notifmgr-content > p {
+  margin: 5px 0 0;
+
+  color: #758196;
+
+  font-size: 9.5px;
+
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   MARK READ
+   ========================================================= */
+
+.notifmgr-mark-read {
+  margin-top: 8px;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #6475ff;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 4px;
+
+  font-size: 8px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.notifmgr-mark-read:hover {
+  color: #4f46e5;
+
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.notifmgr-empty {
+  min-height: 270px;
+
+  box-sizing: border-box;
+
+  padding: 30px 20px;
+
+  border: 1px solid #dfe5ed;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.notifmgr-empty-icon {
+  width: 48px;
+  height: 48px;
+
+  margin-bottom: 11px;
+
+  border-radius: 13px;
+
+  background: #eef3ff;
+
+  color: #5b72e8;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifmgr-empty h3 {
+  margin: 0;
+
+  color: #44546a;
+
+  font-size: 12px;
+}
+
+.notifmgr-empty p {
+  max-width: 300px;
+
+  margin: 5px 0 12px;
+
+  color: #929eae;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+.notifmgr-empty button {
+  height: 30px;
+
+  padding: 0 11px;
+
+  border: 1px solid #dce3eb;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #2563eb;
+
+  font-size: 8.5px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.notifmgr-empty button:hover {
+  background: #eff6ff;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.notifmgr-footer {
+  margin-top: 11px;
+
+  padding: 0 3px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.notifmgr-footer span {
+  color: #9aa5b5;
+
+  font-size: 8px;
+}
+
+.notifmgr-footer strong {
+  color: #66758a;
+
+  font-weight: 700;
+}
+
+.notifmgr-footer button {
+  border: none;
+
+  background: transparent;
+
+  color: #5270d9;
+
+  font-size: 8px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.notifmgr-footer button:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1450px) {
+
+  .notifmgr-heading h1 {
+    font-size: 24px;
+  }
+
+  .notifmgr-item {
+    padding: 14px;
+  }
+
+  .notifmgr-title-wrapper strong {
+    font-size: 11px;
+  }
+
+  .notifmgr-content > p {
+    font-size: 10px;
+  }
+}
+
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .notifmgr-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .notifmgr-item {
+    padding: 12px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .notifmgr-header {
+    gap: 12px;
+  }
+
+  .notifmgr-title-row {
+    flex-direction: column;
+
+    gap: 4px;
+  }
+
+  .notifmgr-title-row time {
+    order: 2;
+  }
+
+  .notifmgr-content > p {
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .notifmgr-header {
+    flex-direction: column;
+  }
+
+  .notifmgr-header-actions {
+    width: 100%;
+  }
+
+  .notifmgr-mark-all,
+  .notifmgr-filter-button {
+    flex: 1;
+  }
+
+  .notifmgr-filter-options {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .notifmgr-clear-filter {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+  .notifmgr-page {
+    padding-bottom: 22px;
+  }
+
+  .notifmgr-heading h1 {
+    font-size: 20px;
+  }
+
+  .notifmgr-heading p {
+    font-size: 9px;
+  }
+
+  .notifmgr-header-actions {
+    gap: 7px;
+  }
+
+  .notifmgr-mark-all,
+  .notifmgr-filter-button {
+    height: 34px;
+
+    font-size: 9px;
+  }
+
+  .notifmgr-category-chip {
+    height: 27px;
+
+    padding: 0 10px;
+
+    font-size: 8px;
+  }
+
+  .notifmgr-item {
+    padding: 11px;
+
+    gap: 9px;
+
+    border-radius: 10px;
+  }
+
+  .notifmgr-icon {
+    width: 30px;
+    height: 30px;
+
+    min-width: 30px;
+  }
+
+  .notifmgr-title-wrapper strong {
+    font-size: 10px;
+  }
+
+  .notifmgr-type-badge {
+    height: 16px;
+
+    font-size: 6.5px;
+  }
+
+  .notifmgr-content > p {
+    font-size: 8.5px;
+
+    line-height: 1.5;
+  }
+
+  .notifmgr-mark-read {
+    font-size: 7.5px;
+  }
+
+  .notifmgr-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .notifmgr-header-actions {
+    flex-direction: column;
+  }
+
+  .notifmgr-mark-all,
+  .notifmgr-filter-button {
+    width: 100%;
+
+    flex: none;
+  }
+
+  .notifmgr-item {
+    align-items: flex-start;
+  }
+
+  .notifmgr-icon {
+    width: 28px;
+    height: 28px;
+
+    min-width: 28px;
+  }
+
+  .notifmgr-title-wrapper {
+    gap: 5px;
+  }
+
+  .notifmgr-title-wrapper strong {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.notifmgr-mark-all:focus-visible,
+.notifmgr-filter-button:focus-visible,
+.notifmgr-category-chip:focus-visible,
+.notifmgr-filter-close:focus-visible,
+.notifmgr-clear-filter:focus-visible,
+.notifmgr-mark-read:focus-visible,
+.notifmgr-empty button:focus-visible,
+.notifmgr-footer button:focus-visible,
+.notifmgr-checkbox-option input:focus-visible {
+  outline: 3px solid rgba(
+    59,
+    130,
+    246,
+    0.18
+  );
+
+  outline-offset: 2px;
+}

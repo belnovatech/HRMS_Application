@@ -1,375 +1,1094 @@
-/* ===========================
-   MANAGER PAGE
-=========================== */
-.main-content {
-    margin-left: 240px;   /* same as sidebar width */
-    min-height: 100vh;
-    background: #f5f7fb;
-}
-.manager-page {
-  padding: 24px;
-  background: #f5f7fb;
-  min-height: calc(100vh - 70px);
-}
+/* =========================================================
+   BELNOVA HRMS — MANAGER DASHBOARD
+   Scoped classes only: mgrdash-*
+   Desktop + Tablet + Mobile
+   ========================================================= */
 
-/* ===========================
-   KPI CARDS
-=========================== */
-
-.manager-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
-  margin-bottom: 28px;
+.mgrdash-shell {
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background: #f6f9fc;
+  color: #142a46;
 }
 
-.manager-stat-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 28px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
-  transition: .25s;
+.mgrdash-shell *,
+.mgrdash-shell *::before,
+.mgrdash-shell *::after {
+  box-sizing: border-box;
 }
 
-.manager-stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, .10);
+.mgrdash-content {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
-.manager-stat-card p {
-  font-size: 15px;
-  letter-spacing: 1px;
-  color: #7d7d7d;
-  margin-bottom: 8px;
+.mgrdash-page {
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 28px 42px 40px;
 }
 
-.manager-stat-card h2 {
-  font-size: 42px;
-  color: #1f1f1f;
+/* =========================================================
+   OPTIONAL PAGE TITLE AREA
+   ========================================================= */
+
+.mgrdash-page-intro {
+  display: none;
+}
+
+.mgrdash-page-title {
+  min-width: 0;
+}
+
+.mgrdash-breadcrumb {
+  color: #2563eb;
+  font-size: 13px;
   font-weight: 700;
 }
 
-.icon {
-  width: 58px;
-  height: 58px;
-  border-radius: 18px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 28px;
+.mgrdash-breadcrumb-separator {
+  margin: 0 8px;
+  color: #91a1b7;
 }
 
-.users {
-  background: #edf5ff;
-  color: #1f6fff;
+.mgrdash-breadcrumb-current {
+  color: #526782;
+  font-size: 13px;
 }
 
-.success {
-  background: #eef9e8;
-  color: #52c41a;
-}
-
-.warning {
-  background: #fff4e5;
-  color: #faad14;
-}
-
-.purple {
-  background: #f3efff;
-  color: #6f5ef9;
-}
-
-/* ===========================
-   GRID
-=========================== */
-
-.manager-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 24px;
-}
-
-.manager-card {
-  background: #fff;
-  border-radius: 22px;
-  padding: 28px;
-
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
-}
-
-.manager-card h2 {
+.mgrdash-page-title h1 {
+  margin: 5px 0 0;
+  color: #10233e;
   font-size: 30px;
-  color: #222;
-  margin-bottom: 26px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.5px;
 }
 
-/* ===========================
-   TEAM
-=========================== */
+/* =========================================================
+   KPI CARDS
+   ========================================================= */
 
-.team-list {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.team-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.team-left {
-  display: flex;
-  align-items: center;
+.mgrdash-stats {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
+  margin-bottom: 22px;
 }
 
-.team-left .avatar {
+.mgrdash-stat-card {
+  min-width: 0;
+  min-height: 126px;
+  padding: 22px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid #e0e7f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 3px 14px rgba(15, 35, 62, 0.045);
+}
+
+.mgrdash-stat-content {
+  min-width: 0;
+}
+
+.mgrdash-stat-content p {
+  margin: 0 0 8px;
+  color: #70839d;
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+}
+
+.mgrdash-stat-content h2 {
+  margin: 0;
+  color: #122844;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 750;
+}
+
+.mgrdash-stat-icon {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-
-  color: white;
-  font-weight: 700;
-  font-size: 18px;
-
+  min-width: 48px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-}
-
-.team-left h3 {
-  font-size: 19px;
-  color: #222;
-  margin-bottom: 4px;
-}
-
-.team-left span {
-  color: #777;
-  font-size: 16px;
-}
-
-.team-right {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.status {
-  padding: 6px 16px;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.active {
-  background: #effce7;
-  color: #52c41a;
-}
-
-.leave {
-  background: #fff3df;
-  color: #fa8c16;
-}
-
-.performance {
-  text-align: right;
-}
-
-.performance strong {
-  display: block;
+  border-radius: 13px;
   font-size: 22px;
-  color: #111;
 }
 
-.performance small {
-  color: #777;
-  font-size: 15px;
+.mgrdash-icon-users {
+  background: #eaf3ff;
+  color: #2878ed;
 }
 
-/* ===========================
-   APPROVALS
-=========================== */
+.mgrdash-icon-success {
+  background: #e8f9ef;
+  color: #16a05d;
+}
 
-.approval-list {
+.mgrdash-icon-warning {
+  background: #fff5df;
+  color: #dc9215;
+}
+
+.mgrdash-icon-purple {
+  background: #f1eaff;
+  color: #7650d8;
+}
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.mgrdash-grid {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(330px, 0.85fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.mgrdash-card {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #e0e7f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 3px 14px rgba(15, 35, 62, 0.045);
+  overflow: hidden;
+}
+
+.mgrdash-card-header {
+  min-width: 0;
+  padding: 20px 22px 17px;
   display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.approval-row {
-  border: 1px solid #ececec;
-  border-radius: 18px;
-  padding: 18px 20px;
-
-  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.mgrdash-card-header > div {
+  min-width: 0;
+}
+
+.mgrdash-card-header h2 {
+  margin: 0;
+  color: #193654;
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 750;
+}
+
+.mgrdash-card-header p {
+  margin: 5px 0 0;
+  color: #8798ad;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mgrdash-count {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  display: inline-flex;
   align-items: center;
-
-  transition: .25s;
-}
-
-.approval-row:hover {
-  background: #fafcff;
-}
-
-.approval-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.approval-avatar {
-  width: 46px;
-  height: 46px;
-
-  border-radius: 50%;
-
-  background: #20c4c4;
-  color: white;
-
-  display: flex;
   justify-content: center;
-  align-items: center;
-
-  font-weight: 700;
-  font-size: 18px;
+  border-radius: 50%;
+  background: #edf5ff;
+  color: #347ce5;
+  font-size: 12px;
+  font-weight: 750;
 }
 
-.approval-left h3 {
-  font-size: 18px;
-  color: #222;
-  margin-bottom: 3px;
+.mgrdash-count-warning {
+  background: #fff4dd;
+  color: #c98110;
 }
 
-.approval-left span {
-  color: #777;
-  font-size: 15px;
+/* =========================================================
+   TEAM LIST
+   ========================================================= */
+
+.mgrdash-team-list {
+  width: 100%;
 }
 
-.approval-actions {
+.mgrdash-team-row {
+  width: 100%;
+  min-width: 0;
+  min-height: 78px;
+  padding: 14px 22px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid #edf1f6;
+  transition: background 0.16s ease;
+}
+
+.mgrdash-team-row:last-child {
+  border-bottom: none;
+}
+
+.mgrdash-team-row:hover {
+  background: #fbfdff;
+}
+
+.mgrdash-team-member {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
-.approve,
-.reject {
-  width: 50px;
-  height: 36px;
-
-  border: none;
-  border-radius: 18px;
-
+.mgrdash-avatar {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  cursor: pointer;
-  transition: .25s;
-
-  color: white;
-  font-size: 20px;
+  justify-content: center;
+  border-radius: 11px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 750;
 }
 
-.approve {
-  background: #52c41a;
+.mgrdash-member-info {
+  min-width: 0;
 }
 
-.approve:hover {
-  background: #43b313;
+.mgrdash-member-info h3 {
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: #172d49;
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.reject {
-  background: #ff4d4f;
+.mgrdash-member-info span {
+  display: block;
+  max-width: 100%;
+  margin-top: 3px;
+  overflow: hidden;
+  color: #8797aa;
+  font-size: 11px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.reject:hover {
-  background: #e13b3d;
+.mgrdash-team-meta {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
 }
 
-/* ===========================
-   VIEW BUTTON
-=========================== */
+.mgrdash-status {
+  min-width: 76px;
+  padding: 7px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 750;
+  white-space: nowrap;
+}
 
-.view-btn {
+.mgrdash-status-dot {
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: 50%;
+}
+
+.mgrdash-status-active {
+  background: #dcf8e8;
+  color: #14834a;
+}
+
+.mgrdash-status-active .mgrdash-status-dot {
+  background: #20b766;
+}
+
+.mgrdash-status-leave {
+  background: #fff0d9;
+  color: #c57909;
+}
+
+.mgrdash-status-leave .mgrdash-status-dot {
+  background: #f0a21a;
+}
+
+.mgrdash-performance {
+  min-width: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mgrdash-performance strong {
+  color: #159653;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 750;
+}
+
+.mgrdash-performance small {
+  margin-top: 2px;
+  color: #9aa8b9;
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   APPROVALS
+   ========================================================= */
+
+.mgrdash-approval-list {
   width: 100%;
-  margin-top: 10px;
+  padding: 4px 22px 20px;
+}
 
-  padding: 14px;
+.mgrdash-approval-row {
+  width: 100%;
+  min-width: 0;
+  min-height: 76px;
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid #edf1f6;
+}
 
-  border-radius: 14px;
+.mgrdash-approval-member {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
 
-  border: 2px solid #2f73f1;
+.mgrdash-approval-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #eef3fb;
+  color: #4c6686;
+  font-size: 11px;
+  font-weight: 750;
+}
 
-  background: white;
+.mgrdash-approval-info {
+  min-width: 0;
+}
 
-  color: #2f73f1;
+.mgrdash-approval-info h3 {
+  margin: 0;
+  overflow: hidden;
+  color: #203954;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  font-size: 17px;
-  font-weight: 600;
+.mgrdash-approval-info span {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  color: #8999ad;
+  font-size: 10px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
+.mgrdash-approval-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mgrdash-approve,
+.mgrdash-reject {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
   cursor: pointer;
-  transition: .25s;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease;
 }
 
-.view-btn:hover {
-  background: #2f73f1;
-  color: white;
+.mgrdash-approve {
+  border: 1px solid #bfe9d0;
+  background: #f0fbf5;
+  color: #159653;
 }
 
-/* ===========================
-   RESPONSIVE
-=========================== */
-
-@media (max-width: 1200px) {
-
-  .manager-stats {
-    grid-template-columns: repeat(2,1fr);
-  }
-
-  .manager-grid {
-    grid-template-columns: 1fr;
-  }
-
+.mgrdash-reject {
+  border: 1px solid #f1cccc;
+  background: #fff7f7;
+  color: #dc4d4d;
 }
 
-@media (max-width:768px) {
+.mgrdash-approve:hover,
+.mgrdash-reject:hover {
+  transform: translateY(-1px);
+}
 
-  .manager-page {
-    padding: 16px;
+.mgrdash-approve:hover {
+  background: #e4f8ec;
+}
+
+.mgrdash-reject:hover {
+  background: #ffeded;
+}
+
+.mgrdash-view-btn {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 17px;
+  padding: 0 15px;
+  border: 1px solid #dce5ef;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #326db6;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.mgrdash-view-btn:hover {
+  border-color: #c5d6e9;
+  background: #f7faff;
+}
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 1200px) {
+  .mgrdash-page {
+    padding-left: 42px;
+    padding-right: 42px;
+  }
+}
+
+/* =========================================================
+   LAPTOP — 901px to 1199px
+   ========================================================= */
+
+@media (max-width: 1199px) {
+  .mgrdash-page {
+    max-width: none;
+    padding: 24px 24px 34px;
   }
 
-  .manager-stats {
-    grid-template-columns: 1fr;
+  .mgrdash-stats {
+    gap: 14px;
   }
 
-  .team-row,
-  .approval-row {
-    flex-direction: column;
-    align-items: flex-start;
+  .mgrdash-stat-card {
+    min-height: 116px;
+    padding: 18px 16px;
+  }
+
+  .mgrdash-stat-content h2 {
+    font-size: 27px;
+  }
+
+  .mgrdash-grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.85fr);
     gap: 16px;
   }
 
-  .team-right {
+  .mgrdash-team-row {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .mgrdash-team-meta {
+    gap: 12px;
+  }
+
+  .mgrdash-card-header,
+  .mgrdash-approval-list {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+/* =========================================================
+   TABLET — 701px to 900px
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .mgrdash-page {
+    padding: 20px 16px 30px;
+  }
+
+  .mgrdash-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .mgrdash-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .mgrdash-team-row {
+    min-height: 74px;
+  }
+
+  .mgrdash-team-meta {
+    gap: 14px;
+  }
+}
+
+/* =========================================================
+   MOBILE — <= 700px
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .mgrdash-content {
     width: 100%;
-    justify-content: space-between;
+    min-width: 0;
   }
 
-  .approval-actions {
+  .mgrdash-page {
     width: 100%;
+    padding: 17px 12px 24px;
   }
 
-  .approve,
-  .reject {
-    flex: 1;
+  .mgrdash-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
   }
 
+  .mgrdash-stat-card {
+    min-height: 100px;
+    padding: 15px 13px;
+    border-radius: 13px;
+  }
+
+  .mgrdash-stat-content p {
+    margin-bottom: 7px;
+    font-size: 9px;
+  }
+
+  .mgrdash-stat-content h2 {
+    font-size: 24px;
+  }
+
+  .mgrdash-stat-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 10px;
+    font-size: 18px;
+  }
+
+  .mgrdash-grid {
+    gap: 13px;
+  }
+
+  .mgrdash-card {
+    border-radius: 13px;
+  }
+
+  .mgrdash-card-header {
+    padding: 15px;
+  }
+
+  .mgrdash-card-header h2 {
+    font-size: 15px;
+  }
+
+  .mgrdash-card-header p {
+    font-size: 10px;
+  }
+
+  .mgrdash-count {
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    font-size: 10px;
+  }
+
+  .mgrdash-team-row {
+    min-height: 70px;
+    padding: 12px 15px;
+    gap: 10px;
+  }
+
+  .mgrdash-team-member {
+    gap: 9px;
+  }
+
+  .mgrdash-avatar {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 9px;
+    font-size: 10px;
+  }
+
+  .mgrdash-member-info h3 {
+    font-size: 11px;
+  }
+
+  .mgrdash-member-info span {
+    font-size: 9px;
+  }
+
+  .mgrdash-team-meta {
+    gap: 9px;
+  }
+
+  .mgrdash-status {
+    min-width: 64px;
+    padding: 6px 7px;
+    font-size: 9px;
+  }
+
+  .mgrdash-performance {
+    min-width: 44px;
+  }
+
+  .mgrdash-performance strong {
+    font-size: 12px;
+  }
+
+  .mgrdash-performance small {
+    font-size: 8px;
+  }
+
+  .mgrdash-approval-list {
+    padding: 2px 15px 15px;
+  }
+
+  .mgrdash-approval-row {
+    min-height: 68px;
+    padding: 11px 0;
+  }
+
+  .mgrdash-approval-avatar {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 9px;
+    font-size: 10px;
+  }
+
+  .mgrdash-approval-info h3 {
+    font-size: 11px;
+  }
+
+  .mgrdash-approval-info span {
+    font-size: 9px;
+  }
+
+  .mgrdash-approve,
+  .mgrdash-reject {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE — <= 480px
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .mgrdash-page {
+    padding: 14px 10px 20px;
+  }
+
+  .mgrdash-stats {
+    gap: 8px;
+  }
+
+  .mgrdash-stat-card {
+    min-height: 92px;
+    padding: 13px 11px;
+  }
+
+  .mgrdash-stat-content p {
+    font-size: 8px;
+    letter-spacing: 0.35px;
+  }
+
+  .mgrdash-stat-content h2 {
+    font-size: 22px;
+  }
+
+  .mgrdash-stat-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    font-size: 16px;
+  }
+
+  .mgrdash-team-row {
+    padding: 11px 12px;
+  }
+
+  .mgrdash-team-member {
+    max-width: 53%;
+  }
+
+  .mgrdash-team-meta {
+    max-width: 47%;
+    gap: 7px;
+  }
+
+  .mgrdash-status {
+    min-width: 58px;
+    padding: 5px 6px;
+    font-size: 8px;
+  }
+
+  .mgrdash-performance {
+    min-width: 39px;
+  }
+
+  .mgrdash-performance strong {
+    font-size: 11px;
+  }
+
+  .mgrdash-performance small {
+    display: none;
+  }
+
+  .mgrdash-approval-member {
+    max-width: 68%;
+  }
+
+  .mgrdash-approval-info {
+    min-width: 0;
+  }
+
+  .mgrdash-approval-info span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE — <= 360px
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .mgrdash-page {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .mgrdash-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .mgrdash-stat-card {
+    min-height: 82px;
+  }
+
+  .mgrdash-team-row {
+    align-items: flex-start;
+  }
+
+  .mgrdash-team-member {
+    max-width: 52%;
+  }
+
+  .mgrdash-team-meta {
+    max-width: 48%;
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================================================
+   DARK MODE
+   Works with html/body data-theme="dark" or .dark/.dark-mode
+   so the Header theme toggle can control the complete page.
+   ========================================================= */
+
+html[data-theme="dark"] .mgrdash-shell,
+body[data-theme="dark"] .mgrdash-shell,
+html.dark .mgrdash-shell,
+body.dark .mgrdash-shell,
+html.dark-mode .mgrdash-shell,
+body.dark-mode .mgrdash-shell {
+  background: #0f172a;
+  color: #e5edf8;
+}
+
+html[data-theme="dark"] .mgrdash-card,
+body[data-theme="dark"] .mgrdash-card,
+html.dark .mgrdash-card,
+body.dark .mgrdash-card,
+html.dark-mode .mgrdash-card,
+body.dark-mode .mgrdash-card,
+html[data-theme="dark"] .mgrdash-stat-card,
+body[data-theme="dark"] .mgrdash-stat-card,
+html.dark .mgrdash-stat-card,
+body.dark .mgrdash-stat-card,
+html.dark-mode .mgrdash-stat-card,
+body.dark-mode .mgrdash-stat-card {
+  border-color: #26364d;
+  background: #172235;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+
+html[data-theme="dark"] .mgrdash-card-header,
+body[data-theme="dark"] .mgrdash-card-header,
+html.dark .mgrdash-card-header,
+body.dark .mgrdash-card-header,
+html.dark-mode .mgrdash-card-header,
+body.dark-mode .mgrdash-card-header,
+html[data-theme="dark"] .mgrdash-team-row,
+body[data-theme="dark"] .mgrdash-team-row,
+html.dark .mgrdash-team-row,
+body.dark .mgrdash-team-row,
+html.dark-mode .mgrdash-team-row,
+body.dark-mode .mgrdash-team-row,
+html[data-theme="dark"] .mgrdash-approval-row,
+body[data-theme="dark"] .mgrdash-approval-row,
+html.dark .mgrdash-approval-row,
+body.dark .mgrdash-approval-row,
+html.dark-mode .mgrdash-approval-row,
+body.dark-mode .mgrdash-approval-row {
+  border-color: #26364d;
+}
+
+html[data-theme="dark"] .mgrdash-card-header h2,
+body[data-theme="dark"] .mgrdash-card-header h2,
+html.dark .mgrdash-card-header h2,
+body.dark .mgrdash-card-header h2,
+html.dark-mode .mgrdash-card-header h2,
+body.dark-mode .mgrdash-card-header h2,
+html[data-theme="dark"] .mgrdash-member-info h3,
+body[data-theme="dark"] .mgrdash-member-info h3,
+html.dark .mgrdash-member-info h3,
+body.dark .mgrdash-member-info h3,
+html.dark-mode .mgrdash-member-info h3,
+body.dark-mode .mgrdash-member-info h3,
+html[data-theme="dark"] .mgrdash-approval-info h3,
+body[data-theme="dark"] .mgrdash-approval-info h3,
+html.dark .mgrdash-approval-info h3,
+body.dark .mgrdash-approval-info h3,
+html.dark-mode .mgrdash-approval-info h3,
+body.dark-mode .mgrdash-approval-info h3 {
+  color: #e6eef9;
+}
+
+html[data-theme="dark"] .mgrdash-card-header p,
+body[data-theme="dark"] .mgrdash-card-header p,
+html.dark .mgrdash-card-header p,
+body.dark .mgrdash-card-header p,
+html.dark-mode .mgrdash-card-header p,
+body.dark-mode .mgrdash-card-header p,
+html[data-theme="dark"] .mgrdash-member-info span,
+body[data-theme="dark"] .mgrdash-member-info span,
+html.dark .mgrdash-member-info span,
+body.dark .mgrdash-member-info span,
+html.dark-mode .mgrdash-member-info span,
+body.dark-mode .mgrdash-member-info span,
+html[data-theme="dark"] .mgrdash-approval-info span,
+body[data-theme="dark"] .mgrdash-approval-info span,
+html.dark .mgrdash-approval-info span,
+body.dark .mgrdash-approval-info span,
+html.dark-mode .mgrdash-approval-info span,
+body.dark-mode .mgrdash-approval-info span {
+  color: #91a4bd;
+}
+
+html[data-theme="dark"] .mgrdash-team-row:hover,
+body[data-theme="dark"] .mgrdash-team-row:hover,
+html.dark .mgrdash-team-row:hover,
+body.dark .mgrdash-team-row:hover,
+html.dark-mode .mgrdash-team-row:hover,
+body.dark-mode .mgrdash-team-row:hover {
+  background: #1c2a40;
+}
+
+html[data-theme="dark"] .mgrdash-approval-avatar,
+body[data-theme="dark"] .mgrdash-approval-avatar,
+html.dark .mgrdash-approval-avatar,
+body.dark .mgrdash-approval-avatar,
+html.dark-mode .mgrdash-approval-avatar,
+body.dark-mode .mgrdash-approval-avatar {
+  background: #24344c;
+  color: #b9c8da;
+}
+
+html[data-theme="dark"] .mgrdash-view-btn,
+body[data-theme="dark"] .mgrdash-view-btn,
+html.dark .mgrdash-view-btn,
+body.dark .mgrdash-view-btn,
+html.dark-mode .mgrdash-view-btn,
+body.dark-mode .mgrdash-view-btn {
+  border-color: #31445e;
+  background: #1a293e;
+  color: #80b5ff;
+}
+
+html[data-theme="dark"] .mgrdash-view-btn:hover,
+body[data-theme="dark"] .mgrdash-view-btn:hover,
+html.dark .mgrdash-view-btn:hover,
+body.dark .mgrdash-view-btn:hover,
+html.dark-mode .mgrdash-view-btn:hover,
+body.dark-mode .mgrdash-view-btn:hover {
+  background: #22344d;
+}
+
+html[data-theme="dark"] .mgrdash-stat-content h2,
+body[data-theme="dark"] .mgrdash-stat-content h2,
+html.dark .mgrdash-stat-content h2,
+body.dark .mgrdash-stat-content h2,
+html.dark-mode .mgrdash-stat-content h2,
+body.dark-mode .mgrdash-stat-content h2 {
+  color: #edf4fc;
+}
+
+html[data-theme="dark"] .mgrdash-stat-content p,
+body[data-theme="dark"] .mgrdash-stat-content p,
+html.dark .mgrdash-stat-content p,
+body.dark .mgrdash-stat-content p,
+html.dark-mode .mgrdash-stat-content p,
+body.dark-mode .mgrdash-stat-content p {
+  color: #8fa2bb;
+}
+
+html[data-theme="dark"] .mgrdash-icon-users,
+body[data-theme="dark"] .mgrdash-icon-users,
+html.dark .mgrdash-icon-users,
+body.dark .mgrdash-icon-users,
+html.dark-mode .mgrdash-icon-users,
+body.dark-mode .mgrdash-icon-users {
+  background: #19345a;
+}
+
+html[data-theme="dark"] .mgrdash-icon-success,
+body[data-theme="dark"] .mgrdash-icon-success,
+html.dark .mgrdash-icon-success,
+body.dark .mgrdash-icon-success,
+html.dark-mode .mgrdash-icon-success,
+body.dark-mode .mgrdash-icon-success {
+  background: #173c2b;
+}
+
+html[data-theme="dark"] .mgrdash-icon-warning,
+body[data-theme="dark"] .mgrdash-icon-warning,
+html.dark .mgrdash-icon-warning,
+body.dark .mgrdash-icon-warning,
+html.dark-mode .mgrdash-icon-warning,
+body.dark-mode .mgrdash-icon-warning {
+  background: #45341b;
+}
+
+html[data-theme="dark"] .mgrdash-icon-purple,
+body[data-theme="dark"] .mgrdash-icon-purple,
+html.dark .mgrdash-icon-purple,
+body.dark .mgrdash-icon-purple,
+html.dark-mode .mgrdash-icon-purple,
+body.dark-mode .mgrdash-icon-purple {
+  background: #30234d;
+}
+
+html[data-theme="dark"] .mgrdash-count,
+body[data-theme="dark"] .mgrdash-count,
+html.dark .mgrdash-count,
+body.dark .mgrdash-count,
+html.dark-mode .mgrdash-count,
+body.dark-mode .mgrdash-count {
+  background: #19345a;
+  color: #80b5ff;
+}
+
+html[data-theme="dark"] .mgrdash-count-warning,
+body[data-theme="dark"] .mgrdash-count-warning,
+html.dark .mgrdash-count-warning,
+body.dark .mgrdash-count-warning,
+html.dark-mode .mgrdash-count-warning,
+body.dark-mode .mgrdash-count-warning {
+  background: #45341b;
+  color: #f4bb59;
+}
+
+html[data-theme="dark"] .mgrdash-approve,
+body[data-theme="dark"] .mgrdash-approve,
+html.dark .mgrdash-approve,
+body.dark .mgrdash-approve,
+html.dark-mode .mgrdash-approve,
+body.dark-mode .mgrdash-approve {
+  border-color: #275b43;
+  background: #173c2b;
+}
+
+html[data-theme="dark"] .mgrdash-reject,
+body[data-theme="dark"] .mgrdash-reject,
+html.dark .mgrdash-reject,
+body.dark .mgrdash-reject,
+html.dark-mode .mgrdash-reject,
+body.dark-mode .mgrdash-reject {
+  border-color: #633838;
+  background: #3a2023;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.mgrdash-approve:focus-visible,
+.mgrdash-reject:focus-visible,
+.mgrdash-view-btn:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.25);
+  outline-offset: 2px;
 }

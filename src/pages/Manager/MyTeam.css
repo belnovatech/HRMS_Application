@@ -1,0 +1,1414 @@
+/* =========================================================
+   MY TEAM PAGE
+   BASE / DESKTOP
+========================================================= */
+
+.myteam-page {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 4px 28px;
+  overflow: visible;
+}
+
+/* Prevent children from forcing the layout wider */
+.myteam-page *,
+.myteam-page *::before,
+.myteam-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.myteam-page-header {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.myteam-page-header > div:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.myteam-page-header h1 {
+  margin: 0;
+  color: #10233f;
+  font-size: clamp(24px, 2vw, 32px);
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.6px;
+}
+
+.myteam-page-header p {
+  margin: 7px 0 0;
+  color: #6b7a90;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.myteam-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.myteam-export-btn,
+.myteam-add-btn {
+  height: 42px;
+  min-width: 150px;
+  border-radius: 10px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+  white-space: nowrap;
+}
+
+.myteam-export-btn {
+  border: 1px solid #dce3ec;
+  background: #ffffff;
+  color: #334155;
+}
+
+.myteam-export-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+}
+
+.myteam-add-btn {
+  border: 1px solid transparent;
+  background: linear-gradient(
+    135deg,
+    #1597f4 0%,
+    #6357e8 100%
+  );
+  color: #ffffff;
+  box-shadow: 0 5px 14px rgba(79, 70, 229, 0.2);
+}
+
+.myteam-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.26);
+}
+
+.myteam-add-btn:active,
+.myteam-export-btn:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.myteam-main-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.035);
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.myteam-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: 46px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.myteam-search-wrapper input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dce4ee;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #172b4d;
+  padding: 0 44px;
+  outline: none;
+  font-size: 14px;
+}
+
+.myteam-search-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.myteam-search-wrapper input:focus {
+  background: #ffffff;
+  border-color: #7aa8ff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.09);
+}
+
+.myteam-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8da0b8;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.myteam-clear-search {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.myteam-clear-search:hover {
+  background: #e8edf3;
+}
+
+/* =========================================================
+   TABLE HEADING
+========================================================= */
+
+.myteam-table-heading {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.myteam-table-heading > div {
+  min-width: 0;
+}
+
+.myteam-table-heading h3 {
+  margin: 0;
+  color: #213b5c;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.myteam-table-heading span {
+  display: block;
+  margin-top: 3px;
+  color: #8a99ad;
+  font-size: 12px;
+}
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.myteam-table-container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  /*
+     IMPORTANT:
+     Allow the table to scroll inside its own container
+     instead of pushing the whole page wider.
+  */
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  border: 1px solid #e1e7ef;
+  border-radius: 13px;
+  background: #ffffff;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.myteam-table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.myteam-table thead {
+  background: #f8fafc;
+}
+
+.myteam-table th {
+  height: 52px;
+  padding: 0 14px;
+  border-bottom: 1px solid #e4e9f0;
+  color: #536b88;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.45px;
+  text-align: left;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.myteam-table td {
+  padding: 15px 14px;
+  border-bottom: 1px solid #edf1f5;
+  color: #273b55;
+  font-size: 13px;
+  line-height: 1.4;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.myteam-table tbody tr {
+  transition: background 0.16s ease;
+}
+
+.myteam-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+.myteam-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =========================================================
+   COLUMN WIDTHS
+========================================================= */
+
+.myteam-member-column {
+  width: 22%;
+}
+
+.myteam-designation-column {
+  width: 16%;
+}
+
+.myteam-email-column {
+  width: 21%;
+}
+
+.myteam-phone-column {
+  width: 16%;
+}
+
+.myteam-status-column {
+  width: 14%;
+}
+
+.myteam-performance-column {
+  width: 11%;
+}
+
+/* =========================================================
+   MEMBER
+========================================================= */
+
+.myteam-member-info {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  width: 100%;
+}
+
+.myteam-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.myteam-member-details {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.myteam-member-details strong {
+  color: #172b4d;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.myteam-member-details span {
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 1.2;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   DESIGNATION
+========================================================= */
+
+.myteam-designation {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 0;
+  color: #304663;
+}
+
+.myteam-designation svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #7f93ad;
+}
+
+.myteam-designation span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   EMAIL / PHONE
+========================================================= */
+
+.myteam-email-link,
+.myteam-phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 100%;
+  min-width: 0;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.myteam-email-link {
+  color: #397cf2;
+}
+
+.myteam-phone-link {
+  color: #60748e;
+}
+
+.myteam-email-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.myteam-phone-link:hover {
+  color: #334155;
+}
+
+.myteam-email-link svg,
+.myteam-phone-link svg {
+  flex-shrink: 0;
+}
+
+.myteam-email-link span,
+.myteam-phone-link span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.myteam-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 76px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.myteam-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.myteam-status-badge.present {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.myteam-status-badge.present .myteam-status-dot {
+  background: #22c55e;
+}
+
+.myteam-status-badge.wfh {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.myteam-status-badge.wfh .myteam-status-dot {
+  background: #0ea5e9;
+}
+
+.myteam-status-badge.absent {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.myteam-status-badge.absent .myteam-status-dot {
+  background: #ef4444;
+}
+
+.myteam-status-badge.on-leave {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.myteam-status-badge.on-leave .myteam-status-dot {
+  background: #f59e0b;
+}
+
+.myteam-status-badge.unknown {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.myteam-status-badge.unknown .myteam-status-dot {
+  background: #94a3b8;
+}
+
+/* =========================================================
+   PERFORMANCE
+========================================================= */
+
+.myteam-performance {
+  display: flex;
+  align-items: center;
+}
+
+.myteam-performance strong {
+  color: #16a34a;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+/* =========================================================
+   RESPONSIVE — LARGE TABLET / SMALL LAPTOP
+   901px - 1199px
+========================================================= */
+
+@media (max-width: 1199px) {
+
+  .myteam-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .myteam-main-card {
+    padding: 18px;
+  }
+
+  .myteam-page-header {
+    gap: 16px;
+  }
+
+  .myteam-table {
+    min-width: 820px;
+  }
+
+  .myteam-table th,
+  .myteam-table td {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .myteam-avatar {
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+  }
+
+  .myteam-member-info {
+    gap: 8px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   701px - 900px
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .myteam-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .myteam-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .myteam-export-btn,
+  .myteam-add-btn {
+    min-width: 140px;
+  }
+
+  .myteam-main-card {
+    padding: 16px;
+  }
+
+  .myteam-table {
+    min-width: 800px;
+  }
+
+  .myteam-table th {
+    font-size: 10px;
+  }
+
+  .myteam-table td {
+    font-size: 11px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   <= 700px
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .myteam-page {
+    width: 100%;
+    padding: 0 0 20px;
+    overflow-x: hidden;
+  }
+
+  .myteam-page-header {
+    width: 100%;
+    margin-bottom: 16px;
+    gap: 14px;
+  }
+
+  .myteam-page-header h1 {
+    font-size: 22px;
+  }
+
+  .myteam-page-header p {
+    font-size: 12px;
+  }
+
+  .myteam-header-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .myteam-export-btn,
+  .myteam-add-btn {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0 10px;
+  }
+
+  .myteam-main-card {
+    width: 100%;
+    padding: 14px;
+    border-radius: 13px;
+  }
+
+  .myteam-search-wrapper {
+    height: 44px;
+    margin-bottom: 18px;
+  }
+
+  .myteam-search-wrapper input {
+    font-size: 13px;
+    padding-left: 42px;
+    padding-right: 40px;
+  }
+
+  .myteam-table-heading {
+    margin-bottom: 10px;
+  }
+
+  .myteam-table-heading h3 {
+    font-size: 14px;
+  }
+
+  .myteam-table-heading span {
+    font-size: 11px;
+  }
+
+  /* ---------------------------------------------
+     Mobile card table
+  --------------------------------------------- */
+
+  .myteam-table-container {
+    border: none;
+    overflow: visible;
+  }
+
+  .myteam-table,
+  .myteam-table thead,
+  .myteam-table tbody,
+  .myteam-table tr,
+  .myteam-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .myteam-table {
+    min-width: 0;
+  }
+
+  .myteam-table thead {
+    display: none;
+  }
+
+  .myteam-table tbody tr {
+    width: 100%;
+    margin-bottom: 12px;
+    border: 1px solid #e4e9f0;
+    border-radius: 12px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .myteam-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .myteam-table td {
+    min-height: 48px;
+    padding: 10px 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    border-bottom: 1px solid #edf1f5;
+    text-align: right;
+
+    overflow: visible;
+  }
+
+  .myteam-table td:last-child {
+    border-bottom: none;
+  }
+
+  .myteam-table td::before {
+    flex: 0 0 auto;
+
+    color: #8291a6;
+    font-size: 9px;
+    font-weight: 750;
+    letter-spacing: 0.35px;
+    text-align: left;
+  }
+
+  .myteam-table td:nth-child(1)::before {
+    content: "MEMBER";
+  }
+
+  .myteam-table td:nth-child(2)::before {
+    content: "DESIGNATION";
+  }
+
+  .myteam-table td:nth-child(3)::before {
+    content: "EMAIL";
+  }
+
+  .myteam-table td:nth-child(4)::before {
+    content: "PHONE";
+  }
+
+  .myteam-table td:nth-child(5)::before {
+    content: "STATUS";
+  }
+
+  .myteam-table td:nth-child(6)::before {
+    content: "PERFORMANCE";
+  }
+
+  .myteam-member-info {
+    width: auto;
+    max-width: 72%;
+    justify-content: flex-end;
+  }
+
+  .myteam-member-details {
+    min-width: 0;
+    text-align: right;
+  }
+
+  .myteam-member-details strong,
+  .myteam-member-details span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .myteam-designation {
+    max-width: 72%;
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .myteam-email-link,
+  .myteam-phone-link {
+    max-width: 72%;
+    justify-content: flex-end;
+  }
+
+  .myteam-status-badge {
+    min-width: 70px;
+  }
+
+  .myteam-performance {
+    justify-content: flex-end;
+  }
+
+  .myteam-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+   <= 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .myteam-page-header h1 {
+    font-size: 20px;
+  }
+
+  .myteam-header-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .myteam-main-card {
+    padding: 11px;
+    border-radius: 11px;
+  }
+
+  .myteam-table td {
+    padding: 9px 10px;
+  }
+
+  .myteam-table td::before {
+    font-size: 8px;
+  }
+
+  .myteam-avatar {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 8px;
+    font-size: 10px;
+  }
+
+  .myteam-member-info {
+    max-width: 68%;
+  }
+
+  .myteam-member-details strong {
+    font-size: 11px;
+  }
+
+  .myteam-member-details span {
+    font-size: 9px;
+  }
+
+  .myteam-email-link,
+  .myteam-phone-link,
+  .myteam-designation {
+    max-width: 68%;
+    font-size: 10px;
+  }
+
+  .myteam-status-badge {
+    min-width: 64px;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+
+  .myteam-performance strong {
+    font-size: 13px;
+  }
+
+  /* Modal */
+  .myteam-modal-overlay {
+    padding: 10px;
+  }
+
+  .myteam-modal {
+    width: 100%;
+    max-height: calc(100vh - 20px);
+    border-radius: 13px;
+  }
+
+  .myteam-modal-header {
+    padding: 18px;
+  }
+
+  .myteam-employee-form {
+    padding: 18px;
+  }
+
+  .myteam-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .myteam-cancel-btn,
+  .myteam-save-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+   <= 360px
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .myteam-main-card {
+    padding: 9px;
+  }
+
+  .myteam-search-wrapper input {
+    font-size: 12px;
+  }
+
+  .myteam-table td {
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  .myteam-member-info {
+    max-width: 64%;
+  }
+
+  .myteam-email-link,
+  .myteam-phone-link,
+  .myteam-designation {
+    max-width: 64%;
+  }
+
+  .myteam-status-badge {
+    min-width: 58px;
+    padding: 5px 6px;
+    gap: 4px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.myteam-export-btn:focus-visible,
+.myteam-add-btn:focus-visible,
+.myteam-clear-search:focus-visible,
+.myteam-modal-close:focus-visible,
+.myteam-cancel-btn:focus-visible,
+.myteam-save-btn:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.25);
+  outline-offset: 2px;
+}
+/* =========================================================
+   MY TEAM — FINAL FULL-WIDTH LAYOUT FIX
+   CSS FILE ONLY
+========================================================= */
+
+.myteam-page {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+
+  /*
+    Prevent the page from being trapped inside a
+    narrower inherited flex/grid child.
+  */
+  position: relative;
+
+  box-sizing: border-box;
+  padding: 0 4px 28px;
+
+  overflow: visible;
+}
+
+/* Make the main card consume the complete My Team area */
+.myteam-page .myteam-main-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+/* Search must never inherit a smaller width */
+.myteam-page .myteam-search-wrapper {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+/* =========================================================
+   DESKTOP — 1200px+
+========================================================= */
+
+@media (min-width: 1200px) {
+  /*
+    Desktop fix:
+    Keep the My Team page inside the width provided by its
+    existing layout/sidebar instead of calculating a viewport
+    width. This prevents the page, header actions, and card
+    from extending past the desktop viewport.
+  */
+  .myteam-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .myteam-page-header,
+  .myteam-main-card,
+  .myteam-search-wrapper,
+  .myteam-table-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .myteam-main-card {
+    box-sizing: border-box;
+  }
+
+  .myteam-table-container {
+    overflow-x: auto;
+  }
+
+  .myteam-table {
+    width: 100%;
+    min-width: 900px;
+    table-layout: fixed;
+  }
+}
+
+/* =========================================================
+   LAPTOP — 901px to 1199px
+========================================================= */
+
+@media (min-width: 901px) and (max-width: 1199px) {
+  .myteam-page {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .myteam-main-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .myteam-table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .myteam-table {
+    width: 100%;
+    min-width: 850px;
+  }
+}
+
+/* =========================================================
+   TABLET — 701px to 900px
+========================================================= */
+
+@media (min-width: 701px) and (max-width: 900px) {
+  .myteam-page {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .myteam-main-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .myteam-table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .myteam-table {
+    width: 100%;
+    min-width: 800px;
+  }
+}
+
+/* =========================================================
+   MOBILE — <= 700px
+========================================================= */
+
+@media (max-width: 700px) {
+  .myteam-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    padding: 0 0 20px;
+
+    /*
+      IMPORTANT:
+      Do not allow the mobile page itself to create
+      horizontal scrolling.
+    */
+    overflow-x: hidden;
+  }
+
+  .myteam-main-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 14px;
+  }
+
+  .myteam-search-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /*
+    Mobile table becomes employee cards.
+  */
+
+  .myteam-table-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+    border: none;
+  }
+
+  .myteam-table,
+  .myteam-table tbody,
+  .myteam-table tr,
+  .myteam-table td {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .myteam-table {
+    min-width: 0;
+    table-layout: auto;
+  }
+
+  .myteam-table thead {
+    display: none;
+  }
+
+  .myteam-table tbody tr {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+
+    margin-bottom: 12px;
+
+    border: 1px solid #e4e9f0;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+  }
+
+  .myteam-table tbody tr:last-child {
+    margin-bottom: 0;
+  }
+
+  .myteam-table td {
+    display: flex;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    min-height: 48px;
+
+    padding: 10px 13px;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    border-bottom: 1px solid #edf1f5;
+
+    text-align: right;
+
+    overflow: hidden;
+  }
+
+  .myteam-table td:last-child {
+    border-bottom: none;
+  }
+
+  .myteam-table td::before {
+    flex: 0 0 auto;
+
+    color: #8291a6;
+    font-size: 9px;
+    font-weight: 750;
+    letter-spacing: 0.35px;
+
+    text-align: left;
+  }
+
+  .myteam-table td:nth-child(1)::before {
+    content: "MEMBER";
+  }
+
+  .myteam-table td:nth-child(2)::before {
+    content: "DESIGNATION";
+  }
+
+  .myteam-table td:nth-child(3)::before {
+    content: "EMAIL";
+  }
+
+  .myteam-table td:nth-child(4)::before {
+    content: "PHONE";
+  }
+
+  .myteam-table td:nth-child(5)::before {
+    content: "STATUS";
+  }
+
+  .myteam-table td:nth-child(6)::before {
+    content: "PERFORMANCE";
+  }
+
+  .myteam-member-info {
+    width: auto;
+    max-width: 70%;
+    min-width: 0;
+
+    justify-content: flex-end;
+  }
+
+  .myteam-member-details {
+    min-width: 0;
+    max-width: 100%;
+
+    text-align: right;
+  }
+
+  .myteam-member-details strong,
+  .myteam-member-details span {
+    max-width: 100%;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .myteam-designation {
+    max-width: 70%;
+    min-width: 0;
+
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .myteam-designation span {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .myteam-email-link,
+  .myteam-phone-link {
+    max-width: 70%;
+    min-width: 0;
+
+    justify-content: flex-end;
+  }
+
+  .myteam-email-link span,
+  .myteam-phone-link span {
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .myteam-status-badge {
+    flex-shrink: 0;
+  }
+
+  .myteam-performance {
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE — <= 480px
+========================================================= */
+
+@media (max-width: 480px) {
+  .myteam-page {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0 18px;
+  }
+
+  .myteam-main-card {
+    width: 100%;
+    padding: 11px;
+    border-radius: 11px;
+  }
+
+  .myteam-page-header {
+    width: 100%;
+  }
+
+  .myteam-header-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .myteam-export-btn,
+  .myteam-add-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .myteam-table td {
+    padding: 9px 10px;
+  }
+
+  .myteam-table td::before {
+    font-size: 8px;
+  }
+
+  .myteam-member-info {
+    max-width: 66%;
+  }
+
+  .myteam-designation,
+  .myteam-email-link,
+  .myteam-phone-link {
+    max-width: 66%;
+  }
+
+  .myteam-status-badge {
+    min-width: 64px;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL MOBILE — <= 360px
+========================================================= */
+
+@media (max-width: 360px) {
+  .myteam-main-card {
+    padding: 9px;
+  }
+
+  .myteam-table td {
+    min-height: 44px;
+    padding: 8px;
+  }
+
+  .myteam-member-info {
+    max-width: 62%;
+  }
+
+  .myteam-designation,
+  .myteam-email-link,
+  .myteam-phone-link {
+    max-width: 62%;
+  }
+
+  .myteam-status-badge {
+    min-width: 58px;
+    padding: 5px 6px;
+  }
+}

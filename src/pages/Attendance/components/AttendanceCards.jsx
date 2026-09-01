@@ -47,9 +47,9 @@ export default function AttendanceCards() {
       {cards.map((card, index) => (
         <div
           key={index}
-          className="attendance-card"
+          className="attendance-kpi-card"
         >
-          <div className={`card-icon ${card.className}`}>
+          <div className={`attendance-card-icon ${card.className}`}>
             {card.icon}
           </div>
 
@@ -60,4 +60,4 @@ export default function AttendanceCards() {
       ))}
     </div>
   );
-}
+}

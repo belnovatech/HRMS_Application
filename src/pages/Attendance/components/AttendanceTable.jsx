@@ -45,34 +45,36 @@ export default function AttendanceTable() {
   ];
 
   return (
-    <table className="attendance-table">
-      <thead>
-        <tr>
-          <th>Employee</th>
-          <th>Date</th>
-          <th>Check In</th>
-          <th>Check Out</th>
-          <th>Work Hours</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {employees.map((emp, index) => (
-          <tr key={index}>
-            <td>{emp.name}</td>
-            <td>{emp.date}</td>
-            <td>{emp.checkIn}</td>
-            <td>{emp.checkOut}</td>
-            <td>{emp.hours}</td>
-            <td>
-              <span className={`status ${emp.status.toLowerCase().replace(" ", "-")}`}>
-                {emp.status}
-              </span>
-            </td>
+    <div className="table-responsive-wrapper">
+      <table className="enterprise-table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Work Hours</th>
+            <th>Status</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {employees.map((emp, index) => (
+            <tr key={index}>
+              <td><strong>{emp.name}</strong></td>
+              <td>{emp.date}</td>
+              <td>{emp.checkIn}</td>
+              <td>{emp.checkOut}</td>
+              <td>{emp.hours}</td>
+              <td>
+                <span className={`att-status-badge ${emp.status.toLowerCase().replace(" ", "-")}`}>
+                  {emp.status}
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
-}
+}

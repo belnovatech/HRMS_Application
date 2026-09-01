@@ -1,0 +1,853 @@
+/* =========================================================
+   TEAM REPORTS & ANALYTICS
+   Completely isolated namespace.
+   
+   IMPORTANT:
+   Every class starts with "teamreports-"
+   so it will not conflict with existing HRMS CSS.
+   ========================================================= */
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.teamreports-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 1px 30px;
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.teamreports-header {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.teamreports-heading {
+  min-width: 0;
+}
+
+.teamreports-heading h1 {
+  margin: 0;
+  color: #202631;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.3px;
+}
+
+.teamreports-heading p {
+  margin: 4px 0 0;
+  color: #7e8999;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.teamreports-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.teamreports-filter-button,
+.teamreports-export-all {
+  height: 36px;
+  padding: 0 13px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.teamreports-filter-button {
+  border: 1px solid #dce3eb;
+  background: #ffffff;
+  color: #536176;
+}
+
+.teamreports-filter-button:hover,
+.teamreports-filter-active {
+  border-color: #c8d4e2;
+  background: #f8fafc;
+  color: #2563eb;
+}
+
+.teamreports-export-all {
+  border: 1px solid transparent;
+  background: linear-gradient(
+    135deg,
+    #168df7,
+    #7653e9
+  );
+  color: #ffffff;
+  box-shadow: 0 3px 9px rgba(79, 70, 229, 0.16);
+}
+
+.teamreports-export-all:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 13px rgba(79, 70, 229, 0.22);
+}
+
+
+/* =========================================================
+   FILTER PANEL
+   ========================================================= */
+
+.teamreports-filter-panel {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid #dfe5ed;
+  border-radius: 11px;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+}
+
+.teamreports-filter-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.teamreports-filter-heading strong {
+  display: block;
+  color: #334155;
+  font-size: 11px;
+}
+
+.teamreports-filter-heading span {
+  display: block;
+  margin-top: 3px;
+  color: #9aa5b5;
+  font-size: 9px;
+}
+
+.teamreports-filter-close {
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.teamreports-filter-close:hover {
+  background: #e2e8f0;
+}
+
+.teamreports-filter-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.teamreports-filter-field {
+  min-width: 180px;
+}
+
+.teamreports-filter-field label {
+  display: block;
+  margin-bottom: 5px;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.teamreports-select-wrap {
+  position: relative;
+}
+
+.teamreports-select-wrap select {
+  width: 100%;
+  height: 34px;
+  box-sizing: border-box;
+  appearance: none;
+  padding: 0 30px 0 10px;
+  border: 1px solid #dce3eb;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #536176;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.teamreports-select-wrap select:focus {
+  border-color: #7aa8f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+}
+
+.teamreports-select-wrap svg {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #8793a4;
+}
+
+.teamreports-clear-button {
+  height: 34px;
+  padding: 0 11px;
+  border: 1px solid #dce3eb;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.teamreports-clear-button:hover {
+  background: #f8fafc;
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   REPORT CARD GRID
+   ========================================================= */
+
+.teamreports-card-grid {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(
+    4,
+    minmax(0, 1fr)
+  );
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+
+/* =========================================================
+   REPORT CARD
+   ========================================================= */
+
+.teamreports-report-card {
+  min-width: 0;
+  min-height: 108px;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #dfe5ed;
+  border-radius: 10px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.teamreports-report-card:hover {
+  transform: translateY(-2px);
+  border-color: #d3dce8;
+  box-shadow: 0 7px 18px rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================================================
+   REPORT TOP
+   ========================================================= */
+
+.teamreports-report-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.teamreports-report-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+}
+
+.teamreports-mini-download {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #c0c8d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.teamreports-mini-download:hover {
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   REPORT CONTENT
+   ========================================================= */
+
+.teamreports-report-content {
+  min-width: 0;
+  margin-top: 9px;
+}
+
+.teamreports-report-content h3 {
+  margin: 0;
+  color: #344054;
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.teamreports-report-content p {
+  margin: 3px 0 0;
+  color: #9aa5b5;
+  font-size: 8.5px;
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   FORMAT BUTTONS
+   ========================================================= */
+
+.teamreports-format-list {
+  margin-top: auto;
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.teamreports-format-list button {
+  min-width: 27px;
+  height: 18px;
+  padding: 0 5px;
+  border: none;
+  border-radius: 3px;
+  background: #f1f3f6;
+  color: #6e7a8b;
+  font-size: 7.5px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.teamreports-format-list button:hover {
+  background: #e8eef8;
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   ANALYTICS CARD
+   ========================================================= */
+
+.teamreports-analytics-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 18px 18px 12px;
+  border: 1px solid #dfe5ed;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   ANALYTICS HEADER
+   ========================================================= */
+
+.teamreports-analytics-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.teamreports-analytics-header h2 {
+  margin: 0;
+  color: #303b4b;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 750;
+}
+
+.teamreports-analytics-header p {
+  margin: 4px 0 0;
+  color: #9aa5b5;
+  font-size: 8.5px;
+}
+
+
+/* =========================================================
+   CHART TABS
+   ========================================================= */
+
+.teamreports-chart-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 8px;
+  background: #f1f3f6;
+  flex-shrink: 0;
+}
+
+.teamreports-chart-tabs button {
+  height: 25px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #7b8798;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.17s ease;
+}
+
+.teamreports-chart-tabs button:hover {
+  color: #475569;
+}
+
+.teamreports-chart-tab-active {
+  color: #ffffff !important;
+  background: linear-gradient(
+    135deg,
+    #2c80f6,
+    #7654e9
+  ) !important;
+  box-shadow: 0 2px 5px rgba(59, 130, 246, 0.16);
+}
+
+
+/* =========================================================
+   CHART
+   ========================================================= */
+
+.teamreports-chart-container {
+  width: 100%;
+  height: 245px;
+  min-width: 0;
+  margin-top: 9px;
+}
+
+.teamreports-chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.teamreports-chart-label {
+  fill: #9aa5b5;
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+.teamreports-metrics-grid {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 1fr)
+  );
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.teamreports-metric-card {
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 85px;
+  padding: 14px 16px;
+  border: 1px solid #dfe5ed;
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.teamreports-metric-label {
+  display: block;
+  color: #9aa5b5;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.teamreports-metric-value {
+  display: block;
+  margin-top: 5px;
+  color: #202731;
+  font-size: 23px;
+  line-height: 1;
+  font-weight: 750;
+}
+
+.teamreports-metric-change {
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.teamreports-metric-change span {
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 7.5px;
+  font-weight: 750;
+}
+
+.teamreports-metric-change small {
+  color: #9aa5b5;
+  font-size: 7.5px;
+}
+
+.teamreports-change-positive span {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.teamreports-change-warning span {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+
+/* =========================================================
+   FILTER RESULT
+   ========================================================= */
+
+.teamreports-filter-result {
+  margin-top: 12px;
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 9px;
+}
+
+.teamreports-filter-result strong {
+  color: #1d4ed8;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1450px) {
+  .teamreports-heading h1 {
+    font-size: 24px;
+  }
+
+  .teamreports-report-card {
+    min-height: 115px;
+  }
+
+  .teamreports-report-content h3 {
+    font-size: 10.5px;
+  }
+
+  .teamreports-analytics-card {
+    padding: 20px;
+  }
+}
+
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+  .teamreports-card-grid {
+    grid-template-columns: repeat(
+      4,
+      minmax(0, 1fr)
+    );
+  }
+
+  .teamreports-report-card {
+    padding: 10px;
+  }
+
+  .teamreports-report-content h3 {
+    font-size: 9px;
+  }
+
+  .teamreports-format-list {
+    gap: 3px;
+  }
+
+  .teamreports-format-list button {
+    padding: 0 4px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 950px) {
+
+  .teamreports-card-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+  }
+
+  .teamreports-metrics-grid {
+    grid-template-columns: repeat(
+      3,
+      minmax(0, 1fr)
+    );
+    gap: 8px;
+  }
+
+  .teamreports-analytics-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .teamreports-chart-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .teamreports-chart-tabs button {
+    flex: 1;
+  }
+
+  .teamreports-filter-field {
+    flex: 1 1 180px;
+  }
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .teamreports-page {
+    padding-bottom: 22px;
+  }
+
+  .teamreports-header {
+    flex-direction: column;
+  }
+
+  .teamreports-header-actions {
+    width: 100%;
+  }
+
+  .teamreports-filter-button,
+  .teamreports-export-all {
+    flex: 1;
+  }
+
+  .teamreports-card-grid {
+    grid-template-columns: repeat(
+      2,
+      minmax(0, 1fr)
+    );
+    gap: 8px;
+  }
+
+  .teamreports-report-card {
+    min-height: 110px;
+  }
+
+  .teamreports-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teamreports-metric-card {
+    min-height: 80px;
+  }
+
+  .teamreports-filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .teamreports-filter-field {
+    width: 100%;
+  }
+
+  .teamreports-clear-button {
+    width: 100%;
+  }
+
+  .teamreports-chart-container {
+    height: 210px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+  .teamreports-heading h1 {
+    font-size: 20px;
+  }
+
+  .teamreports-heading p {
+    font-size: 9px;
+  }
+
+  .teamreports-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teamreports-report-card {
+    min-height: 105px;
+  }
+
+  .teamreports-report-icon {
+    font-size: 18px;
+  }
+
+  .teamreports-report-content h3 {
+    font-size: 10px;
+  }
+
+  .teamreports-report-content p {
+    font-size: 8.5px;
+  }
+
+  .teamreports-analytics-card {
+    padding: 14px 10px 10px;
+    border-radius: 10px;
+  }
+
+  .teamreports-analytics-header h2 {
+    font-size: 12px;
+  }
+
+  .teamreports-chart-tabs {
+    width: 100%;
+  }
+
+  .teamreports-chart-tabs button {
+    padding: 0 7px;
+    font-size: 7.5px;
+  }
+
+  .teamreports-chart-container {
+    height: 185px;
+  }
+
+  .teamreports-metric-value {
+    font-size: 21px;
+  }
+
+  .teamreports-metrics-grid {
+    gap: 8px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .teamreports-header-actions {
+    flex-direction: column;
+  }
+
+  .teamreports-filter-button,
+  .teamreports-export-all {
+    width: 100%;
+    flex: none;
+  }
+
+  .teamreports-chart-tabs {
+    overflow-x: auto;
+  }
+
+  .teamreports-chart-tabs button {
+    min-width: 70px;
+    flex: 0 0 auto;
+  }
+
+  .teamreports-chart-container {
+    height: 170px;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.teamreports-filter-button:focus-visible,
+.teamreports-export-all:focus-visible,
+.teamreports-mini-download:focus-visible,
+.teamreports-format-list button:focus-visible,
+.teamreports-chart-tabs button:focus-visible,
+.teamreports-filter-close:focus-visible,
+.teamreports-clear-button:focus-visible,
+.teamreports-select-wrap select:focus-visible {
+  outline: 3px solid rgba(
+    59,
+    130,
+    246,
+    0.18
+  );
+  outline-offset: 2px;
+}

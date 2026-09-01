@@ -1,0 +1,1064 @@
+/* ============================================================
+   EMPLOYEE ATTENDANCE
+   Unique prefix: emp-attendance-
+   No generic selectors are used to prevent CSS overrides.
+   ============================================================ */
+
+.emp-attendance-page {
+  --emp-att-text: #172033;
+  --emp-att-muted: #7f8a9d;
+  --emp-att-border: #e1e5eb;
+  --emp-att-surface: #ffffff;
+  --emp-att-page: #f6f8fb;
+  --emp-att-blue: #2d78f4;
+  --emp-att-green: #13b968;
+  --emp-att-red: #ff4d4f;
+  --emp-att-orange: #f59e0b;
+  --emp-att-purple: #7758ef;
+
+  width: 100%;
+  max-width: 100%;
+
+  padding: 5px 10px 40px;
+
+  color: var(--emp-att-text);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.emp-attendance-page *,
+.emp-attendance-page *::before,
+.emp-attendance-page *::after {
+  box-sizing: border-box;
+}
+
+.emp-attendance-page button,
+.emp-attendance-page input,
+.emp-attendance-page textarea {
+  font: inherit;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.emp-attendance-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 14px;
+}
+
+.emp-attendance-header h1 {
+  margin: 0;
+
+  color: #171c28;
+
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.emp-attendance-header p {
+  margin: 3px 0 0;
+
+  color: #7f899a;
+
+  font-size: 10.5px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   REQUEST CORRECTION BUTTON
+   ============================================================ */
+
+.emp-attendance-correction-btn {
+  min-height: 35px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 13px;
+
+  border: 1px solid #dfe4ea;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #3e4858;
+
+  cursor: pointer;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.emp-attendance-correction-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.emp-attendance-correction-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #2d67e9;
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   SUMMARY CARDS
+   ============================================================ */
+
+.emp-attendance-summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-bottom: 16px;
+}
+
+.emp-attendance-summary-card {
+  min-height: 69px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 11px 13px;
+
+  border: 1px solid var(--emp-att-border);
+  border-radius: 13px;
+
+  background: var(--emp-att-surface);
+}
+
+.emp-attendance-summary-card strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.emp-attendance-summary-card span {
+  display: block;
+
+  color: #7e899a;
+
+  font-size: 9px;
+  line-height: 1.25;
+  font-weight: 500;
+}
+
+.emp-attendance-summary-blue {
+  color: #2378f5;
+}
+
+.emp-attendance-summary-green {
+  color: #12b866;
+}
+
+.emp-attendance-summary-red {
+  color: #ff4d4f;
+}
+
+.emp-attendance-summary-orange {
+  color: #f59e0b;
+}
+
+.emp-attendance-summary-purple {
+  color: #7656ee;
+}
+
+
+/* ============================================================
+   ATTENDANCE TABLE CARD
+   ============================================================ */
+
+.emp-attendance-table-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid var(--emp-att-border);
+  border-radius: 14px;
+
+  background: #ffffff;
+}
+
+.emp-attendance-table-header {
+  min-height: 49px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 8px 13px;
+
+  border-bottom: 1px solid #edf0f3;
+}
+
+.emp-attendance-table-header h2 {
+  margin: 0;
+
+  color: #252b35;
+
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   MONTH SELECTOR
+   ============================================================ */
+
+.emp-attendance-month-control {
+  min-height: 31px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 0 7px;
+
+  border: 1px solid #dfe4ea;
+  border-radius: 7px;
+
+  background: #ffffff;
+}
+
+.emp-attendance-month-control svg {
+  width: 12px;
+  height: 12px;
+
+  color: #6c78e8;
+}
+
+.emp-attendance-month-control input {
+  min-width: 108px;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+  color: #4c5666;
+
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.emp-attendance-month-control input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.emp-attendance-table-scroll {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.emp-attendance-table {
+  width: 100%;
+
+  min-width: 620px;
+
+  border-collapse: collapse;
+}
+
+.emp-attendance-table th {
+  height: 36px;
+
+  padding: 0 13px;
+
+  background: #fbfcfd;
+
+  color: #9099a8;
+
+  font-size: 8.5px;
+  line-height: 1;
+  font-weight: 600;
+
+  text-align: left;
+
+  white-space: nowrap;
+}
+
+.emp-attendance-table td {
+  height: 43px;
+
+  padding: 0 13px;
+
+  border-top: 1px solid #f0f2f5;
+
+  color: #4b5565;
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.emp-attendance-table th:first-child,
+.emp-attendance-table td:first-child {
+  padding-left: 13px;
+}
+
+.emp-attendance-table th:last-child,
+.emp-attendance-table td:last-child {
+  padding-right: 13px;
+}
+
+.emp-attendance-table td strong {
+  color: #253044;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.emp-attendance-checkin {
+  color: #0db966 !important;
+}
+
+.emp-attendance-checkout {
+  color: #ff5053 !important;
+}
+
+.emp-attendance-hours {
+  color: #202a3a !important;
+
+  font-weight: 700 !important;
+}
+
+
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+
+.emp-attendance-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 50px;
+  min-height: 19px;
+
+  padding: 3px 8px;
+
+  border-radius: 999px;
+
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.emp-attendance-status-present {
+  background: #d9f8e8;
+  color: #15935a;
+}
+
+.emp-attendance-status-late {
+  background: #fff0c2;
+  color: #a16e00;
+}
+
+.emp-attendance-status-leave {
+  background: #fff0c2;
+  color: #a16e00;
+}
+
+.emp-attendance-status-absent {
+  background: #ffe1e1;
+  color: #dc3f42;
+}
+
+.emp-attendance-status-wfh {
+  background: #e7edff;
+  color: #536be2;
+}
+
+.emp-attendance-status-unknown {
+  background: #f0f2f5;
+  color: #697386;
+}
+
+.emp-attendance-empty {
+  height: 90px !important;
+
+  color: #98a2b3 !important;
+
+  text-align: center;
+
+  white-space: normal !important;
+}
+
+
+/* ============================================================
+   TODAY'S ATTENDANCE CARD
+   ============================================================ */
+
+.emp-attendance-today-card {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-top: 14px;
+
+  padding: 13px 15px;
+
+  border: 1px solid var(--emp-att-border);
+  border-radius: 13px;
+
+  background: #ffffff;
+}
+
+.emp-attendance-today-info {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.emp-attendance-today-icon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: #eef4ff;
+  color: #3d73e9;
+}
+
+.emp-attendance-today-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.emp-attendance-today-info h2 {
+  margin: 0;
+
+  color: #303743;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.emp-attendance-today-info p {
+  margin: 3px 0 0;
+
+  color: #929aaa;
+
+  font-size: 9px;
+}
+
+.emp-attendance-today-info p strong {
+  margin-left: 4px;
+
+  color: #18ae64;
+
+  font-weight: 600;
+}
+
+.emp-attendance-today-info p span {
+  margin-left: 5px;
+}
+
+.emp-attendance-check-btn {
+  min-height: 33px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 0 13px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: linear-gradient(
+    90deg,
+    #12b8e9,
+    #4d76f4,
+    #7657ee
+  );
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  font-size: 9.5px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.emp-attendance-check-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.emp-attendance-modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  background: rgba(17, 24, 39, 0.48);
+
+  backdrop-filter: blur(2px);
+}
+
+.emp-attendance-modal {
+  width: min(500px, 100%);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 25px 70px rgba(15, 23, 42, 0.2);
+}
+
+.emp-attendance-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  padding: 20px;
+
+  border-bottom: 1px solid #edf0f3;
+}
+
+.emp-attendance-modal-kicker {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #6472e9;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.emp-attendance-modal-header h2 {
+  margin: 0;
+
+  color: #252b35;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.emp-attendance-modal-header p {
+  max-width: 380px;
+
+  margin: 5px 0 0;
+
+  color: #8b95a5;
+
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.emp-attendance-modal-close {
+  width: 29px;
+  height: 29px;
+
+  flex: 0 0 29px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: #f3f4f6;
+  color: #667085;
+
+  cursor: pointer;
+}
+
+.emp-attendance-modal-close svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* ============================================================
+   CORRECTION FORM
+   ============================================================ */
+
+.emp-attendance-correction-form {
+  display: grid;
+
+  gap: 16px;
+
+  padding: 20px;
+}
+
+.emp-attendance-correction-form label {
+  display: grid;
+
+  gap: 6px;
+
+  color: #5c6675;
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.emp-attendance-correction-form input,
+.emp-attendance-correction-form textarea {
+  width: 100%;
+
+  padding: 9px 10px;
+
+  border: 1px solid #dce1e8;
+  border-radius: 8px;
+
+  outline: 0;
+
+  background: #f9fafb;
+  color: #344054;
+
+  font-size: 10px;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.emp-attendance-correction-form input {
+  height: 38px;
+}
+
+.emp-attendance-correction-form textarea {
+  min-height: 90px;
+
+  resize: vertical;
+}
+
+.emp-attendance-correction-form input:focus,
+.emp-attendance-correction-form textarea:focus {
+  border-color: #6b7cf0;
+
+  box-shadow:
+    0 0 0 3px rgba(107, 124, 240, 0.1);
+}
+
+.emp-attendance-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  padding-top: 3px;
+}
+
+.emp-attendance-cancel-btn,
+.emp-attendance-submit-btn {
+  min-height: 35px;
+
+  padding: 0 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.emp-attendance-cancel-btn {
+  border: 1px solid #dfe3e8;
+
+  background: #ffffff;
+  color: #626b78;
+}
+
+.emp-attendance-submit-btn {
+  border: 0;
+
+  background: #4f6df5;
+  color: #ffffff;
+}
+
+.emp-attendance-submit-btn:hover {
+  background: #425fe0;
+}
+
+
+/* ============================================================
+   SUCCESS STATE
+   ============================================================ */
+
+.emp-attendance-success-state {
+  padding: 40px 25px;
+
+  text-align: center;
+}
+
+.emp-attendance-success-icon {
+  width: 50px;
+  height: 50px;
+
+  display: grid;
+  place-items: center;
+
+  margin: 0 auto 13px;
+
+  border-radius: 50%;
+
+  background: #e8f9ef;
+  color: #13ad60;
+}
+
+.emp-attendance-success-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.emp-attendance-success-state h2 {
+  margin: 0;
+
+  color: #29313d;
+
+  font-size: 16px;
+}
+
+.emp-attendance-success-state p {
+  max-width: 340px;
+
+  margin: 7px auto 20px;
+
+  color: #8993a3;
+
+  font-size: 9.5px;
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   LARGE TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .emp-attendance-summary-grid {
+    grid-template-columns:
+      repeat(5, minmax(100px, 1fr));
+
+    overflow-x: auto;
+
+    padding-bottom: 2px;
+  }
+
+  .emp-attendance-summary-card {
+    min-width: 100px;
+  }
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+  .emp-attendance-page {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .emp-attendance-summary-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+  }
+
+  .emp-attendance-summary-card {
+    min-width: 0;
+  }
+
+  .emp-attendance-today-card {
+    align-items: flex-start;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .emp-attendance-page {
+    padding: 3px 4px 28px;
+  }
+
+  .emp-attendance-header {
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+  .emp-attendance-header h1 {
+    font-size: 18px;
+  }
+
+  .emp-attendance-header p {
+    font-size: 9.5px;
+  }
+
+  .emp-attendance-correction-btn {
+    min-height: 33px;
+
+    padding: 0 9px;
+
+    font-size: 8.5px;
+  }
+
+  .emp-attendance-correction-btn svg {
+    width: 11px;
+    height: 11px;
+  }
+
+
+  /* Summary */
+
+  .emp-attendance-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+
+    overflow: visible;
+  }
+
+  .emp-attendance-summary-card {
+    min-height: 64px;
+
+    padding: 10px 11px;
+
+    border-radius: 11px;
+  }
+
+  .emp-attendance-summary-card strong {
+    font-size: 18px;
+  }
+
+
+  /* Table */
+
+  .emp-attendance-table-card {
+    border-radius: 12px;
+  }
+
+  .emp-attendance-table-header {
+    min-height: 47px;
+
+    padding: 7px 11px;
+  }
+
+  .emp-attendance-table-header h2 {
+    font-size: 11px;
+  }
+
+  .emp-attendance-month-control {
+    min-height: 29px;
+  }
+
+  .emp-attendance-month-control input {
+    min-width: 96px;
+
+    font-size: 8.5px;
+  }
+
+  .emp-attendance-table {
+    min-width: 570px;
+  }
+
+
+  /* Today's card */
+
+  .emp-attendance-today-card {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 11px;
+  }
+
+  .emp-attendance-check-btn {
+    width: 100%;
+  }
+
+
+  /* Modal */
+
+  .emp-attendance-modal-overlay {
+    padding: 10px;
+  }
+
+  .emp-attendance-modal-header {
+    padding: 16px;
+  }
+
+  .emp-attendance-modal-header h2 {
+    font-size: 14px;
+  }
+
+  .emp-attendance-correction-form {
+    padding: 16px;
+  }
+
+  .emp-attendance-modal-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .emp-attendance-cancel-btn,
+  .emp-attendance-submit-btn {
+    width: 100%;
+  }
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 400px) {
+
+  .emp-attendance-header {
+    display: block;
+  }
+
+  .emp-attendance-correction-btn {
+    width: 100%;
+
+    margin-top: 10px;
+  }
+
+  .emp-attendance-summary-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .emp-attendance-table-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .emp-attendance-month-control {
+    width: 100%;
+  }
+
+  .emp-attendance-month-control input {
+    width: 100%;
+  }
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 340px) {
+
+  .emp-attendance-summary-card strong {
+    font-size: 17px;
+  }
+
+  .emp-attendance-summary-card span {
+    font-size: 8px;
+  }
+
+  .emp-attendance-table {
+    min-width: 540px;
+  }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .emp-attendance-correction-btn,
+  .emp-attendance-correction-form input,
+  .emp-attendance-correction-form textarea {
+    transition: none;
+  }
+}

@@ -1,172 +1,654 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
 import { useAuth } from "../../context/AuthContext";
-import { FiPlus } from "react-icons/fi";
+import {
+  FiPlus,
+  FiCalendar,
+  FiX,
+  FiCheckCircle,
+} from "react-icons/fi";
+import "./EmployeeLeave.css";
+
+const HR_NOTIFICATION_STORAGE_KEY = "hrNotifications";
+
+const calculateDuration = (startDate, endDate) => {
+  if (!startDate || !endDate) return 0;
+
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return 0;
+  }
+
+  if (end < start) return 0;
+
+  return Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+};
+
+const formatShortDate = (dateValue) => {
+  if (!dateValue) return "—";
+
+  const date = new Date(`${dateValue}T00:00:00`);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateValue;
+  }
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+};
+
+const formatAppliedDate = (dateValue) => {
+  if (!dateValue) return "—";
+
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateValue;
+  }
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+};
+
+const getLeaveData = (leaveBalances) => {
+  const safeBalances = leaveBalances || {};
+
+  return [
+    {
+      key: "casual",
+      label: "Casual Leave",
+      available: Number(safeBalances.casual?.available) || 0,
+      total: Number(safeBalances.casual?.total) || 0,
+      color: "blue",
+    },
+    {
+      key: "sick",
+      label: "Sick Leave",
+      available: Number(safeBalances.sick?.available) || 0,
+      total: Number(safeBalances.sick?.total) || 0,
+      color: "purple",
+    },
+    {
+      key: "earned",
+      label: "Earned Leave",
+      available: Number(safeBalances.earned?.available) || 0,
+      total: Number(safeBalances.earned?.total) || 0,
+      color: "green",
+    },
+    {
+      key: "optional",
+      label: "Optional Leave",
+      available: Number(safeBalances.optional?.available) || 0,
+      total: Number(safeBalances.optional?.total) || 3,
+      color: "orange",
+    },
+  ];
+};
 
 export default function EmployeeLeave() {
-  const { leaveBalances, leaveRequests, handleAddLeaveRequest, user } = useAuth();
+  const {
+    leaveBalances,
+    leaveRequests = [],
+    handleAddLeaveRequest,
+    user,
+  } = useAuth();
+
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [leaveType, setLeaveType] = useState("Casual Leave");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
+  const [formError, setFormError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
-  const myRequests = leaveRequests.filter((r) => r.employeeId === (user?.employeeId || "EMP001"));
+  const employeeId = user?.employeeId || "EMP001";
 
-  const handleApply = (e) => {
-    e.preventDefault();
-    if (startDate && endDate && reason) {
-      handleAddLeaveRequest({ leaveType, startDate, endDate, duration: 1, reason });
-      setShowApplyModal(false);
-      setStartDate("");
-      setEndDate("");
-      setReason("");
+  const leaveData = useMemo(
+    () => getLeaveData(leaveBalances),
+    [leaveBalances]
+  );
+
+  const myRequests = useMemo(
+    () =>
+      leaveRequests.filter(
+        (request) =>
+          request.employeeId === employeeId
+      ),
+    [leaveRequests, employeeId]
+  );
+
+  const selectedLeave = useMemo(() => {
+    const normalizedType = leaveType.toLowerCase();
+
+    return leaveData.find((item) =>
+      normalizedType.startsWith(
+        item.label.toLowerCase().replace(" leave", "")
+      )
+    );
+  }, [leaveData, leaveType]);
+
+  const requestedDuration = useMemo(
+    () => calculateDuration(startDate, endDate),
+    [startDate, endDate]
+  );
+
+  const openApplyModal = () => {
+    setShowApplyModal(true);
+    setSubmitted(false);
+    setFormError("");
+  };
+
+  const closeApplyModal = () => {
+    setShowApplyModal(false);
+    setSubmitted(false);
+    setFormError("");
+  };
+
+  const resetForm = () => {
+    setStartDate("");
+    setEndDate("");
+    setReason("");
+    setLeaveType("Casual Leave");
+    setFormError("");
+  };
+
+  const createHRNotification = (request) => {
+    const notification = {
+      id: `LEAVE-${Date.now()}`,
+      type: "leave_request",
+      title: "New Leave Request",
+      message: `${user?.name || "Employee"} (${employeeId}) submitted a ${request.leaveType} request.`,
+      employeeId,
+      employeeName: user?.name || "Employee",
+      leaveType: request.leaveType,
+      startDate: request.startDate,
+      endDate: request.endDate,
+      duration: request.duration,
+      reason: request.reason,
+      status: "Pending",
+      audience: "HR",
+      read: false,
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      const existingNotifications = JSON.parse(
+        localStorage.getItem(HR_NOTIFICATION_STORAGE_KEY) || "[]"
+      );
+
+      localStorage.setItem(
+        HR_NOTIFICATION_STORAGE_KEY,
+        JSON.stringify([
+          notification,
+          ...existingNotifications,
+        ])
+      );
+
+      window.dispatchEvent(
+        new CustomEvent("hr-notification-created", {
+          detail: notification,
+        })
+      );
+    } catch (error) {
+      console.error(
+        "Unable to create HR notification:",
+        error
+      );
     }
   };
 
+  const handleApply = (event) => {
+    event.preventDefault();
+    setFormError("");
+
+    if (!startDate || !endDate || !reason.trim()) {
+      setFormError("Please complete all required fields.");
+      return;
+    }
+
+    if (endDate < startDate) {
+      setFormError(
+        "End date cannot be earlier than the start date."
+      );
+      return;
+    }
+
+    if (!requestedDuration) {
+      setFormError("Please select valid leave dates.");
+      return;
+    }
+
+    if (
+      selectedLeave &&
+      selectedLeave.total > 0 &&
+      requestedDuration > selectedLeave.available
+    ) {
+      setFormError(
+        `You only have ${selectedLeave.available} day(s) available for ${leaveType}.`
+      );
+      return;
+    }
+
+    const request = {
+      leaveType,
+      startDate,
+      endDate,
+      duration: requestedDuration,
+      reason: reason.trim(),
+      employeeId,
+      employeeName: user?.name || "Employee",
+      status: "Pending",
+      appliedOn: new Date().toISOString(),
+    };
+
+    if (typeof handleAddLeaveRequest === "function") {
+      handleAddLeaveRequest(request);
+    }
+
+    createHRNotification(request);
+    setSubmitted(true);
+  };
+
+  const handleDone = () => {
+    setSubmitted(false);
+    setShowApplyModal(false);
+    resetForm();
+  };
+
   return (
-    <EmployeeLayout title="My Leave Portal" breadcrumb="Leave">
-      <div className="page-header-block" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div>
-          <h2>Leave Balances & Applications</h2>
-          <p>View your remaining quota, submit leave requests, and track status.</p>
-        </div>
-        <button className="login-btn" style={{ width: "auto", padding: "0.7rem 1.25rem" }} onClick={() => setShowApplyModal(true)}>
-          <FiPlus /> Apply New Leave
-        </button>
-      </div>
+    <EmployeeLayout
+      title="My Leave"
+      breadcrumb="Leave"
+    >
+      <div className="emp-leave-page">
 
-      {/* LEAVE BALANCE SUMMARY */}
-      <div className="leave-balance-grid" style={{ marginBottom: "1.5rem" }}>
-        <div className="leave-cat-card" style={{ background: "#ffffff" }}>
-          <div className="leave-cat-header">
-            <span className="cat-title">Casual Leave</span>
-            <span className="cat-count">{leaveBalances.casual.available} / {leaveBalances.casual.total} Days Available</span>
+        {/* =====================================================
+            PAGE HEADER
+           ===================================================== */}
+        <section className="emp-leave-header">
+          <div>
+            <h1>My Leave</h1>
+            <p>
+              Manage your leave requests and balances
+            </p>
           </div>
-          <div className="progress-bar-bg">
-            <div className="progress-bar-fill green" style={{ width: `${(leaveBalances.casual.available / leaveBalances.casual.total) * 100}%` }} />
-          </div>
-        </div>
 
-        <div className="leave-cat-card" style={{ background: "#ffffff" }}>
-          <div className="leave-cat-header">
-            <span className="cat-title">Sick Leave</span>
-            <span className="cat-count">{leaveBalances.sick.available} / {leaveBalances.sick.total} Days Available</span>
-          </div>
-          <div className="progress-bar-bg">
-            <div className="progress-bar-fill blue" style={{ width: `${(leaveBalances.sick.available / leaveBalances.sick.total) * 100}%` }} />
-          </div>
-        </div>
+          <button
+            type="button"
+            className="emp-leave-apply-button"
+            onClick={openApplyModal}
+          >
+            <FiPlus />
+            Apply Leave
+          </button>
+        </section>
 
-        <div className="leave-cat-card" style={{ background: "#ffffff" }}>
-          <div className="leave-cat-header">
-            <span className="cat-title">Earned Leave</span>
-            <span className="cat-count">{leaveBalances.earned.available} / {leaveBalances.earned.total} Days Available</span>
-          </div>
-          <div className="progress-bar-bg">
-            <div className="progress-bar-fill purple" style={{ width: `${(leaveBalances.earned.available / leaveBalances.earned.total) * 100}%` }} />
-          </div>
-        </div>
-      </div>
 
-      {/* MY LEAVE REQUESTS TABLE */}
-      <div className="enterprise-card">
-        <h3>My Leave Application History</h3>
-        <div className="table-responsive-wrapper" style={{ marginTop: "1rem" }}>
-          <table className="enterprise-table">
-            <thead>
-              <tr>
-                <th>REQUEST ID</th>
-                <th>LEAVE TYPE</th>
-                <th>START DATE</th>
-                <th>END DATE</th>
-                <th>DURATION</th>
-                <th>REASON</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {myRequests.map((req) => (
-                <tr key={req.id}>
-                  <td><strong>{req.id}</strong></td>
-                  <td><span className="leave-type-tag">{req.leaveType}</span></td>
-                  <td>{req.startDate}</td>
-                  <td>{req.endDate}</td>
-                  <td>{req.duration}</td>
-                  <td>"{req.reason}"</td>
-                  <td>
-                    <span className={`badge badge-${req.status.toLowerCase()}`}>{req.status}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+        {/* =====================================================
+            LEAVE BALANCE CARDS
+           ===================================================== */}
+        <section className="emp-leave-balance-grid">
+          {leaveData.map((leave) => {
+            const percentage =
+              leave.total > 0
+                ? Math.min(
+                    100,
+                    Math.max(
+                      0,
+                      (leave.available / leave.total) * 100
+                    )
+                  )
+                : 0;
 
-      {/* APPLY LEAVE MODAL */}
-      {showApplyModal && (
-        <div className="modal-overlay" onClick={() => setShowApplyModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Apply for Leave</h3>
-              <button className="modal-close" onClick={() => setShowApplyModal(false)}>✕</button>
-            </div>
-            <form onSubmit={handleApply}>
-              <div className="modal-body">
-                <label className="input-label">Leave Category</label>
-                <select
-                  value={leaveType}
-                  onChange={(e) => setLeaveType(e.target.value)}
-                  style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", border: "1px solid #cbd5e1", marginBottom: "1rem" }}
+            return (
+              <article
+                className="emp-leave-balance-card"
+                key={leave.key}
+              >
+                <strong
+                  className={`emp-leave-balance-number emp-leave-number-${leave.color}`}
                 >
-                  <option value="Casual Leave">Casual Leave</option>
-                  <option value="Sick Leave">Sick Leave</option>
-                  <option value="Earned Leave">Earned Leave</option>
-                </select>
+                  {leave.available}
+                </strong>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
-                  <div>
-                    <label className="input-label">Start Date</label>
-                    <input
-                      type="date"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      required
-                      style={{ width: "100%", padding: "0.65rem", borderRadius: "8px", border: "1px solid #cbd5e1" }}
-                    />
-                  </div>
-                  <div>
-                    <label className="input-label">End Date</label>
-                    <input
-                      type="date"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      required
-                      style={{ width: "100%", padding: "0.65rem", borderRadius: "8px", border: "1px solid #cbd5e1" }}
-                    />
-                  </div>
+                <span className="emp-leave-balance-name">
+                  {leave.label}
+                </span>
+
+                <div className="emp-leave-progress-track">
+                  <div
+                    className={`emp-leave-progress-fill emp-leave-progress-${leave.color}`}
+                    style={{
+                      width: `${percentage}%`,
+                    }}
+                  />
                 </div>
 
-                <label className="input-label">Reason for Leave</label>
-                <textarea
-                  rows={3}
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  placeholder="State the reason for your leave request..."
-                  required
-                  style={{ width: "100%", padding: "0.65rem", borderRadius: "8px", border: "1px solid #cbd5e1" }}
-                />
-              </div>
+                <span className="emp-leave-balance-total">
+                  of {leave.total} days
+                </span>
+              </article>
+            );
+          })}
+        </section>
 
-              <div className="modal-footer" style={{ marginTop: "1rem", display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-                <button type="button" className="view-payslip-btn" style={{ width: "auto" }} onClick={() => setShowApplyModal(false)}>Cancel</button>
-                <button type="submit" className="login-btn" style={{ width: "auto", padding: "0.65rem 1.25rem" }}>Submit Request</button>
-              </div>
-            </form>
+
+        {/* =====================================================
+            LEAVE HISTORY
+           ===================================================== */}
+        <section className="emp-leave-history-card">
+
+          <div className="emp-leave-history-header">
+            <h2>Leave History</h2>
           </div>
-        </div>
-      )}
+
+          <div className="emp-leave-table-scroll">
+            <table className="emp-leave-table">
+              <thead>
+                <tr>
+                  <th>LEAVE TYPE</th>
+                  <th>FROM</th>
+                  <th>TO</th>
+                  <th>DAYS</th>
+                  <th>APPLIED ON</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {myRequests.length > 0 ? (
+                  myRequests.map((request) => (
+                    <tr key={request.id || `${request.startDate}-${request.leaveType}`}>
+
+                      <td>
+                        <strong>
+                          {request.leaveType}
+                        </strong>
+                      </td>
+
+                      <td>
+                        {formatShortDate(
+                          request.startDate
+                        )}
+                      </td>
+
+                      <td>
+                        {formatShortDate(
+                          request.endDate
+                        )}
+                      </td>
+
+                      <td className="emp-leave-duration">
+                        {request.duration || 0}d
+                      </td>
+
+                      <td>
+                        {formatAppliedDate(
+                          request.appliedOn ||
+                            request.createdAt
+                        )}
+                      </td>
+
+                      <td>
+                        <span
+                          className={`emp-leave-status emp-leave-status-${String(
+                            request.status || "Pending"
+                          )
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`}
+                        >
+                          {request.status || "Pending"}
+                        </span>
+                      </td>
+
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="emp-leave-empty"
+                    >
+                      No leave applications found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+
+        {/* =====================================================
+            APPLY LEAVE MODAL
+           ===================================================== */}
+        {showApplyModal && (
+          <div
+            className="emp-leave-modal-overlay"
+            onClick={closeApplyModal}
+          >
+            <div
+              className="emp-leave-modal"
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+            >
+
+              {!submitted ? (
+                <>
+                  <div className="emp-leave-modal-header">
+
+                    <div>
+                      <span className="emp-leave-modal-kicker">
+                        LEAVE APPLICATION
+                      </span>
+
+                      <h2>Apply for Leave</h2>
+
+                      <p>
+                        Submit your leave request for HR
+                        approval.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="emp-leave-modal-close"
+                      onClick={closeApplyModal}
+                      aria-label="Close"
+                    >
+                      <FiX />
+                    </button>
+
+                  </div>
+
+                  <form
+                    className="emp-leave-form"
+                    onSubmit={handleApply}
+                  >
+
+                    <div className="emp-leave-form-field">
+                      <label htmlFor="employee-leave-type">
+                        Leave Category
+                      </label>
+
+                      <select
+                        id="employee-leave-type"
+                        value={leaveType}
+                        onChange={(event) =>
+                          setLeaveType(
+                            event.target.value
+                          )
+                        }
+                      >
+                        <option value="Casual Leave">
+                          Casual Leave
+                        </option>
+
+                        <option value="Sick Leave">
+                          Sick Leave
+                        </option>
+
+                        <option value="Earned Leave">
+                          Earned Leave
+                        </option>
+
+                        <option value="Optional Leave">
+                          Optional Leave
+                        </option>
+                      </select>
+                    </div>
+
+
+                    <div className="emp-leave-date-grid">
+
+                      <div className="emp-leave-form-field">
+                        <label htmlFor="employee-leave-start">
+                          Start Date
+                        </label>
+
+                        <div className="emp-leave-input-icon">
+                          <FiCalendar />
+
+                          <input
+                            id="employee-leave-start"
+                            type="date"
+                            value={startDate}
+                            onChange={(event) =>
+                              setStartDate(
+                                event.target.value
+                              )
+                            }
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="emp-leave-form-field">
+                        <label htmlFor="employee-leave-end">
+                          End Date
+                        </label>
+
+                        <div className="emp-leave-input-icon">
+                          <FiCalendar />
+
+                          <input
+                            id="employee-leave-end"
+                            type="date"
+                            value={endDate}
+                            min={startDate || undefined}
+                            onChange={(event) =>
+                              setEndDate(
+                                event.target.value
+                              )
+                            }
+                            required
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                    {requestedDuration > 0 && (
+                      <div className="emp-leave-duration-preview">
+                        <span>Requested Duration</span>
+                        <strong>
+                          {requestedDuration}{" "}
+                          {requestedDuration === 1
+                            ? "day"
+                            : "days"}
+                        </strong>
+                      </div>
+                    )}
+
+
+                    <div className="emp-leave-form-field">
+                      <label htmlFor="employee-leave-reason">
+                        Reason for Leave
+                      </label>
+
+                      <textarea
+                        id="employee-leave-reason"
+                        rows="4"
+                        value={reason}
+                        onChange={(event) =>
+                          setReason(
+                            event.target.value
+                          )
+                        }
+                        placeholder="State the reason for your leave request..."
+                        required
+                      />
+                    </div>
+
+
+                    {formError && (
+                      <div className="emp-leave-form-error">
+                        {formError}
+                      </div>
+                    )}
+
+
+                    <div className="emp-leave-modal-actions">
+
+                      <button
+                        type="button"
+                        className="emp-leave-cancel-button"
+                        onClick={closeApplyModal}
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        type="submit"
+                        className="emp-leave-submit-button"
+                      >
+                        Submit Request
+                      </button>
+
+                    </div>
+
+                  </form>
+                </>
+              ) : (
+                <div className="emp-leave-success">
+
+                  <div className="emp-leave-success-icon">
+                    <FiCheckCircle />
+                  </div>
+
+                  <h2>Leave Request Submitted</h2>
+
+                  <p>
+                    Your leave request has been submitted
+                    successfully and HR has been notified
+                    for review.
+                  </p>
+
+                  <button
+                    type="button"
+                    className="emp-leave-submit-button"
+                    onClick={handleDone}
+                  >
+                    Done
+                  </button>
+
+                </div>
+              )}
+
+            </div>
+          </div>
+        )}
+
+      </div>
     </EmployeeLayout>
   );
 }

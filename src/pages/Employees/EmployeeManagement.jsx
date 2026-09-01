@@ -25,6 +25,7 @@ const deptColors = {
   Finance: "#722ed1",
   Marketing: "#eb2f96",
 };
+
 const fallbackColor = "#2563eb";
 
 function getInitials(first, last) {
@@ -35,7 +36,6 @@ export default function EmployeeManagement() {
   const navigate = useNavigate();
 
   const [employees, setEmployees] = useState([]);
-  const [statusMap, setStatusMap] = useState({});
   const [search, setSearch] = useState("");
   const [department, setDepartment] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,13 +53,18 @@ export default function EmployeeManagement() {
           api.get("/employees/master-status"),
         ]);
 
-        // Build a status_id -> label map, defensively (field name unconfirmed from backend team)
+        // Build a status_id -> label map
         const map = {};
+
         (statusRes.data || []).forEach((s) => {
-          const label = s.status_name || s.name || s.status || `Status ${s.id}`;
+          const label =
+            s.status_name ||
+            s.name ||
+            s.status ||
+            `Status ${s.id}`;
+
           map[s.id ?? s.status_id] = label;
         });
-        setStatusMap(map);
 
         // Normalize API data into the shape the table expects
         const mapped = (empRes.data || []).map((emp) => ({
@@ -86,16 +91,19 @@ export default function EmployeeManagement() {
     fetchData();
   }, []);
 
-  // NOTE: No DELETE /employees/{id} endpoint exists yet — flagged to backend team.
-  // This only removes the row from local state (UI-only), not from the actual database.
+  // NOTE: No DELETE /employees/{id} endpoint exists yet.
+  // This only removes the row from local state (UI-only).
   const handleDelete = (id) => {
     alert(
       "Delete is not yet supported by the backend for Employees. This will only hide it from your current view until the page is refreshed."
     );
-    setEmployees((prev) => prev.filter((emp) => emp.id !== id));
+
+    setEmployees((prev) =>
+      prev.filter((emp) => emp.id !== id)
+    );
   };
 
-  // NOTE: No PUT /employees/{emp_id} endpoint exists yet — flagged to backend team.
+  // NOTE: No PUT /employees/{emp_id} endpoint exists yet.
   const handleEdit = (emp) => {
     alert("Edit Employee is not yet supported by the backend.");
   };
@@ -105,36 +113,58 @@ export default function EmployeeManagement() {
       emp.name.toLowerCase().includes(search.toLowerCase()) ||
       emp.email.toLowerCase().includes(search.toLowerCase());
 
-    const matchDept = department === "All" ? true : emp.department === department;
+    const matchDept =
+      department === "All"
+        ? true
+        : emp.department === department;
 
     return matchSearch && matchDept;
   });
 
-  const totalPages = Math.ceil(filteredEmployees.length / employeesPerPage);
-  const startIndex = (currentPage - 1) * employeesPerPage;
-  const currentEmployees = filteredEmployees.slice(startIndex, startIndex + employeesPerPage);
+  const totalPages = Math.ceil(
+    filteredEmployees.length / employeesPerPage
+  );
+
+  const startIndex =
+    (currentPage - 1) * employeesPerPage;
+
+  const currentEmployees = filteredEmployees.slice(
+    startIndex,
+    startIndex + employeesPerPage
+  );
 
   return (
     <div className="dashboard-layout">
       <Sidebar />
 
       <div className="employees-main">
-        <Header title="Employees" breadcrumb="Employees" />
+        <Header
+          title="Employees"
+          breadcrumb="Employees"
+        />
 
         <div className="employee-page">
           {/* TOOLBAR */}
           <div className="toolbar">
             <div className="search-box">
               <FiSearch />
+
               <input
                 placeholder="Search employees..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
               />
             </div>
 
             <div className="toolbar-right">
-              <select value={department} onChange={(e) => setDepartment(e.target.value)}>
+              <select
+                value={department}
+                onChange={(e) =>
+                  setDepartment(e.target.value)
+                }
+              >
                 <option>All</option>
                 <option>Engineering</option>
                 <option>HR</option>
@@ -153,7 +183,12 @@ export default function EmployeeManagement() {
                 Export
               </button>
 
-              <button className="add-btn" onClick={() => navigate("/employees/add")}>
+              <button
+                className="add-btn"
+                onClick={() =>
+                  navigate("/employees/add")
+                }
+              >
                 <FiPlus />
                 Add Employee
               </button>
@@ -161,7 +196,12 @@ export default function EmployeeManagement() {
           </div>
 
           {loading && <p>Loading employees...</p>}
-          {error && <p className="employee-error">{error}</p>}
+
+          {error && (
+            <p className="employee-error">
+              {error}
+            </p>
+          )}
 
           {/* TABLE */}
           {!loading && !error && (
@@ -184,9 +224,15 @@ export default function EmployeeManagement() {
                     <tr key={emp.rawId}>
                       <td>
                         <div className="employee-info">
-                          <div className="avatar" style={{ background: emp.color }}>
+                          <div
+                            className="avatar"
+                            style={{
+                              background: emp.color,
+                            }}
+                          >
                             {emp.initials}
                           </div>
+
                           <div>
                             <h4>{emp.name}</h4>
                             <span>{emp.id}</span>
@@ -195,13 +241,18 @@ export default function EmployeeManagement() {
                       </td>
 
                       <td>{emp.department}</td>
+
                       <td>{emp.designation}</td>
+
                       <td>{emp.email}</td>
+
                       <td>{emp.phone}</td>
 
                       <td>
                         <span
-                          className={`status ${emp.status.toLowerCase().replace(" ", "-")}`}
+                          className={`status ${emp.status
+                            .toLowerCase()
+                            .replace(" ", "-")}`}
                         >
                           {emp.status}
                         </span>
@@ -209,9 +260,25 @@ export default function EmployeeManagement() {
 
                       <td>
                         <div className="actions">
-                          <FiEye onClick={() => navigate(`/employees/${emp.rawId}`)} />
-                          <FiEdit2 onClick={() => handleEdit(emp)} />
-                          <FiTrash2 onClick={() => handleDelete(emp.id)} />
+                          <FiEye
+                            onClick={() =>
+                              navigate(
+                                `/employees/${emp.rawId}`
+                              )
+                            }
+                          />
+
+                          <FiEdit2
+                            onClick={() =>
+                              handleEdit(emp)
+                            }
+                          />
+
+                          <FiTrash2
+                            onClick={() =>
+                              handleDelete(emp.id)
+                            }
+                          />
                         </div>
                       </td>
                     </tr>
@@ -222,19 +289,28 @@ export default function EmployeeManagement() {
               {/* FOOTER */}
               <div className="table-footer">
                 <span>
-                  Showing {currentEmployees.length} of {filteredEmployees.length} employees
+                  Showing {currentEmployees.length} of{" "}
+                  {filteredEmployees.length} employees
                 </span>
 
                 <div className="pagination">
-                  {[...Array(totalPages)].map((_, index) => (
-                    <button
-                      key={index}
-                      className={currentPage === index + 1 ? "active" : ""}
-                      onClick={() => setCurrentPage(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
+                  {[...Array(totalPages)].map(
+                    (_, index) => (
+                      <button
+                        key={index}
+                        className={
+                          currentPage === index + 1
+                            ? "active"
+                            : ""
+                        }
+                        onClick={() =>
+                          setCurrentPage(index + 1)
+                        }
+                      >
+                        {index + 1}
+                      </button>
+                    )
+                  )}
                 </div>
               </div>
             </div>

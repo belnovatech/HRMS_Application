@@ -1,44 +1,38 @@
-.attendance-table {
+.att-table-wrapper {
   width: 100%;
-  border-collapse: collapse;
+  overflow-x: auto;
 }
 
-.attendance-table th {
-  text-align: left;
-  padding: 18px 24px;
-  background: #fafafa;
-  color: #6b7280;
-  font-size: 14px;
-}
-
-.attendance-table td {
-  padding: 20px 24px;
-  border-top: 1px solid #f1f5f9;
-}
-
-.status {
-  padding: 6px 12px;
+.att-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 0.78rem;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
-.present {
-  background: #ecfdf5;
-  color: #16a34a;
+.att-status-badge.present {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
 }
 
-.late {
-  background: #fff7ed;
-  color: #d97706;
-}
-
-.on-leave {
+.att-status-badge.late {
   background: #fef3c7;
-  color: #ca8a04;
+  color: #b45309;
+  border: 1px solid #fde68a;
 }
 
-.wfh {
-  background: #eff6ff;
-  color: #2563eb;
+.att-status-badge.on-leave {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
 }
+
+.att-status-badge.wfh {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}

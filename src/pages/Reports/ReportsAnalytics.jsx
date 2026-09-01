@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import "./ReportsAnalytics.css";
-
-import Header from "../../components/Header/Header";
-import Sidebar from "../../components/Sidebar/Sidebar";
-
+import HRLayout from "../../layouts/HRLayout";
 import { exportToPDF } from "../../utils/exportPdf";
 import { exportToExcel } from "../../utils/exportExcel";
-
 import {
   ResponsiveContainer,
   LineChart,
@@ -50,28 +46,16 @@ export default function ReportsAnalytics() {
   ];
 
   return (
-    <div className="reports-main">
-      <Sidebar />
-
-      <div className="reports-container">
-        <Header
-  title="Reports & Analytics"
-  breadcrumb="Reports"
-/>
-      <div className="top-filters">
-          <select
-            value={period}
-            onChange={(e) => setPeriod(e.target.value)}
-          >
+    <HRLayout title="Reports & Analytics" breadcrumb="Reports">
+      <div className="reports-page-container">
+        <div className="reports-filter-bar">
+          <select className="reports-select" value={period} onChange={(e) => setPeriod(e.target.value)}>
             <option>Last 6 months</option>
             <option>Last year</option>
             <option>Custom range</option>
           </select>
 
-          <select
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-          >
+          <select className="reports-select" value={department} onChange={(e) => setDepartment(e.target.value)}>
             <option>All Departments</option>
             <option>Engineering</option>
             <option>Sales</option>
@@ -80,115 +64,63 @@ export default function ReportsAnalytics() {
             <option>Marketing</option>
           </select>
 
-          <button
-            className="export-btn"
-            onClick={exportToPDF}
-          >
-            Export PDF
-          </button>
-
-          <button
-            className="export-btn"
-            onClick={exportToExcel}
-          >
-            Export Excel
-          </button>
+          <button className="reports-export-btn" onClick={exportToPDF}>📄 Export PDF</button>
+          <button className="reports-export-btn" onClick={exportToExcel}>📊 Export Excel</button>
         </div>
 
-        <div
-          id="reports-container"
-          className="reports-grid"
-        >
-          {/* Employee Growth */}
-
-          <div className="card chart-card">
+        <div id="reports-container" className="reports-grid">
+          <div className="reports-chart-card">
             <h3>Employee Growth Trend</h3>
-
-            <ResponsiveContainer
-              width="100%"
-              height={280}
-            >
+            <ResponsiveContainer width="100%" height={260}>
               <LineChart data={employeeGrowthData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="month" stroke="#64748b" />
+                <YAxis stroke="#64748b" />
                 <Tooltip />
-
-                <Line
-                  type="monotone"
-                  dataKey="employees"
-                  stroke="#3b82f6"
-                  strokeWidth={3}
-                />
+                <Line type="monotone" dataKey="employees" stroke="#3b82f6" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Salary */}
-
-          <div className="card chart-card">
+          <div className="reports-chart-card">
             <h3>Salary Distribution by Dept</h3>
-
-            <ResponsiveContainer
-              width="100%"
-              height={280}
-            >
+            <ResponsiveContainer width="100%" height={260}>
               <BarChart data={salaryData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="dept" />
-                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="dept" stroke="#64748b" />
+                <YAxis stroke="#64748b" />
                 <Tooltip />
-
-                <Bar
-                  dataKey="salary"
-                  fill="#6366f1"
-                  radius={[8, 8, 0, 0]}
-                />
+                <Bar dataKey="salary" fill="#6366f1" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Attendance */}
-
-          <div className="card chart-card">
+          <div className="reports-chart-card">
             <h3>Monthly Attendance %</h3>
-
-            <ResponsiveContainer
-              width="100%"
-              height={280}
-            >
+            <ResponsiveContainer width="100%" height={260}>
               <LineChart data={attendanceData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="month" stroke="#64748b" />
+                <YAxis stroke="#64748b" />
                 <Tooltip />
-
-                <Line
-                  type="monotone"
-                  dataKey="attendance"
-                  stroke="#22c55e"
-                  strokeWidth={3}
-                />
+                <Line type="monotone" dataKey="attendance" stroke="#16a34a" strokeWidth={3} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Quick Reports */}
-
-          <div className="card quick-report-card">
+          <div className="reports-chart-card">
             <h3>Quick Reports</h3>
-
-            <div className="quick-grid">
-              <button>Employee Report</button>
-              <button>Attendance Report</button>
-              <button>Leave Report</button>
-              <button>Payroll Report</button>
-              <button>Attrition Report</button>
-              <button>Dept Performance</button>
+            <div className="reports-quick-grid">
+              <button className="reports-quick-btn" onClick={() => alert("Generating Employee Report...")}>Employee Report →</button>
+              <button className="reports-quick-btn" onClick={() => alert("Generating Attendance Report...")}>Attendance Report →</button>
+              <button className="reports-quick-btn" onClick={() => alert("Generating Leave Report...")}>Leave Report →</button>
+              <button className="reports-quick-btn" onClick={() => alert("Generating Payroll Report...")}>Payroll Report →</button>
+              <button className="reports-quick-btn" onClick={() => alert("Generating Attrition Report...")}>Attrition Report →</button>
+              <button className="reports-quick-btn" onClick={() => alert("Generating Dept Performance...")}>Dept Performance →</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </HRLayout>
   );
 }

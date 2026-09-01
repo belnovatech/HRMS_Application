@@ -70,225 +70,169 @@ export default function Manager() {
   ];
 
   return (
-    <>
+    <div className="mgrdash-shell">
       <Sidebar />
 
-      <div className="main-content">
+      <main className="mgrdash-content">
+        <Header title="Manager Portal" breadcrumb="Manager" />
 
-        <Header
-          title="Manager Portal"
-          breadcrumb="Manager"
-        />
-
-        <div className="manager-page">
-
-          {/* KPI Cards */}
-
-          <div className="manager-stats">
-
-            <div className="manager-stat-card">
-
-              <div>
-
-                <p>TEAM MEMBERS</p>
-
-                <h2>8</h2>
-
-              </div>
-
-              <div className="icon users">
-                <FiUsers />
-              </div>
-
+        <section className="mgrdash-page">
+          <div className="mgrdash-page-intro">
+            <div className="mgrdash-page-title">
+              <span className="mgrdash-breadcrumb">BELNOVA HRMS</span>
+              <span className="mgrdash-breadcrumb-separator">&gt;</span>
+              <span className="mgrdash-breadcrumb-current">Manager Dashboard</span>
+              <h1>Manager Portal</h1>
             </div>
-
-            <div className="manager-stat-card">
-
-              <div>
-
-                <p>PRESENT TODAY</p>
-
-                <h2>6</h2>
-
-              </div>
-
-              <div className="icon success">
-                <FiCheckCircle />
-              </div>
-
-            </div>
-
-            <div className="manager-stat-card">
-
-              <div>
-
-                <p>PENDING APPROVALS</p>
-
-                <h2>3</h2>
-
-              </div>
-
-              <div className="icon warning">
-                <FiAlertCircle />
-              </div>
-
-            </div>
-
-            <div className="manager-stat-card">
-
-              <div>
-
-                <p>AVG PERFORMANCE</p>
-
-                <h2>87%</h2>
-
-              </div>
-
-              <div className="icon purple">
-                <FiTrendingUp />
-              </div>
-
-            </div>
-
           </div>
 
-          {/* Bottom Section */}
+          <div className="mgrdash-stats" aria-label="Manager statistics">
+            <div className="mgrdash-stat-card">
+              <div className="mgrdash-stat-content">
+                <p>TEAM MEMBERS</p>
+                <h2>8</h2>
+              </div>
+              <div className="mgrdash-stat-icon mgrdash-icon-users">
+                <FiUsers />
+              </div>
+            </div>
 
-          <div className="manager-grid">
+            <div className="mgrdash-stat-card">
+              <div className="mgrdash-stat-content">
+                <p>PRESENT TODAY</p>
+                <h2>6</h2>
+              </div>
+              <div className="mgrdash-stat-icon mgrdash-icon-success">
+                <FiCheckCircle />
+              </div>
+            </div>
 
-            {/* Team Overview */}
+            <div className="mgrdash-stat-card">
+              <div className="mgrdash-stat-content">
+                <p>PENDING APPROVALS</p>
+                <h2>3</h2>
+              </div>
+              <div className="mgrdash-stat-icon mgrdash-icon-warning">
+                <FiAlertCircle />
+              </div>
+            </div>
 
-            <div className="manager-card">
+            <div className="mgrdash-stat-card">
+              <div className="mgrdash-stat-content">
+                <p>AVG PERFORMANCE</p>
+                <h2>87%</h2>
+              </div>
+              <div className="mgrdash-stat-icon mgrdash-icon-purple">
+                <FiTrendingUp />
+              </div>
+            </div>
+          </div>
 
-              <h2>Team Overview</h2>
+          <div className="mgrdash-grid">
+            <section className="mgrdash-card mgrdash-team-card">
+              <div className="mgrdash-card-header">
+                <div>
+                  <h2>Team Overview</h2>
+                  <p>Current team activity and performance</p>
+                </div>
+                <span className="mgrdash-count">{teamMembers.length}</span>
+              </div>
 
-              <div className="team-list">
-
+              <div className="mgrdash-team-list">
                 {teamMembers.map((member, index) => (
-
-                  <div
-                    key={index}
-                    className="team-row"
-                  >
-
-                    <div className="team-left">
-
+                  <div className="mgrdash-team-row" key={`${member.name}-${index}`}>
+                    <div className="mgrdash-team-member">
                       <div
-                        className="avatar"
-                        style={{
-                          background: member.color,
-                        }}
+                        className="mgrdash-avatar"
+                        style={{ background: member.color }}
                       >
                         {member.initials}
                       </div>
 
-                      <div>
-
+                      <div className="mgrdash-member-info">
                         <h3>{member.name}</h3>
-
                         <span>{member.role}</span>
-
                       </div>
-
                     </div>
 
-                    <div className="team-right">
-
+                    <div className="mgrdash-team-meta">
                       <span
                         className={
                           member.status === "Active"
-                            ? "status active"
-                            : "status leave"
+                            ? "mgrdash-status mgrdash-status-active"
+                            : "mgrdash-status mgrdash-status-leave"
                         }
                       >
+                        <span className="mgrdash-status-dot" />
                         {member.status}
                       </span>
 
-                      <div className="performance">
-
+                      <div className="mgrdash-performance">
                         <strong>{member.performance}</strong>
-
                         <small>performance</small>
-
                       </div>
-
                     </div>
-
                   </div>
-
                 ))}
+              </div>
+            </section>
 
+            <section className="mgrdash-card mgrdash-approval-card">
+              <div className="mgrdash-card-header">
+                <div>
+                  <h2>Pending Approvals</h2>
+                  <p>Requests waiting for your action</p>
+                </div>
+                <span className="mgrdash-count mgrdash-count-warning">
+                  {approvals.length}
+                </span>
               </div>
 
-            </div>
-
-            {/* Pending Approvals */}
-
-            <div className="manager-card">
-
-              <h2>Pending Approvals</h2>
-
-              <div className="approval-list">
-
+              <div className="mgrdash-approval-list">
                 {approvals.map((item, index) => (
-
                   <div
-                    key={index}
-                    className="approval-row"
+                    className="mgrdash-approval-row"
+                    key={`${item.name}-${index}`}
                   >
-
-                    <div className="approval-left">
-
-                      <div className="approval-avatar">
+                    <div className="mgrdash-approval-member">
+                      <div className="mgrdash-approval-avatar">
                         {item.initials}
                       </div>
 
-                      <div>
-
+                      <div className="mgrdash-approval-info">
                         <h3>{item.name}</h3>
-
                         <span>{item.reason}</span>
-
                       </div>
-
                     </div>
 
-                    <div className="approval-actions">
-
-                      <button className="approve">
-
+                    <div className="mgrdash-approval-actions">
+                      <button
+                        type="button"
+                        className="mgrdash-approve"
+                        aria-label={`Approve request from ${item.name}`}
+                      >
                         <FiCheck />
-
                       </button>
 
-                      <button className="reject">
-
+                      <button
+                        type="button"
+                        className="mgrdash-reject"
+                        aria-label={`Reject request from ${item.name}`}
+                      >
                         <FiX />
-
                       </button>
-
                     </div>
-
                   </div>
-
                 ))}
 
-                <button className="view-btn">
-
+                <button type="button" className="mgrdash-view-btn">
                   View All Requests
-
                 </button>
-
               </div>
-
-            </div>
-
+            </section>
           </div>
-
-        </div>
-
-      </div>
-
-    </>
+        </section>
+      </main>
+    </div>
   );
 }

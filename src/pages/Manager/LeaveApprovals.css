@@ -1,0 +1,1410 @@
+/* =========================================================
+   LEAVE APPROVALS PAGE
+   All classes are prefixed with leaveapp-
+   to prevent conflicts with the rest of the HRMS.
+   ========================================================= */
+
+.leaveapp-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 4px 30px;
+  overflow-x: hidden;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.leaveapp-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.leaveapp-header-content {
+  min-width: 0;
+}
+
+.leaveapp-header h1 {
+  margin: 0;
+  color: #1d2533;
+  font-size: 23px;
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.35px;
+}
+
+.leaveapp-header p {
+  margin: 5px 0 0;
+  color: #7b8798;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.leaveapp-export-button {
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #dce3eb;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #344256;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.leaveapp-export-button:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.leaveapp-summary-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.leaveapp-summary-card {
+  min-width: 0;
+  min-height: 82px;
+  box-sizing: border-box;
+  padding: 13px 15px;
+  border: 1px solid #dfe5ed;
+  border-radius: 12px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.leaveapp-summary-card strong {
+  color: #202732;
+  font-size: 23px;
+  line-height: 1;
+  font-weight: 750;
+}
+
+.leaveapp-summary-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  color: #737f90;
+  font-size: 10px;
+}
+
+.leaveapp-summary-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.leaveapp-dot-pending {
+  background: #f59e0b;
+}
+
+.leaveapp-dot-approved {
+  background: #22c55e;
+}
+
+.leaveapp-dot-rejected {
+  background: #ef4444;
+}
+
+.leaveapp-dot-leave {
+  background: #8b5cf6;
+}
+
+
+/* =========================================================
+   SECTION TABS
+   ========================================================= */
+
+.leaveapp-section-tabs {
+  width: max-content;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 18px;
+  padding: 3px;
+  border-radius: 8px;
+  background: #f1f3f6;
+}
+
+.leaveapp-section-tab {
+  height: 30px;
+  padding: 0 17px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #717c8d;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.leaveapp-section-tab:hover {
+  color: #334155;
+}
+
+.leaveapp-section-tab-active {
+  background: linear-gradient(
+    135deg,
+    #287cf4,
+    #7654e9
+  );
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.17);
+}
+
+
+/* =========================================================
+   REQUEST CARD
+   ========================================================= */
+
+.leaveapp-request-card {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid #dfe5ed;
+  border-radius: 13px;
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   FILTER BAR
+   ========================================================= */
+
+.leaveapp-filter-bar {
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 13px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.leaveapp-search-box {
+  position: relative;
+  height: 34px;
+  width: 105px;
+  flex: 0 1 105px;
+  min-width: 105px;
+}
+
+.leaveapp-search-box input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 28px 0 32px;
+  border: 1px solid #dce3eb;
+  border-radius: 8px;
+  outline: none;
+  background: #ffffff;
+  color: #344256;
+  font-size: 10px;
+}
+
+.leaveapp-search-box input::placeholder {
+  color: #9aa5b5;
+}
+
+.leaveapp-search-box input:focus {
+  border-color: #78a5f3;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+}
+
+.leaveapp-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.leaveapp-search-clear {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 23px;
+  height: 23px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.leaveapp-search-clear:hover {
+  background: #eef2f7;
+}
+
+
+/* =========================================================
+   STATUS TABS
+   ========================================================= */
+
+.leaveapp-status-tabs {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.leaveapp-status-tab {
+  height: 31px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: #7b8798;
+  font-size: 9px;
+  font-weight: 650;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.leaveapp-status-tab small {
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: #eef2f6;
+  color: #738095;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+}
+
+.leaveapp-status-tab:hover {
+  color: #334155;
+  background: #f8fafc;
+}
+
+.leaveapp-status-tab-active {
+  color: #2563eb;
+  background: #eff6ff;
+  border-color: #dbeafe;
+}
+
+.leaveapp-status-tab-active small {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+
+/* =========================================================
+   MORE FILTER BUTTON
+   ========================================================= */
+
+.leaveapp-more-filter {
+  height: 34px;
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #dce3eb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #66758a;
+  font-size: 9px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.leaveapp-more-filter:hover,
+.leaveapp-more-filter-active {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+
+/* =========================================================
+   FILTER PANEL
+   ========================================================= */
+
+.leaveapp-filter-panel {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 12px 13px;
+  border-bottom: 1px solid #edf1f5;
+  background: #fafbfd;
+}
+
+.leaveapp-filter-field {
+  min-width: 180px;
+}
+
+.leaveapp-filter-field label {
+  display: block;
+  margin-bottom: 5px;
+  color: #68778b;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.leaveapp-filter-field select {
+  width: 100%;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid #dce3eb;
+  border-radius: 7px;
+  outline: none;
+  background: #ffffff;
+  color: #44546a;
+  font-size: 10px;
+}
+
+.leaveapp-clear-filter-button {
+  height: 34px;
+  padding: 0 11px;
+  border: 1px solid #dce3eb;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.leaveapp-clear-filter-button:hover {
+  background: #f1f5f9;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.leaveapp-table-wrapper {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.leaveapp-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.leaveapp-table th {
+  height: 38px;
+  padding: 0 11px;
+  border-bottom: 1px solid #e9edf2;
+  background: #f8fafc;
+  color: #8995a6;
+  font-size: 8.5px;
+  font-weight: 750;
+  letter-spacing: 0.25px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.leaveapp-table td {
+  padding: 11px 11px;
+  border-bottom: 1px solid #edf1f5;
+  color: #69778b;
+  font-size: 9.5px;
+  line-height: 1.35;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.leaveapp-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.leaveapp-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+.leaveapp-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================================
+   COLUMN WIDTHS
+   ========================================================= */
+
+.leaveapp-table th:nth-child(1) {
+  width: 15%;
+}
+
+.leaveapp-table th:nth-child(2) {
+  width: 11%;
+}
+
+.leaveapp-table th:nth-child(3) {
+  width: 8%;
+}
+
+.leaveapp-table th:nth-child(4) {
+  width: 8%;
+}
+
+.leaveapp-table th:nth-child(5) {
+  width: 6%;
+}
+
+.leaveapp-table th:nth-child(6) {
+  width: 13%;
+}
+
+.leaveapp-table th:nth-child(7) {
+  width: 8%;
+}
+
+.leaveapp-table th:nth-child(8) {
+  width: 9%;
+}
+
+.leaveapp-table th:nth-child(9) {
+  width: 13%;
+}
+
+
+/* =========================================================
+   EMPLOYEE
+   ========================================================= */
+
+.leaveapp-employee {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.leaveapp-avatar {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.leaveapp-employee-details {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.leaveapp-employee-details strong {
+  color: #26354a;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.leaveapp-employee-details span {
+  color: #9ba6b5;
+  font-size: 8px;
+}
+
+
+/* =========================================================
+   LEAVE TYPE
+   ========================================================= */
+
+.leaveapp-type-tag {
+  display: inline-block;
+  max-width: 100%;
+  color: #55657a;
+  font-size: 9px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   DAYS
+   ========================================================= */
+
+.leaveapp-days {
+  color: #29374b;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   REASON
+   ========================================================= */
+
+.leaveapp-reason {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #728095;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.leaveapp-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.leaveapp-status-pending {
+  background: #fef3c7;
+  color: #a16207;
+}
+
+.leaveapp-status-approved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.leaveapp-status-rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.leaveapp-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.leaveapp-approve-button,
+.leaveapp-reject-button,
+.leaveapp-view-button {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.leaveapp-approve-button {
+  border: 1px solid #22c55e;
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.leaveapp-approve-button:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.leaveapp-reject-button {
+  border: 1px solid #ef4444;
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.leaveapp-reject-button:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.leaveapp-view-button {
+  border: 1px solid #dce3eb;
+  background: #ffffff;
+  color: #758399;
+}
+
+.leaveapp-view-button:hover {
+  background: #f8fafc;
+  color: #2563eb;
+  border-color: #cbd5e1;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.leaveapp-empty-cell {
+  height: 230px;
+  text-align: center !important;
+}
+
+.leaveapp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaveapp-empty-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 10px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+.leaveapp-empty-state strong {
+  color: #536176;
+  font-size: 12px;
+}
+
+.leaveapp-empty-state span {
+  margin-top: 4px;
+  color: #9aa5b5;
+  font-size: 9px;
+}
+
+.leaveapp-empty-state button {
+  margin-top: 11px;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   SECONDARY SECTIONS
+   ========================================================= */
+
+.leaveapp-secondary-card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px 24px;
+  border: 1px solid #dfe5ed;
+  border-radius: 13px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.leaveapp-secondary-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 13px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.leaveapp-secondary-card h2 {
+  margin: 0;
+  color: #29374b;
+  font-size: 17px;
+}
+
+.leaveapp-secondary-card > p {
+  max-width: 480px;
+  margin: 6px auto 20px;
+  color: #8a97a8;
+  font-size: 10px;
+}
+
+.leaveapp-policy-grid,
+.leaveapp-balance-grid {
+  max-width: 650px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.leaveapp-policy-item,
+.leaveapp-balance-item {
+  padding: 15px;
+  border: 1px solid #e4e9f0;
+  border-radius: 9px;
+  background: #fafbfd;
+}
+
+.leaveapp-policy-item strong,
+.leaveapp-balance-item span {
+  display: block;
+  color: #45556b;
+  font-size: 10px;
+}
+
+.leaveapp-policy-item span,
+.leaveapp-balance-item small {
+  display: block;
+  margin-top: 5px;
+  color: #8d99a9;
+  font-size: 9px;
+}
+
+.leaveapp-balance-item strong {
+  display: block;
+  margin-top: 7px;
+  color: #26354a;
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   MODAL OVERLAY
+   ========================================================= */
+
+.leaveapp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(3px);
+}
+
+
+/* =========================================================
+   CONFIRMATION MODAL
+   ========================================================= */
+
+.leaveapp-confirm-modal {
+  width: min(400px, 100%);
+  box-sizing: border-box;
+  padding: 25px;
+  border-radius: 15px;
+  background: #ffffff;
+  text-align: center;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.22);
+}
+
+.leaveapp-confirm-icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 13px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaveapp-confirm-success {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.leaveapp-confirm-danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.leaveapp-confirm-modal h2 {
+  margin: 0;
+  color: #26354a;
+  font-size: 17px;
+}
+
+.leaveapp-confirm-modal > p {
+  margin: 7px auto 15px;
+  max-width: 320px;
+  color: #7b8798;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.leaveapp-confirm-request {
+  padding: 11px;
+  border-radius: 9px;
+  background: #f8fafc;
+  border: 1px solid #e8edf3;
+}
+
+.leaveapp-confirm-request strong {
+  display: block;
+  color: #45556b;
+  font-size: 10px;
+}
+
+.leaveapp-confirm-request span {
+  display: block;
+  margin-top: 3px;
+  color: #8b98a9;
+  font-size: 9px;
+}
+
+.leaveapp-confirm-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.leaveapp-confirm-cancel,
+.leaveapp-confirm-approve,
+.leaveapp-confirm-reject {
+  height: 35px;
+  padding: 0 15px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.leaveapp-confirm-cancel {
+  border: 1px solid #dce3eb;
+  background: #ffffff;
+  color: #59697d;
+}
+
+.leaveapp-confirm-approve {
+  border: none;
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.leaveapp-confirm-reject {
+  border: none;
+  background: #ef4444;
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   DETAILS MODAL
+   ========================================================= */
+
+.leaveapp-details-modal {
+  width: min(540px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.22);
+}
+
+.leaveapp-details-header {
+  padding: 17px 19px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.leaveapp-details-header h2 {
+  margin: 0;
+  color: #26354a;
+  font-size: 16px;
+}
+
+.leaveapp-details-header span {
+  display: block;
+  margin-top: 3px;
+  color: #929eae;
+  font-size: 9px;
+}
+
+.leaveapp-details-close {
+  width: 29px;
+  height: 29px;
+  border: none;
+  border-radius: 7px;
+  background: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.leaveapp-details-close:hover {
+  background: #e2e8f0;
+}
+
+.leaveapp-details-body {
+  padding: 19px;
+}
+
+.leaveapp-details-employee {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px;
+  margin-bottom: 17px;
+  border: 1px solid #e5eaf0;
+  border-radius: 9px;
+  background: #fafbfd;
+}
+
+.leaveapp-details-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+}
+
+.leaveapp-details-employee div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.leaveapp-details-employee strong {
+  color: #26354a;
+  font-size: 11px;
+}
+
+.leaveapp-details-employee span {
+  color: #8c98a8;
+  font-size: 9px;
+}
+
+.leaveapp-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 13px;
+}
+
+.leaveapp-details-grid > div {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #e7ebf0;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.leaveapp-details-grid label,
+.leaveapp-details-reason label {
+  display: block;
+  margin-bottom: 5px;
+  color: #8a97a8;
+  font-size: 8px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.25px;
+}
+
+.leaveapp-details-grid strong {
+  color: #3c4c62;
+  font-size: 10px;
+}
+
+.leaveapp-details-reason {
+  margin-top: 13px;
+  padding: 11px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.leaveapp-details-reason p {
+  margin: 0;
+  color: #59697d;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.leaveapp-details-footer {
+  padding: 13px 19px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  border-top: 1px solid #edf1f5;
+}
+
+.leaveapp-detail-reject,
+.leaveapp-detail-approve,
+.leaveapp-detail-close-button {
+  height: 34px;
+  padding: 0 13px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.leaveapp-detail-reject {
+  border: 1px solid #ef4444;
+  background: #ffffff;
+  color: #dc2626;
+}
+
+.leaveapp-detail-approve {
+  border: none;
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.leaveapp-detail-close-button {
+  border: 1px solid #dce3eb;
+  background: #ffffff;
+  color: #59697d;
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1440px) {
+  .leaveapp-header h1 {
+    font-size: 25px;
+  }
+
+  .leaveapp-table th {
+    font-size: 9px;
+  }
+
+  .leaveapp-table td {
+    font-size: 10px;
+  }
+}
+
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .leaveapp-filter-bar {
+    flex-wrap: wrap;
+  }
+
+  .leaveapp-search-box {
+    flex: 1 1 220px;
+    width: auto;
+  }
+
+  .leaveapp-more-filter {
+    margin-left: 0;
+  }
+
+  .leaveapp-table th,
+  .leaveapp-table td {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .leaveapp-actions {
+    gap: 3px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 950px) {
+  .leaveapp-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .leaveapp-filter-bar {
+    align-items: stretch;
+  }
+
+  .leaveapp-search-box {
+    flex: 1 1 100%;
+  }
+
+  .leaveapp-status-tabs {
+    flex-wrap: wrap;
+  }
+
+  .leaveapp-more-filter {
+    margin-left: auto;
+  }
+
+  .leaveapp-table-wrapper {
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .leaveapp-table {
+    min-width: 850px;
+    table-layout: fixed;
+  }
+
+  .leaveapp-policy-grid,
+  .leaveapp-balance-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .leaveapp-page {
+    padding: 0 0 22px;
+  }
+
+  .leaveapp-header {
+    flex-direction: column;
+  }
+
+  .leaveapp-export-button {
+    width: 100%;
+  }
+
+  .leaveapp-summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .leaveapp-summary-card {
+    min-height: 78px;
+    padding: 11px;
+  }
+
+  .leaveapp-summary-card strong {
+    font-size: 20px;
+  }
+
+  .leaveapp-section-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .leaveapp-section-tab {
+    flex: 1;
+    padding: 0 12px;
+  }
+
+  .leaveapp-filter-bar {
+    flex-direction: column;
+  }
+
+  .leaveapp-search-box {
+    width: 100%;
+    flex: none;
+  }
+
+  .leaveapp-status-tabs {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .leaveapp-status-tab {
+    flex-shrink: 0;
+  }
+
+  .leaveapp-more-filter {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .leaveapp-filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .leaveapp-filter-field {
+    width: 100%;
+  }
+
+  .leaveapp-clear-filter-button {
+    width: 100%;
+  }
+
+  /*
+   * Table gets its own contained scroll area.
+   * The overall HRMS page does not become wider.
+   */
+  .leaveapp-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .leaveapp-table {
+    min-width: 850px;
+  }
+
+  .leaveapp-policy-grid,
+  .leaveapp-balance-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+  .leaveapp-header h1 {
+    font-size: 21px;
+  }
+
+  .leaveapp-header p {
+    font-size: 10px;
+  }
+
+  .leaveapp-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .leaveapp-summary-card {
+    min-height: 75px;
+  }
+
+  .leaveapp-summary-label {
+    font-size: 9px;
+  }
+
+  .leaveapp-request-card {
+    border-radius: 11px;
+  }
+
+  .leaveapp-status-tabs {
+    padding-bottom: 2px;
+  }
+
+  .leaveapp-table-wrapper {
+    scrollbar-width: thin;
+  }
+
+  .leaveapp-modal-overlay {
+    padding: 10px;
+  }
+
+  .leaveapp-confirm-modal {
+    padding: 21px;
+  }
+
+  .leaveapp-details-modal {
+    max-height: calc(100vh - 20px);
+  }
+
+  .leaveapp-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .leaveapp-details-footer {
+    flex-direction: column;
+  }
+
+  .leaveapp-detail-reject,
+  .leaveapp-detail-approve,
+  .leaveapp-detail-close-button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .leaveapp-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .leaveapp-section-tabs {
+    overflow-x: auto;
+  }
+
+  .leaveapp-section-tab {
+    flex: 0 0 auto;
+  }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.leaveapp-export-button:focus-visible,
+.leaveapp-section-tab:focus-visible,
+.leaveapp-status-tab:focus-visible,
+.leaveapp-more-filter:focus-visible,
+.leaveapp-search-clear:focus-visible,
+.leaveapp-approve-button:focus-visible,
+.leaveapp-reject-button:focus-visible,
+.leaveapp-view-button:focus-visible,
+.leaveapp-clear-filter-button:focus-visible,
+.leaveapp-confirm-cancel:focus-visible,
+.leaveapp-confirm-approve:focus-visible,
+.leaveapp-confirm-reject:focus-visible,
+.leaveapp-details-close:focus-visible,
+.leaveapp-detail-reject:focus-visible,
+.leaveapp-detail-approve:focus-visible,
+.leaveapp-detail-close-button:focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.2);
+  outline-offset: 2px;
+}

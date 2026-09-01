@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import "./EmployeeManagement.css";
 
-import Header from "../../components/Header/Header";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import HRLayout from "../../layouts/HRLayout";
 
 import {
   FiSearch,
@@ -134,16 +133,8 @@ export default function EmployeeManagement() {
   );
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar />
-
-      <div className="employees-main">
-        <Header
-          title="Employees"
-          breadcrumb="Employees"
-        />
-
-        <div className="employee-page">
+    <HRLayout title="Employees" breadcrumb="Employees">
+      <div className="employee-page">
           {/* TOOLBAR */}
           <div className="toolbar">
             <div className="search-box">
@@ -313,10 +304,10 @@ export default function EmployeeManagement() {
                   )}
                 </div>
               </div>
-            </div>
-          )}
         </div>
-      </div>
+
+      )}
     </div>
+    </HRLayout>
   );
 }

@@ -1,97 +1,57 @@
-.attendance-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f3f5f9;
-}
-
-.attendance-main {
-  flex: 1;
-  margin-left: 240px; /* Sidebar width */
-  overflow-y: auto;
-}
-
-.attendance-container {
-  padding: 20px;
-}
-.attendance-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f5f7fb;
-}
-
-.attendance-main {
-  flex: 1;
+.attendance-page-container {
   display: flex;
   flex-direction: column;
-}
-
-.attendance-container {
-  padding: 24px 32px;
-}
-
-.attendance-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #8b8f9c;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
-
-.separator {
-  color: #c0c4cc;
-}
-
-.attendance-title {
-  font-size: 34px;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 24px;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .attendance-tabs {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 0.5rem;
+  background: #ffffff;
+  padding: 0.35rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.tab-btn {
+.attendance-tab-btn {
   border: none;
   outline: none;
   cursor: pointer;
   background: transparent;
-  color: #6b7280;
-  padding: 12px 20px;
-  border-radius: 999px;
-  font-size: 15px;
+  color: #64748b;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
   font-weight: 600;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.tab-btn:hover {
-  background: #edf2ff;
+.attendance-tab-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
 }
 
-.tab-btn.active {
+.attendance-tab-btn.active {
   background: #2563eb;
-  color: white;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 .attendance-content {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {
-  .attendance-container {
-    padding: 16px;
-  }
-
   .attendance-tabs {
-    overflow-x: auto;
+    width: 100%;
   }
-
-  .attendance-title {
-    font-size: 28px;
-  }
-}
+}

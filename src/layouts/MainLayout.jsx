@@ -1,23 +1,14 @@
-import Sidebar from "../components/Sidebar/Sidebar";
-import Header from "../components/Header/Header";
+import React from "react";
+import HRLayout from "./HRLayout";
 
 export default function MainLayout({
   children,
-  title,
-  breadcrumb,
+  title = "HR Portal",
+  breadcrumb = "HR",
 }) {
   return (
-    <>
-      <Sidebar />
-
-      <Header
-        title={title}
-        breadcrumb={breadcrumb}
-      />
-
-      <div className="page-content">
-        {children}
-      </div>
-    </>
+    <HRLayout title={title} breadcrumb={breadcrumb}>
+      {children}
+    </HRLayout>
   );
 }

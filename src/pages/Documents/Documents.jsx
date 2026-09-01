@@ -1,7 +1,6 @@
 import "./Documents.css";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import HRLayout from "../../layouts/HRLayout";
 import { useState, useRef } from "react";
-import Header from "../../components/Header/Header";
 import {
   FiUser,
   FiShield,
@@ -15,7 +14,6 @@ import {
 
 export default function Documents() {
   const fileInputRef = useRef(null);
-
   const [search] = useState("");
 
   const [documents, setDocuments] = useState([
@@ -27,7 +25,7 @@ export default function Documents() {
     },
     {
       id: 2,
-      name: "Q1_2025_Payroll_Report.xlsx",
+      name: "Q1_2026_Payroll_Report.xlsx",
       details: "Salary Doc • 1.2 MB",
       url: null,
     },
@@ -55,9 +53,7 @@ export default function Documents() {
   };
 
   const deleteFile = (id) => {
-    setDocuments((prev) =>
-      prev.filter((doc) => doc.id !== id)
-    );
+    setDocuments((prev) => prev.filter((doc) => doc.id !== id));
   };
 
   const viewFile = (doc) => {
@@ -87,28 +83,14 @@ export default function Documents() {
   );
 
   return (
-<div className="docs-layout">
-  <Sidebar />
-
-<div className="docs-main">
-  <Header
-    title="Document Management"
-    breadcrumb="Documents"
-  />
-
-  <div className="docs-content">
-
-
-
-
+    <HRLayout title="Document Management" breadcrumb="Documents">
+      <div className="docs-content">
         {/* Stats */}
-
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon blue">
               <FiUser />
             </div>
-
             <div>
               <p>Total Documents</p>
               <h2>{documents.length}</h2>
@@ -119,7 +101,6 @@ export default function Documents() {
             <div className="stat-icon purple">
               <FiShield />
             </div>
-
             <div>
               <p>Legal Docs</p>
               <h2>12</h2>
@@ -130,7 +111,6 @@ export default function Documents() {
             <div className="stat-icon green">
               <FiFileText />
             </div>
-
             <div>
               <p>Contracts</p>
               <h2>23</h2>
@@ -141,7 +121,6 @@ export default function Documents() {
             <div className="stat-icon orange">
               <FiDollarSign />
             </div>
-
             <div>
               <p>Salary Docs</p>
               <h2>115</h2>
@@ -150,10 +129,8 @@ export default function Documents() {
         </div>
 
         {/* Upload */}
-
         <div className="upload-card">
           <h3>Upload Documents</h3>
-
           <div
             className="upload-area"
             onClick={openFileExplorer}
@@ -164,11 +141,8 @@ export default function Documents() {
             }}
           >
             <FiUpload size={40} />
-
             <h4>Drag & Drop files here</h4>
-
             <p>Click to browse files</p>
-
             <input
               type="file"
               multiple
@@ -180,7 +154,6 @@ export default function Documents() {
         </div>
 
         {/* Recent Documents */}
-
         <div className="recent-card">
           <div className="recent-header">
             <h3>Recent Documents</h3>
@@ -196,7 +169,6 @@ export default function Documents() {
                   <div className="doc-icon">
                     <FiFileText />
                   </div>
-
                   <div>
                     <h4>{doc.name}</h4>
                     <p>{doc.details}</p>
@@ -204,27 +176,15 @@ export default function Documents() {
                 </div>
 
                 <div className="doc-actions">
-                  <FiEye
-                    title="View"
-                    onClick={() => viewFile(doc)}
-                  />
-
-                  <FiDownload
-                    title="Download"
-                    onClick={() => downloadFile(doc)}
-                  />
-
-                  <FiTrash2
-                    title="Delete"
-                    onClick={() => deleteFile(doc.id)}
-                  />
+                  <FiEye title="View" onClick={() => viewFile(doc)} />
+                  <FiDownload title="Download" onClick={() => downloadFile(doc)} />
+                  <FiTrash2 title="Delete" onClick={() => deleteFile(doc.id)} />
                 </div>
               </div>
             ))
           )}
         </div>
       </div>
-    </div>
-    </div>
+    </HRLayout>
   );
 }

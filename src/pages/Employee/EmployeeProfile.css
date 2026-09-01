@@ -1,0 +1,769 @@
+/* ============================================================
+   EMPLOYEE PROFILE
+   Unique prefix: emp-profile-
+   This prevents conflicts with existing application CSS.
+   ============================================================ */
+
+.emp-profile-page {
+  width: 100%;
+  max-width: 100%;
+  padding: 4px 10px 40px;
+  color: #20242d;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.emp-profile-page *,
+.emp-profile-page *::before,
+.emp-profile-page *::after {
+  box-sizing: border-box;
+}
+
+.emp-profile-page button {
+  font: inherit;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.emp-profile-header {
+  margin-bottom: 14px;
+}
+
+.emp-profile-header h1 {
+  margin: 0;
+  color: #171b24;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   PROFILE SUMMARY CARD
+   Matches the first screenshot
+   ============================================================ */
+
+.emp-profile-summary-card {
+  width: 100%;
+  max-width: 625px;
+  padding: 18px 20px 20px;
+  border: 1px solid #e0e4ea;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+
+/* Top profile information */
+
+.emp-profile-summary-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.emp-profile-avatar {
+  width: 65px;
+  height: 65px;
+  flex: 0 0 65px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+
+  box-shadow: 0 6px 16px rgba(79, 109, 245, 0.16);
+}
+
+.emp-profile-main-info {
+  min-width: 0;
+  flex: 1;
+  padding-top: 1px;
+}
+
+.emp-profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.emp-profile-name-row h2 {
+  margin: 0;
+  color: #171b24;
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.emp-profile-active-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 19px;
+  padding: 3px 9px;
+
+  border-radius: 999px;
+
+  background: #d9f8e7;
+  color: #15935a;
+
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.emp-profile-designation {
+  margin: 3px 0 0;
+
+  color: #667085;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.emp-profile-id-line {
+  margin: 2px 0 0;
+
+  color: #9aa1ad;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.emp-profile-separator {
+  display: inline-block;
+  margin: 0 4px;
+  color: #a5abb5;
+}
+
+
+/* ============================================================
+   SUMMARY DETAILS
+   ============================================================ */
+
+.emp-profile-summary-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 50px;
+  row-gap: 13px;
+
+  margin-top: 23px;
+}
+
+.emp-profile-summary-item {
+  min-width: 0;
+}
+
+.emp-profile-summary-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-bottom: 4px;
+
+  color: #8c95a5;
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.emp-profile-summary-label svg {
+  width: 10px;
+  height: 10px;
+  stroke-width: 2;
+}
+
+.emp-profile-summary-value {
+  display: block;
+
+  color: #344054;
+  font-size: 10.5px;
+  line-height: 1.35;
+  font-weight: 500;
+
+  overflow-wrap: anywhere;
+}
+
+.emp-profile-summary-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+
+  min-width: 0;
+}
+
+.emp-profile-summary-value-row > span {
+  min-width: 0;
+
+  color: #344054;
+  font-size: 10.5px;
+  line-height: 1.35;
+  font-weight: 500;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   COPY BUTTON
+   ============================================================ */
+
+.emp-profile-copy-btn {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 6px;
+
+  background: #ffffff;
+  color: #8a94a4;
+
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.emp-profile-copy-btn svg {
+  width: 11px;
+  height: 11px;
+}
+
+.emp-profile-copy-btn:hover {
+  color: #4f6df5;
+  border-color: #cbd4f8;
+  background: #f7f8ff;
+  transform: translateY(-1px);
+}
+
+.emp-profile-copy-success {
+  color: #15935a !important;
+  border-color: #bcebd0 !important;
+  background: #ecfbf2 !important;
+}
+
+
+/* ============================================================
+   HR NOTE
+   ============================================================ */
+
+.emp-profile-hr-note {
+  margin-top: 15px;
+  padding: 9px 10px;
+
+  border-radius: 9px;
+
+  background: #f5f7fa;
+  color: #98a2b3;
+
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+
+/* ============================================================
+   DETAILED INFORMATION SECTION
+   ============================================================ */
+
+.emp-profile-details-section {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 20px;
+
+  border: 1px solid #e1e5eb;
+  border-radius: 14px;
+
+  background: #ffffff;
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.emp-profile-tabs {
+  display: flex;
+  align-items: stretch;
+
+  width: 100%;
+
+  padding: 5px;
+
+  background: #111827;
+  border-radius: 11px;
+
+  max-width: 600px;
+  margin: 18px 20px 0;
+}
+
+.emp-profile-tab {
+  min-height: 38px;
+
+  flex: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 7px 12px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #aeb8c9;
+
+  cursor: pointer;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.emp-profile-tab svg {
+  width: 13px;
+  height: 13px;
+}
+
+.emp-profile-tab:hover {
+  color: #ffffff;
+}
+
+.emp-profile-tab-active {
+  background: #2d67e9;
+  color: #ffffff;
+
+  box-shadow: 0 2px 7px rgba(45, 103, 233, 0.25);
+}
+
+
+/* ============================================================
+   TAB CONTENT
+   ============================================================ */
+
+.emp-profile-tab-content {
+  padding: 25px 20px 24px;
+}
+
+.emp-profile-detail-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  column-gap: 28px;
+  row-gap: 19px;
+}
+
+.emp-profile-detail-item {
+  min-width: 0;
+}
+
+.emp-profile-detail-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #7c8798;
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.emp-profile-detail-value {
+  min-height: 39px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 12px;
+
+  border: 1px solid #e2e6ec;
+  border-radius: 8px;
+
+  background: #f8fafc;
+
+  color: #344054;
+
+  font-size: 10.5px;
+  line-height: 1.4;
+  font-weight: 500;
+
+  overflow-wrap: anywhere;
+}
+
+.emp-profile-copy-value {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.emp-profile-copy-value > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.emp-profile-detail-status {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 4px 9px;
+
+  border-radius: 999px;
+
+  background: #d9f8e7;
+  color: #15935a;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   BANK INFORMATION NOTE
+   ============================================================ */
+
+.emp-profile-sensitive-note {
+  margin-top: 20px;
+  padding: 10px 12px;
+
+  border-left: 3px solid #6378e8;
+  border-radius: 7px;
+
+  background: #f5f7ff;
+  color: #7b8495;
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  .emp-profile-page {
+    padding: 4px 8px 32px;
+  }
+
+  .emp-profile-summary-card {
+    max-width: 100%;
+  }
+
+  .emp-profile-summary-details {
+    column-gap: 30px;
+  }
+
+  .emp-profile-details-section {
+    margin-top: 18px;
+  }
+
+  .emp-profile-tabs {
+    max-width: calc(100% - 30px);
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .emp-profile-tab-content {
+    padding: 22px 15px;
+  }
+
+  .emp-profile-detail-grid {
+    column-gap: 20px;
+  }
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 680px) {
+
+  .emp-profile-page {
+    padding: 3px 5px 28px;
+  }
+
+  .emp-profile-header {
+    margin-bottom: 10px;
+  }
+
+  .emp-profile-header h1 {
+    font-size: 18px;
+  }
+
+
+  /* Profile card */
+
+  .emp-profile-summary-card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .emp-profile-summary-top {
+    gap: 12px;
+  }
+
+  .emp-profile-avatar {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+  }
+
+  .emp-profile-name-row {
+    gap: 6px;
+  }
+
+  .emp-profile-name-row h2 {
+    font-size: 14px;
+  }
+
+  .emp-profile-designation {
+    font-size: 10px;
+  }
+
+  .emp-profile-id-line {
+    font-size: 8.5px;
+  }
+
+
+  /* Summary details */
+
+  .emp-profile-summary-details {
+    grid-template-columns: 1fr;
+    gap: 12px;
+
+    margin-top: 19px;
+  }
+
+  .emp-profile-summary-item {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f2f5;
+  }
+
+  .emp-profile-summary-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .emp-profile-summary-label {
+    font-size: 9px;
+  }
+
+  .emp-profile-summary-value,
+  .emp-profile-summary-value-row > span {
+    font-size: 10px;
+  }
+
+
+  /* HR note */
+
+  .emp-profile-hr-note {
+    margin-top: 13px;
+    font-size: 8.5px;
+  }
+
+
+  /* Details */
+
+  .emp-profile-details-section {
+    border-radius: 12px;
+  }
+
+  .emp-profile-tabs {
+    max-width: none;
+
+    margin: 12px 12px 0;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+  }
+
+  .emp-profile-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .emp-profile-tab {
+    flex: 0 0 auto;
+
+    min-width: 125px;
+
+    font-size: 10px;
+  }
+
+  .emp-profile-tab-content {
+    padding: 18px 12px;
+  }
+
+  .emp-profile-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .emp-profile-detail-label {
+    font-size: 9.5px;
+  }
+
+  .emp-profile-detail-value {
+    min-height: 38px;
+    padding: 0 10px;
+
+    font-size: 10px;
+  }
+
+  .emp-profile-sensitive-note {
+    font-size: 8.5px;
+  }
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 430px) {
+
+  .emp-profile-page {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .emp-profile-summary-card {
+    padding: 13px;
+  }
+
+  .emp-profile-summary-top {
+    align-items: flex-start;
+  }
+
+  .emp-profile-avatar {
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+
+    border-radius: 11px;
+
+    font-size: 14px;
+  }
+
+  .emp-profile-name-row {
+    display: block;
+  }
+
+  .emp-profile-active-badge {
+    margin-top: 4px;
+  }
+
+  .emp-profile-designation {
+    margin-top: 4px;
+    line-height: 1.45;
+  }
+
+  .emp-profile-id-line {
+    line-height: 1.5;
+  }
+
+  .emp-profile-tabs {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .emp-profile-tab {
+    min-width: 115px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .emp-profile-tab-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .emp-profile-detail-value {
+    min-height: 40px;
+  }
+}
+
+
+/* ============================================================
+   VERY SMALL DEVICES
+   ============================================================ */
+
+@media (max-width: 360px) {
+
+  .emp-profile-summary-card {
+    padding: 12px;
+  }
+
+  .emp-profile-avatar {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .emp-profile-name-row h2 {
+    font-size: 13px;
+  }
+
+  .emp-profile-designation {
+    font-size: 9px;
+  }
+
+  .emp-profile-id-line {
+    font-size: 8px;
+  }
+
+  .emp-profile-tab {
+    min-width: 105px;
+    font-size: 9px;
+  }
+}
+
+
+/* ============================================================
+   ACCESSIBILITY / REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .emp-profile-copy-btn,
+  .emp-profile-tab {
+    transition: none;
+  }
+}

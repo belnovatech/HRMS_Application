@@ -1,0 +1,68 @@
+.hradmin-dashboard-holidays-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hradmin-dashboard-holidays-header {
+  margin-bottom: 1.25rem;
+}
+
+.hradmin-dashboard-holidays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.hradmin-dashboard-holiday-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.2rem 0;
+}
+
+.hradmin-dashboard-holiday-date-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  line-height: 1;
+}
+
+.hradmin-dashboard-holiday-month {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #3b82f6;
+  letter-spacing: -0.01em;
+}
+
+.hradmin-dashboard-holiday-day {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 0.15rem;
+}
+
+.hradmin-dashboard-holiday-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.hradmin-dashboard-holiday-name {
+  margin: 0;
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.hradmin-dashboard-holiday-weekday {
+  font-size: 0.775rem;
+  color: #64748b;
+}

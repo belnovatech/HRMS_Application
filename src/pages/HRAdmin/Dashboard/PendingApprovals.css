@@ -1,0 +1,179 @@
+.hradmin-dashboard-pending-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hradmin-dashboard-pending-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.hradmin-dashboard-btn-link {
+  background: transparent;
+  border: none;
+  color: #3b82f6;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.hradmin-dashboard-btn-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.hradmin-dashboard-pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.hradmin-dashboard-empty-state {
+  padding: 2rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.hradmin-dashboard-pending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.hradmin-dashboard-pending-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.hradmin-dashboard-pending-user {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hradmin-dashboard-pending-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hradmin-dashboard-pending-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.hradmin-dashboard-pending-name {
+  margin: 0;
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.hradmin-dashboard-pending-subtext {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.hradmin-dashboard-pending-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hradmin-dashboard-pending-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hradmin-dashboard-pill {
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  line-height: 1;
+}
+
+.hradmin-dashboard-pill.warning-pill {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.hradmin-dashboard-pill.danger-pill {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.hradmin-dashboard-pending-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hradmin-dashboard-btn-approve {
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.hradmin-dashboard-btn-approve:hover {
+  background: #059669;
+}
+
+.hradmin-dashboard-btn-reject {
+  background: #ffffff;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hradmin-dashboard-btn-reject:hover {
+  background: #fef2f2;
+}
+
+@media (max-width: 640px) {
+  .hradmin-dashboard-pending-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hradmin-dashboard-pending-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

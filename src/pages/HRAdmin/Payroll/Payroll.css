@@ -1,0 +1,1280 @@
+/*
+  Payroll Management styles
+  Namespace: bel-payroll-*
+  This page intentionally avoids hr-payroll-* selectors to prevent
+  cross-page CSS overrides.
+*/
+
+.bel-payroll-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 18px 0 38px;
+  color: #20242d;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.bel-payroll-page *,
+.bel-payroll-page *::before,
+.bel-payroll-page *::after {
+  box-sizing: border-box;
+}
+
+.bel-payroll-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 14px;
+}
+
+.bel-payroll-header h1 {
+  margin: 0 0 4px;
+  color: #20252e;
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.bel-payroll-header p {
+  margin: 0;
+  color: #7c8798;
+  font-size: 11px;
+}
+
+.bel-payroll-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bel-payroll-export-button,
+.bel-payroll-run-button,
+.bel-payroll-month-control button,
+.bel-payroll-month-control select,
+.bel-payroll-view-button,
+.bel-payroll-primary-action,
+.bel-payroll-secondary-action {
+  font: inherit;
+}
+
+.bel-payroll-export-button,
+.bel-payroll-run-button {
+  min-height: 35px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.bel-payroll-export-button {
+  border: 1px solid #dfe4eb;
+  background: #fff;
+  color: #505b6a;
+}
+
+.bel-payroll-export-button:hover {
+  border-color: #c5cfdb;
+  box-shadow: 0 4px 12px rgba(32, 45, 65, 0.06);
+}
+
+.bel-payroll-run-button {
+  border: 1px solid #2676ef;
+  color: #fff;
+  background: linear-gradient(90deg, #13b9f3 0%, #7955ee 100%);
+  box-shadow: 0 4px 10px rgba(55, 107, 235, 0.13);
+}
+
+.bel-payroll-run-button:hover {
+  filter: brightness(0.98);
+  transform: translateY(-1px);
+}
+
+.bel-payroll-export-button svg,
+.bel-payroll-run-button svg {
+  font-size: 13px;
+}
+
+.bel-payroll-month-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.bel-payroll-month-control button,
+.bel-payroll-month-control select {
+  height: 31px;
+  border: 1px solid #dfe4eb;
+  border-radius: 7px;
+  background: #fff;
+  color: #687383;
+  font-size: 9px;
+  font-weight: 600;
+  outline: none;
+}
+
+.bel-payroll-month-control button {
+  padding: 0 9px;
+  cursor: pointer;
+}
+
+.bel-payroll-month-control button:hover {
+  border-color: #bcd3f5;
+  color: #2873e7;
+  background: #f5f9ff;
+}
+
+.bel-payroll-month-control select {
+  min-width: 140px;
+  padding: 0 9px;
+  cursor: pointer;
+}
+
+.bel-payroll-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin-bottom: 18px;
+}
+
+.bel-payroll-stat {
+  min-height: 90px;
+  padding: 14px 16px 12px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #e0e5ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.bel-payroll-stat > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #8a94a3;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.bel-payroll-stat > strong {
+  display: block;
+  color: #20252d;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.bel-payroll-stat > i {
+  width: 74%;
+  height: 3px;
+  position: absolute;
+  left: 16px;
+  bottom: 15px;
+  border-radius: 999px;
+  background: #2578f5;
+}
+
+.bel-payroll-stat--gross > i {
+  background: #2779f7;
+}
+
+.bel-payroll-stat--deductions > i {
+  background: #ff4b53;
+}
+
+.bel-payroll-stat--net > i {
+  background: #18bb61;
+}
+
+.bel-payroll-stat--paid > i {
+  background: #8056ef;
+}
+
+.bel-payroll-tabs {
+  width: fit-content;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  background: #f0f2f6;
+  overflow-x: auto;
+}
+
+.bel-payroll-tabs button {
+  min-height: 30px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #697484;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.bel-payroll-tabs button:hover {
+  color: #3e4857;
+}
+
+.bel-payroll-tabs button.is-active {
+  color: #fff;
+  background: linear-gradient(90deg, #2579f5 0%, #8155ee 100%);
+  box-shadow: 0 3px 9px rgba(76, 94, 235, 0.18);
+}
+
+/* Employee table */
+
+.bel-payroll-table-card,
+.bel-payroll-processing-card,
+.bel-payroll-analytics-card {
+  width: 100%;
+  border: 1px solid #dfe4eb;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.bel-payroll-table-topbar {
+  min-height: 58px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.bel-payroll-table-topbar h2 {
+  margin: 0 0 3px;
+  color: #242a33;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bel-payroll-table-topbar p {
+  margin: 0;
+  color: #8a94a2;
+  font-size: 9px;
+}
+
+.bel-payroll-selected-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 25px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: #5f6b7a;
+  background: #f5f7fa;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.bel-payroll-selected-indicator svg {
+  color: #6d75eb;
+  font-size: 11px;
+}
+
+.bel-payroll-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.bel-payroll-table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: collapse;
+}
+
+.bel-payroll-table th {
+  height: 36px;
+  padding: 0 12px;
+  border-bottom: 1px solid #edf0f4;
+  background: #fbfcfd;
+  color: #929baa;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 8.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bel-payroll-table td {
+  height: 56px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0f2f5;
+  color: #566170;
+  white-space: nowrap;
+  font-size: 9px;
+  vertical-align: middle;
+}
+
+.bel-payroll-table tbody tr {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.bel-payroll-table tbody tr:hover {
+  background: #fbfdff;
+}
+
+.bel-payroll-table tbody tr.is-selected {
+  background: #f2f7ff;
+}
+
+.bel-payroll-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.bel-payroll-employee {
+  min-width: 165px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.bel-payroll-employee input {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: #2877f1;
+  cursor: pointer;
+}
+
+.bel-payroll-employee > span:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bel-payroll-employee strong {
+  color: #303742;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.bel-payroll-employee small {
+  color: #929baa;
+  font-size: 8px;
+}
+
+.bel-payroll-avatar {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.bel-payroll-avatar--blue {
+  background: #e1bd34;
+}
+
+.bel-payroll-avatar--yellow {
+  background: #d7c932;
+}
+
+.bel-payroll-avatar--green {
+  background: #36c85c;
+}
+
+.bel-payroll-avatar--cyan {
+  background: #32c8d2;
+}
+
+.bel-payroll-avatar--indigo {
+  background: #4c49d8;
+}
+
+.bel-payroll-gross {
+  color: #17ad56 !important;
+  font-weight: 700;
+}
+
+.bel-payroll-deduction {
+  color: #f0434b !important;
+  font-weight: 700;
+}
+
+.bel-payroll-net {
+  color: #151a21 !important;
+  font-weight: 700;
+}
+
+.bel-payroll-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.bel-payroll-view-button {
+  min-height: 25px;
+  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid #cfe0f8;
+  border-radius: 6px;
+  background: #fff;
+  color: #2875e6;
+  font-size: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bel-payroll-view-button:hover {
+  background: #f1f7ff;
+  border-color: #a9c8f4;
+}
+
+.bel-payroll-view-button svg {
+  width: 10px;
+  height: 10px;
+}
+
+.bel-payroll-row-processed {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #1aa957;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.bel-payroll-row-processed svg {
+  font-size: 11px;
+}
+
+.bel-payroll-selection-footer {
+  min-height: 55px;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-top: 1px solid #edf0f4;
+  background: #fcfdff;
+}
+
+.bel-payroll-selection-footer > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #7a8594;
+  font-size: 9px;
+}
+
+.bel-payroll-selection-footer > div:first-child svg {
+  color: #6c76e9;
+  font-size: 12px;
+}
+
+.bel-payroll-selection-footer > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Processing */
+
+.bel-payroll-processing-card {
+  padding: 20px 14px 17px;
+}
+
+.bel-payroll-processing-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.bel-payroll-processing-heading h2 {
+  margin: 0 0 5px;
+  color: #242a33;
+  font-size: 13px;
+}
+
+.bel-payroll-processing-heading p {
+  margin: 0;
+  color: #8a94a3;
+  font-size: 9px;
+}
+
+.bel-payroll-processing-employee {
+  min-height: 27px;
+  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  color: #2873e3;
+  background: #edf5ff;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.bel-payroll-stepper {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  padding: 0 7px;
+}
+
+.bel-payroll-step-line {
+  position: absolute;
+  z-index: 0;
+  top: 17px;
+  left: 7%;
+  right: 7%;
+  height: 1px;
+  background: #e4e8ee;
+}
+
+.bel-payroll-step {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bel-payroll-step > span {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e0e5eb;
+  border-radius: 50%;
+  color: #a2aab6;
+  background: #fff;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.bel-payroll-step > span svg {
+  font-size: 13px;
+}
+
+.bel-payroll-step strong {
+  max-width: 80px;
+  min-height: 24px;
+  color: #98a1ae;
+  text-align: center;
+  font-size: 8px;
+  line-height: 1.25;
+}
+
+.bel-payroll-step.is-complete > span {
+  border-color: #1fbd61;
+  color: #fff;
+  background: #1fbd61;
+}
+
+.bel-payroll-step.is-complete strong {
+  color: #1aae57;
+}
+
+.bel-payroll-step.is-current > span {
+  border-color: #5d64ed;
+  color: #fff;
+  background: linear-gradient(135deg, #2879f4, #8054ed);
+}
+
+.bel-payroll-step.is-current strong {
+  color: #202630;
+}
+
+.bel-payroll-processing-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.bel-payroll-processing-actions .bel-payroll-primary-action,
+.bel-payroll-processing-actions .bel-payroll-secondary-action {
+  min-width: 91px;
+}
+
+.bel-payroll-primary-action,
+.bel-payroll-secondary-action {
+  min-height: 35px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.bel-payroll-primary-action {
+  border: 1px solid #2875ef;
+  color: #fff;
+  background: linear-gradient(90deg, #14b9f1, #7955ee);
+}
+
+.bel-payroll-primary-action:hover:not(:disabled) {
+  filter: brightness(0.98);
+  transform: translateY(-1px);
+}
+
+.bel-payroll-secondary-action {
+  border: 1px solid #dfe4eb;
+  color: #5e6978;
+  background: #fff;
+}
+
+.bel-payroll-secondary-action:hover:not(:disabled) {
+  color: #2773e4;
+  border-color: #bfd4f5;
+  background: #f5f9ff;
+}
+
+.bel-payroll-primary-action:disabled,
+.bel-payroll-secondary-action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Analytics */
+
+.bel-payroll-analytics-card {
+  padding: 19px 19px 17px;
+}
+
+.bel-payroll-analytics-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.bel-payroll-analytics-header h2 {
+  margin: 0 0 5px;
+  color: #242a33;
+  font-size: 12px;
+}
+
+.bel-payroll-analytics-header p {
+  margin: 0;
+  color: #8d97a4;
+  font-size: 8px;
+}
+
+.bel-payroll-analytics-header > strong {
+  color: #262c35;
+  font-size: 12px;
+}
+
+.bel-payroll-chart {
+  min-height: 225px;
+  display: flex;
+  gap: 10px;
+}
+
+.bel-payroll-y-labels {
+  width: 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 0 24px;
+}
+
+.bel-payroll-y-labels span {
+  color: #a1a9b5;
+  text-align: right;
+  font-size: 8px;
+}
+
+.bel-payroll-chart-area {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.bel-payroll-grid-lines {
+  position: absolute;
+  inset: 0 0 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bel-payroll-grid-lines i {
+  display: block;
+  width: 100%;
+  border-top: 1px dashed #edf0f3;
+}
+
+.bel-payroll-bars {
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(35px, 1fr));
+  align-items: end;
+  gap: 22px;
+  padding: 0 20px 0;
+}
+
+.bel-payroll-bar-column {
+  height: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.bel-payroll-bar-column:hover .bel-payroll-bar {
+  filter: brightness(1.05);
+  transform: scaleY(1.015);
+}
+
+.bel-payroll-bar {
+  width: 30px;
+  max-height: calc(100% - 28px);
+  min-height: 30px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(180deg, #1d79f5 0%, #8054ee 100%);
+  transition: 0.2s ease;
+}
+
+.bel-payroll-bar-column small {
+  color: #8e98a6;
+  font-size: 8px;
+}
+
+/* Payslip modal */
+
+.bel-payroll-modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 29, 40, 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.bel-payroll-payslip-modal {
+  width: min(520px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  border: 1px solid #dfe4eb;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(25, 34, 50, 0.2);
+}
+
+.bel-payroll-modal-header {
+  padding: 16px 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.bel-payroll-modal-header h2 {
+  margin: 0 0 4px;
+  color: #242a33;
+  font-size: 15px;
+}
+
+.bel-payroll-modal-header p {
+  margin: 0;
+  color: #8b95a3;
+  font-size: 9px;
+}
+
+.bel-payroll-modal-header > button {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dfe4eb;
+  border-radius: 7px;
+  background: #fff;
+  color: #687383;
+  cursor: pointer;
+}
+
+.bel-payroll-payslip-body {
+  padding: 18px;
+}
+
+.bel-payroll-payslip-identity {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.bel-payroll-payslip-identity > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bel-payroll-payslip-identity strong {
+  color: #303743;
+  font-size: 11px;
+}
+
+.bel-payroll-payslip-identity span {
+  color: #8c96a4;
+  font-size: 8px;
+}
+
+.bel-payroll-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.bel-payroll-status--processed {
+  color: #16874a;
+  background: #dcf8e7;
+}
+
+.bel-payroll-status--processed svg {
+  font-size: 10px;
+}
+
+.bel-payroll-status--pending {
+  color: #a16c00;
+  background: #fff0c3;
+}
+
+.bel-payroll-status--pending span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #eea000;
+}
+
+.bel-payroll-payslip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  padding: 16px 0;
+}
+
+.bel-payroll-payslip-grid > div {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  border: 1px solid #edf0f4;
+  border-radius: 8px;
+  background: #fbfcfd;
+}
+
+.bel-payroll-payslip-grid span {
+  color: #8c96a4;
+  font-size: 8px;
+}
+
+.bel-payroll-payslip-grid strong {
+  color: #303742;
+  font-size: 11px;
+}
+
+.bel-payroll-payslip-grid strong.deduction {
+  color: #f0444c;
+}
+
+.bel-payroll-net-box {
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-radius: 9px;
+  color: #fff;
+  background: linear-gradient(90deg, #2678f3, #8055ee);
+}
+
+.bel-payroll-net-box span {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.bel-payroll-net-box strong {
+  font-size: 16px;
+}
+
+.bel-payroll-modal-footer {
+  padding: 12px 18px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  border-top: 1px solid #edf0f4;
+}
+
+/* Large desktop */
+
+@media (min-width: 1440px) {
+  .bel-payroll-header h1 {
+    font-size: 23px;
+  }
+
+  .bel-payroll-stat {
+    min-height: 94px;
+  }
+
+  .bel-payroll-table td {
+    font-size: 10px;
+  }
+
+  .bel-payroll-table th {
+    font-size: 9px;
+  }
+}
+
+/* Tablet */
+
+@media (max-width: 1050px) {
+  .bel-payroll-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bel-payroll-table-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .bel-payroll-selected-indicator {
+    align-self: flex-start;
+  }
+
+  .bel-payroll-bars {
+    gap: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* Small tablet */
+
+@media (max-width: 760px) {
+  .bel-payroll-page {
+    padding: 14px 0 28px;
+  }
+
+  .bel-payroll-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .bel-payroll-header-actions {
+    width: 100%;
+  }
+
+  .bel-payroll-header-actions button {
+    flex: 1;
+  }
+
+  .bel-payroll-month-control {
+    width: 100%;
+  }
+
+  .bel-payroll-month-control select {
+    flex: 1;
+  }
+
+  .bel-payroll-selection-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .bel-payroll-selection-footer > div:last-child {
+    width: 100%;
+  }
+
+  .bel-payroll-selection-footer > div:last-child button {
+    flex: 1;
+  }
+
+  .bel-payroll-stepper {
+    overflow-x: auto;
+    grid-template-columns: repeat(7, 90px);
+    justify-content: start;
+    padding-bottom: 8px;
+  }
+
+  .bel-payroll-step-line {
+    left: 45px;
+    right: auto;
+    width: 510px;
+  }
+
+  .bel-payroll-processing-actions {
+    justify-content: stretch;
+  }
+
+  .bel-payroll-processing-actions button {
+    flex: 1;
+  }
+
+  .bel-payroll-chart {
+    min-height: 205px;
+  }
+
+  .bel-payroll-bars {
+    gap: 9px;
+  }
+
+  .bel-payroll-bar {
+    width: 24px;
+  }
+}
+
+/* Phones */
+
+@media (max-width: 520px) {
+  .bel-payroll-header h1 {
+    font-size: 20px;
+  }
+
+  .bel-payroll-header p {
+    font-size: 10px;
+  }
+
+  .bel-payroll-header-actions {
+    gap: 6px;
+  }
+
+  .bel-payroll-export-button,
+  .bel-payroll-run-button {
+    min-height: 34px;
+    padding: 0 9px;
+    font-size: 9px;
+  }
+
+  .bel-payroll-month-control {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+  }
+
+  .bel-payroll-month-control button,
+  .bel-payroll-month-control select {
+    width: 100%;
+    min-width: 0;
+    font-size: 8px;
+  }
+
+  .bel-payroll-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .bel-payroll-stat {
+    min-height: 78px;
+    padding: 11px;
+  }
+
+  .bel-payroll-stat > strong {
+    font-size: 18px;
+  }
+
+  .bel-payroll-stat > i {
+    left: 11px;
+    bottom: 11px;
+    width: 70%;
+  }
+
+  .bel-payroll-tabs {
+    width: 100%;
+  }
+
+  .bel-payroll-tabs button {
+    flex: 1 0 auto;
+    padding: 0 9px;
+    font-size: 8px;
+  }
+
+  .bel-payroll-table-topbar {
+    padding: 11px;
+  }
+
+  .bel-payroll-table-topbar h2 {
+    font-size: 11px;
+  }
+
+  .bel-payroll-table-topbar p {
+    line-height: 1.4;
+  }
+
+  .bel-payroll-selection-footer > div:last-child {
+    flex-direction: column;
+  }
+
+  .bel-payroll-selection-footer > div:last-child button {
+    width: 100%;
+  }
+
+  .bel-payroll-processing-card {
+    padding: 15px 11px;
+  }
+
+  .bel-payroll-processing-heading {
+    flex-direction: column;
+    margin-bottom: 18px;
+  }
+
+  .bel-payroll-stepper {
+    grid-template-columns: repeat(7, 76px);
+  }
+
+  .bel-payroll-step-line {
+    width: 426px;
+  }
+
+  .bel-payroll-step > span {
+    width: 30px;
+    height: 30px;
+  }
+
+  .bel-payroll-step strong {
+    font-size: 7px;
+  }
+
+  .bel-payroll-analytics-card {
+    padding: 14px 11px;
+  }
+
+  .bel-payroll-analytics-header {
+    flex-direction: column;
+  }
+
+  .bel-payroll-chart {
+    min-height: 190px;
+  }
+
+  .bel-payroll-y-labels {
+    width: 28px;
+  }
+
+  .bel-payroll-bars {
+    gap: 4px;
+    padding: 0 3px;
+  }
+
+  .bel-payroll-bar {
+    width: 19px;
+  }
+
+  .bel-payroll-modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .bel-payroll-payslip-modal {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 15px 15px 0 0;
+  }
+
+  .bel-payroll-modal-header,
+  .bel-payroll-payslip-body {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .bel-payroll-modal-footer {
+    padding-left: 15px;
+    padding-right: 15px;
+    flex-direction: column-reverse;
+  }
+
+  .bel-payroll-modal-footer button {
+    width: 100%;
+  }
+}
+
+/* Very small phones */
+
+@media (max-width: 360px) {
+  .bel-payroll-stat {
+    min-height: 73px;
+    padding: 9px;
+  }
+
+  .bel-payroll-stat > span {
+    font-size: 8px;
+  }
+
+  .bel-payroll-stat > strong {
+    font-size: 16px;
+  }
+
+  .bel-payroll-header-actions {
+    flex-direction: column;
+  }
+
+  .bel-payroll-header-actions button {
+    width: 100%;
+  }
+
+  .bel-payroll-month-control {
+    grid-template-columns: 1fr;
+  }
+
+  .bel-payroll-month-control select {
+    order: -1;
+  }
+
+  .bel-payroll-bars {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .bel-payroll-bar {
+    width: 15px;
+  }
+}

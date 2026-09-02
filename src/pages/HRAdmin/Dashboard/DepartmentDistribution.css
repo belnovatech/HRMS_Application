@@ -1,0 +1,64 @@
+.hradmin-dashboard-dept-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hradmin-dashboard-dept-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.hradmin-dashboard-dept-chart-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.hradmin-dashboard-dept-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.hradmin-dashboard-dept-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 0;
+}
+
+.hradmin-dashboard-dept-legend-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.hradmin-dashboard-dept-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hradmin-dashboard-dept-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.hradmin-dashboard-dept-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+}

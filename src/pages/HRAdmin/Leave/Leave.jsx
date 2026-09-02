@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import "./Leave.css";
 import HRLayout from "../../../layouts/HRLayout";
+import { useAuth } from "../../../context/AuthContext";
 import {
   FiCheck,
   FiChevronDown,
@@ -8,96 +9,8 @@ import {
   FiEdit2,
   FiEye,
   FiFilter,
-  FiPlus,
   FiX,
 } from "react-icons/fi";
-
-const INITIAL_REQUESTS = [
-  {
-    id: "LV-301",
-    employeeId: "EMP1001",
-    employee: "Meena Pillai",
-    department: "Finance",
-    initials: "MP",
-    type: "Casual Leave",
-    from: "Sep 5",
-    to: "Sep 7",
-    days: 3,
-    reason: "Personal work",
-    applied: "Sep 1",
-    status: "Pending",
-  },
-  {
-    id: "LV-302",
-    employeeId: "EMP1007",
-    employee: "Rohan Das",
-    department: "Sales",
-    initials: "RD",
-    type: "Sick Leave",
-    from: "Aug 29",
-    to: "Aug 30",
-    days: 2,
-    reason: "Fever and cold",
-    applied: "Aug 28",
-    status: "Approved",
-  },
-  {
-    id: "LV-303",
-    employeeId: "EMP1002",
-    employee: "Kavya Nair",
-    department: "Marketing",
-    initials: "KN",
-    type: "Earned Leave",
-    from: "Sep 10",
-    to: "Sep 14",
-    days: 5,
-    reason: "Family vacation",
-    applied: "Aug 25",
-    status: "Pending",
-  },
-  {
-    id: "LV-304",
-    employeeId: "EMP1011",
-    employee: "Kiran Reddy",
-    department: "Engineering",
-    initials: "KR",
-    type: "Casual Leave",
-    from: "Sep 2",
-    to: "Sep 3",
-    days: 2,
-    reason: "Personal",
-    applied: "Aug 30",
-    status: "Approved",
-  },
-  {
-    id: "LV-305",
-    employeeId: "EMP1012",
-    employee: "Deepika Iyer",
-    department: "Engineering",
-    initials: "DI",
-    type: "Sick Leave",
-    from: "Aug 27",
-    to: "Aug 27",
-    days: 1,
-    reason: "Medical appointment",
-    applied: "Aug 26",
-    status: "Rejected",
-  },
-  {
-    id: "LV-306",
-    employeeId: "EMP1006",
-    employee: "Anjali Nair",
-    department: "Finance",
-    initials: "AN",
-    type: "Earned Leave",
-    from: "Aug 18",
-    to: "Aug 22",
-    days: 5,
-    reason: "Annual vacation",
-    applied: "Aug 10",
-    status: "Approved",
-  },
-];
 
 const INITIAL_POLICIES = [
   {
@@ -238,8 +151,8 @@ function StatCard({ value, label, tone }) {
 }
 
 export default function Leave() {
+  const { leaveRequests = [], handleApproveLeave, handleRejectLeave } = useAuth();
   const [activeTab, setActiveTab] = useState("requests");
-  const [requests, setRequests] = useState(INITIAL_REQUESTS);
   const [policies, setPolicies] = useState(INITIAL_POLICIES);
   const [balances] = useState(INITIAL_BALANCES);
 
@@ -253,10 +166,27 @@ export default function Leave() {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
 
+  const normalizedRequests = useMemo(() => {
+    return leaveRequests.map((req) => ({
+      id: req.id,
+      employeeId: req.employeeId || "EMP001",
+      employee: req.employeeName || req.employee || "Employee",
+      department: req.department || "Engineering",
+      initials: req.initials || "EM",
+      type: req.leaveType || req.type || "Casual Leave",
+      from: req.startDate || req.from || "—",
+      to: req.endDate || req.to || "—",
+      days: parseInt(req.duration) || req.days || 1,
+      reason: req.reason || "—",
+      applied: req.appliedOn || req.applied || "Today",
+      status: req.status || "Pending",
+    }));
+  }, [leaveRequests]);
+
   const filteredRequests = useMemo(() => {
     const term = search.trim().toLowerCase();
 
-    return requests.filter((request) => {
+    return normalizedRequests.filter((request) => {
       const matchesSearch =
         !term ||
         request.employee.toLowerCase().includes(term) ||
@@ -271,11 +201,11 @@ export default function Leave() {
 
       return matchesSearch && matchesStatus && matchesType;
     });
-  }, [requests, search, statusFilter, typeFilter]);
+  }, [normalizedRequests, search, statusFilter, typeFilter]);
 
-  const pendingCount = requests.filter((item) => item.status === "Pending").length;
-  const approvedCount = requests.filter((item) => item.status === "Approved").length;
-  const rejectedCount = requests.filter((item) => item.status === "Rejected").length;
+  const pendingCount = normalizedRequests.filter((item) => item.status === "Pending").length;
+  const approvedCount = normalizedRequests.filter((item) => item.status === "Approved").length;
+  const rejectedCount = normalizedRequests.filter((item) => item.status === "Rejected").length;
 
   const closeModal = () => {
     setModal(null);
@@ -283,16 +213,8 @@ export default function Leave() {
     setSelectedPolicy(null);
   };
 
-  const updateRequestStatus = (id, status) => {
-    setRequests((current) =>
-      current.map((request) =>
-        request.id === id ? { ...request, status } : request
-      )
-    );
-  };
-
-  const approveRequest = (id) => updateRequestStatus(id, "Approved");
-  const rejectRequest = (id) => updateRequestStatus(id, "Rejected");
+  const approveRequest = (id) => handleApproveLeave(id);
+  const rejectRequest = (id) => handleRejectLeave(id, "Rejected by HR");
 
   const exportRequests = () => {
     const header = [

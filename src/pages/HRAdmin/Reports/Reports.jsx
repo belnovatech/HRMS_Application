@@ -278,7 +278,7 @@ function makePdfHtml(title, rows) {
       <body>
         ${headerHtml}
         <table>${body}</table>
-        <script>window.onload=function(){window.print();};<\/script>
+        <script>window.onload=function(){window.print();};</script>
       </body>
     </html>
   `;

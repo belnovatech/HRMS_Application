@@ -460,6 +460,15 @@ export default function Attendance() {
                   />
                 </div>
 
+                <div className="bel-attendance-search">
+                  <FiCalendar />
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(event) => setSelectedDate(event.target.value)}
+                  />
+                </div>
+
                 <div className="bel-attendance-filter-wrap">
                   <button
                     type="button"

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import "./HelpSupport.css";
 import HRLayout from "../../../layouts/HRLayout";
+import { useAuth } from "../../../context/AuthContext";
 import {
   FiBookOpen,
   FiCheck,
@@ -8,12 +9,10 @@ import {
   FiChevronRight,
   FiClock,
   FiFileText,
-  FiHelpCircle,
   FiLifeBuoy,
   FiMail,
   FiMessageSquare,
   FiPhone,
-  FiPlus,
   FiSearch,
   FiSend,
   FiShield,
@@ -207,6 +206,8 @@ function BelHelpFaqItem({ item, isOpen, onToggle }) {
 }
 
 export default function HelpSupport() {
+  const { helpTickets = [], updateHelpTicketStatus } = useAuth();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [openFaq, setOpenFaq] = useState(1);
@@ -417,6 +418,100 @@ export default function HelpSupport() {
                 </button>
               );
             })}
+          </div>
+        </section>
+
+        {/* EMPLOYEE SUPPORT TICKETS SECTION */}
+        <section className="bel-help-tickets-section" style={{ marginBottom: "2rem" }}>
+          <div className="bel-help-section-heading">
+            <div>
+              <span className="bel-help-section-kicker">EMPLOYEE TICKETS</span>
+              <h2>Support Requests</h2>
+              <p>Review and resolve support tickets submitted by employees.</p>
+            </div>
+            <span className="bel-help-result-count">
+              {helpTickets.length} total tickets
+            </span>
+          </div>
+
+          <div style={{ background: "#ffffff", borderRadius: "12px", border: "1px solid #e2e8f0", overflow: "hidden" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px", textAlign: "left" }}>
+              <thead>
+                <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0", color: " #475569" }}>
+                  <th style={{ padding: "12px 16px" }}>Ticket ID</th>
+                  <th style={{ padding: "12px 16px" }}>Employee</th>
+                  <th style={{ padding: "12px 16px" }}>Category</th>
+                  <th style={{ padding: "12px 16px" }}>Subject</th>
+                  <th style={{ padding: "12px 16px" }}>Date</th>
+                  <th style={{ padding: "12px 16px" }}>Status</th>
+                  <th style={{ padding: "12px 16px" }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {helpTickets.length > 0 ? (
+                  helpTickets.map((t) => (
+                    <tr key={t.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                      <td style={{ padding: "12px 16px", fontWeight: "600", color: "#2563eb" }}>{t.id}</td>
+                      <td style={{ padding: "12px 16px", fontWeight: "500" }}>{t.employeeName || t.employeeId}</td>
+                      <td style={{ padding: "12px 16px" }}>{t.category}</td>
+                      <td style={{ padding: "12px 16px", maxWidth: "250px" }}>
+                        <div style={{ fontWeight: "500" }}>{t.subject}</div>
+                        <div style={{ fontSize: "12px", color: "#64748b" }}>{t.description}</div>
+                        {t.responseNote && (
+                          <div style={{ fontSize: "11px", color: "#059669", marginTop: "4px" }}>
+                            HR Note: {t.responseNote}
+                          </div>
+                        )}
+                      </td>
+                      <td style={{ padding: "12px 16px", color: "#64748b" }}>{t.date}</td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <span style={{
+                          padding: "4px 10px",
+                          borderRadius: "12px",
+                          fontSize: "12px",
+                          fontWeight: "600",
+                          backgroundColor: t.status === "Resolved" ? "#d1fae5" : t.status === "In Progress" ? "#fef3c7" : "#fee2e2",
+                          color: t.status === "Resolved" ? "#065f46" : t.status === "In Progress" ? "#92400e" : "#991b1b"
+                        }}>
+                          {t.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ display: "flex", gap: "6px" }}>
+                          {t.status !== "In Progress" && t.status !== "Resolved" && (
+                            <button
+                              type="button"
+                              onClick={() => updateHelpTicketStatus(t.id, "In Progress")}
+                              style={{ padding: "4px 8px", fontSize: "12px", background: "#f59e0b", color: "#fff", border: "0", borderRadius: "6px", cursor: "pointer" }}
+                            >
+                              In Progress
+                            </button>
+                          )}
+                          {t.status !== "Resolved" && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const note = prompt("Enter resolution note for employee:", "Issue resolved by HR support desk.");
+                                updateHelpTicketStatus(t.id, "Resolved", note || "Resolved");
+                              }}
+                              style={{ padding: "4px 8px", fontSize: "12px", background: "#10b981", color: "#fff", border: "0", borderRadius: "6px", cursor: "pointer" }}
+                            >
+                              Resolve
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" style={{ padding: "20px", textAlign: "center", color: "#64748b" }}>
+                      No support requests submitted yet.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </section>
 

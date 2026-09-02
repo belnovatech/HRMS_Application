@@ -1,5 +1,6 @@
 import React from "react";
 import "./StatCards.css";
+import { useAuth } from "../../../context/AuthContext";
 import {
   FiUsers,
   FiClock,
@@ -8,6 +9,16 @@ import {
 } from "react-icons/fi";
 
 export default function StatCards() {
+  const { leaveRequests = [] } = useAuth();
+
+  const pendingApprovalsCount = leaveRequests.filter(
+    (request) => request.status === "Pending"
+  ).length;
+
+  const approvedLeaveCount = leaveRequests.filter(
+    (request) => request.status === "Approved"
+  ).length;
+
   const cards = [
     {
       id: "total-employees",
@@ -42,8 +53,8 @@ export default function StatCards() {
     {
       id: "on-leave",
       title: "On Leave",
-      value: "90",
-      badgeText: "7.2%",
+      value: String(90 + approvedLeaveCount),
+      badgeText: "Active",
       badgeType: "neutral-pill",
       icon: <FiCalendar />,
       iconBg: "#fffbeb",
@@ -52,9 +63,9 @@ export default function StatCards() {
     {
       id: "pending-approvals",
       title: "Pending Approvals",
-      value: "18",
-      badgeText: "↑ urgent",
-      badgeType: "urgent-pill",
+      value: String(pendingApprovalsCount),
+      badgeText: pendingApprovalsCount > 0 ? "↑ Action needed" : "All clear",
+      badgeType: pendingApprovalsCount > 0 ? "urgent-pill" : "positive-pill",
       icon: <FiAlertCircle />,
       iconBg: "#faf5ff",
       iconColor: "#a855f7"

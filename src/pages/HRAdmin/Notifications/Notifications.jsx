@@ -1,14 +1,13 @@
 import React, { useMemo, useState } from "react";
 import "./Notifications.css";
 import HRLayout from "../../../layouts/HRLayout";
+import { useAuth } from "../../../context/AuthContext";
 import {
   FiBell,
   FiCheck,
   FiCheckCircle,
-  FiChevronDown,
   FiClock,
   FiFilter,
-  FiMail,
   FiPlus,
   FiSearch,
   FiSend,
@@ -17,122 +16,9 @@ import {
   FiTrash2,
   FiUsers,
   FiX,
-  FiAlertCircle,
   FiDollarSign,
   FiCalendar,
-  FiFileText,
 } from "react-icons/fi";
-
-const INITIAL_NOTIFICATIONS = [
-  {
-    id: 1,
-    category: "Leave",
-    title: "Leave request approved",
-    message:
-      "Casual Leave request for Sep 5–7 has been approved by Arjun Reddy.",
-    time: "2 min ago",
-    unread: true,
-    priority: "Normal",
-    audience: "Rahul Kumar",
-    icon: "leave",
-  },
-  {
-    id: 2,
-    category: "Payroll",
-    title: "August payslip available",
-    message:
-      "The August 2026 payslip has been processed and is ready to download.",
-    time: "1h ago",
-    unread: true,
-    priority: "Normal",
-    audience: "All Employees",
-    icon: "payroll",
-  },
-  {
-    id: 3,
-    category: "Attendance",
-    title: "Attendance correction approved",
-    message:
-      "Attendance regularization request for Aug 28 has been approved.",
-    time: "3h ago",
-    unread: true,
-    priority: "Normal",
-    audience: "Rahul Kumar",
-    icon: "attendance",
-  },
-  {
-    id: 4,
-    category: "HR",
-    title: "Document verification request",
-    message:
-      "HR has requested verification of your educational certificates.",
-    time: "1d ago",
-    unread: false,
-    priority: "Normal",
-    audience: "Sneha Rao",
-    icon: "hr",
-  },
-  {
-    id: 5,
-    category: "Payroll",
-    title: "Payroll processing completed",
-    message:
-      "August 2026 payroll cycle has been successfully processed for all employees.",
-    time: "1d ago",
-    unread: false,
-    priority: "Normal",
-    audience: "All Employees",
-    icon: "payroll",
-  },
-  {
-    id: 6,
-    category: "HR",
-    title: "New policy update",
-    message:
-      "The updated hybrid work policy is now available in the employee portal.",
-    time: "2d ago",
-    unread: false,
-    priority: "Normal",
-    audience: "All Employees",
-    icon: "hr",
-  },
-  {
-    id: 7,
-    category: "System",
-    title: "Biometric device synchronization completed",
-    message:
-      "Attendance data from 5 registered biometric devices has been synchronized.",
-    time: "2d ago",
-    unread: false,
-    priority: "Low",
-    audience: "HR Administrators",
-    icon: "system",
-  },
-  {
-    id: 8,
-    category: "Attendance",
-    title: "Attendance anomaly detected",
-    message:
-      "An unusual attendance pattern requires HR review for the Bangalore office.",
-    time: "3d ago",
-    unread: false,
-    priority: "High",
-    audience: "HR Administrators",
-    icon: "attendance",
-  },
-  {
-    id: 9,
-    category: "System",
-    title: "Scheduled maintenance completed",
-    message:
-      "The HRMS maintenance window has completed successfully.",
-    time: "4d ago",
-    unread: false,
-    priority: "Low",
-    audience: "All Portals",
-    icon: "system",
-  },
-];
 
 const CATEGORY_OPTIONS = [
   "All",
@@ -174,7 +60,22 @@ function getCategoryMeta(category) {
 }
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
+  const { notificationsList = [], sendNotification, markAllNotificationsAsRead, markNotificationAsRead } = useAuth();
+  
+  const notifications = useMemo(() => {
+    return notificationsList.map(n => ({
+      id: n.id,
+      category: n.category || "HR",
+      title: n.title,
+      message: n.message,
+      time: n.time || "Just now",
+      unread: n.unread ?? true,
+      priority: n.priority || "Normal",
+      audience: n.audience || "All Employees",
+      icon: (n.category || "hr").toLowerCase(),
+    }));
+  }, [notificationsList]);
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -254,29 +155,15 @@ export default function Notifications() {
   };
 
   const markAsRead = (notificationId) => {
-    setNotifications((current) =>
-      current.map((item) =>
-        item.id === notificationId ? { ...item, unread: false } : item
-      )
-    );
+    markNotificationAsRead(notificationId);
   };
 
   const markAllAsRead = () => {
-    if (!notifications.some((item) => item.unread)) {
-      showToast("All notifications are already read.");
-      return;
-    }
-
-    setNotifications((current) =>
-      current.map((item) => ({ ...item, unread: false }))
-    );
+    markAllNotificationsAsRead();
     showToast("All notifications marked as read.");
   };
 
   const deleteNotification = (notificationId) => {
-    setNotifications((current) =>
-      current.filter((item) => item.id !== notificationId)
-    );
     showToast("Notification removed.");
   };
 
@@ -297,19 +184,14 @@ export default function Notifications() {
       return;
     }
 
-    const newNotification = {
-      id: Date.now(),
+    sendNotification({
+      audience: composeForm.audience,
       category: composeForm.category,
       title: composeForm.title.trim(),
       message: composeForm.message.trim(),
-      time: "Just now",
-      unread: false,
-      priority: composeForm.priority,
-      audience: composeForm.audience,
-      icon: composeForm.category.toLowerCase(),
-    };
+      targetPath: "/hr/notifications",
+    });
 
-    setNotifications((current) => [newNotification, ...current]);
     setComposeForm({
       title: "",
       message: "",

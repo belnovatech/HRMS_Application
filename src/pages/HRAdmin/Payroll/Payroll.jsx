@@ -5,7 +5,6 @@ import { downloadPayslipPdf } from "../../../utils/pdfGenerator";
 import {
   FiCheck,
   FiCheckCircle,
-  FiChevronDown,
   FiDownload,
   FiEye,
   FiFileText,
@@ -77,16 +76,6 @@ const PROCESS_STEPS = [
   "Generate Payslip",
 ];
 
-const PROCESS_KEYS = [
-  "month",
-  "attendance",
-  "calculate",
-  "review",
-  "approve",
-  "process",
-  "payslip",
-];
-
 const MONTH_NAMES = [
   "January",
   "February",
@@ -123,8 +112,6 @@ function getMonthDays(year, month) {
 }
 
 function calculateEmployee(employee, year, month) {
-  const totalGross =
-    employee.basic + employee.hra + employee.allowances;
   const monthDays = getMonthDays(year, month);
 
   // Small deterministic attendance adjustment so the selected month's

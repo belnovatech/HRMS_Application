@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
+import { useAuth } from "../../context/AuthContext";
 import {
   FiArrowRight,
   FiCheckCircle,
@@ -73,13 +74,22 @@ const SUPPORT_CATEGORIES = [
 ];
 
 export default function EmployeeHelp() {
+  const { user, helpTickets, addHelpTicket } = useAuth();
+
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Attendance");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFaq, setActiveFaq] = useState(null);
-  const [submittedTickets, setSubmittedTickets] = useState([]);
   const [successTicket, setSuccessTicket] = useState(null);
+
+  const empId = user?.employeeId || "EMP001";
+
+  const submittedTickets = useMemo(() => {
+    return helpTickets.filter(
+      (t) => t.employeeId === empId || t.employeeName === user?.name
+    );
+  }, [helpTickets, empId, user]);
 
   const filteredFaqs = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -106,16 +116,12 @@ export default function EmployeeHelp() {
       return;
     }
 
-    const ticket = {
-      id: `EMP-${Date.now().toString().slice(-6)}`,
+    const ticket = addHelpTicket({
       category,
       subject: trimmedSubject,
       description: trimmedDescription,
-      date: new Date().toISOString().split("T")[0],
-      status: "Open",
-    };
+    });
 
-    setSubmittedTickets((previous) => [ticket, ...previous]);
     setSuccessTicket(ticket);
     setSubject("");
     setDescription("");

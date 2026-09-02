@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
+import { useAuth } from "../../context/AuthContext";
 import { downloadReportPdf } from "../../utils/pdfGenerator";
 import {
   FiFolder,
@@ -16,69 +17,6 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import "./EmployeeDocuments.css";
-
-const INITIAL_DOCUMENTS = [
-  {
-    id: 1,
-    name: "Aadhaar Card — Rahul Kumar",
-    category: "Identity",
-    fileName: "Aadhaar_Card_Rahul_Kumar.pdf",
-    type: "PDF",
-    size: "1.2 MB",
-    uploadDate: "2022-01-12",
-    status: "Verified",
-  },
-  {
-    id: 2,
-    name: "PAN Card — Rahul Kumar",
-    category: "Identity",
-    fileName: "PAN_Card_Rahul_Kumar.pdf",
-    type: "PDF",
-    size: "0.8 MB",
-    uploadDate: "2022-01-12",
-    status: "Verified",
-  },
-  {
-    id: 3,
-    name: "Offer Letter — Rahul Kumar",
-    category: "Employment",
-    fileName: "Offer_Letter_Rahul_Kumar.pdf",
-    type: "PDF",
-    size: "0.5 MB",
-    uploadDate: "2022-01-12",
-    status: "Verified",
-  },
-  {
-    id: 4,
-    name: "Degree Certificate — Rahul Kumar",
-    category: "Education",
-    fileName: "Degree_Certificate_Rahul_Kumar.pdf",
-    type: "PDF",
-    size: "2.1 MB",
-    uploadDate: "2024-02-14",
-    status: "Pending",
-  },
-  {
-    id: 5,
-    name: "Bank Statement — Rahul Kumar",
-    category: "Salary",
-    fileName: "Bank_Statement_Rahul_Kumar.pdf",
-    type: "PDF",
-    size: "3.4 MB",
-    uploadDate: "2024-04-03",
-    status: "Verified",
-  },
-  {
-    id: 6,
-    name: "Resume — Rahul Kumar",
-    category: "Employment",
-    fileName: "Resume_Rahul_Kumar.pdf",
-    type: "PDF",
-    size: "0.3 MB",
-    uploadDate: "2024-08-22",
-    status: "Verified",
-  },
-];
 
 const CATEGORY_CONFIG = [
   { key: "Identity", label: "Identity" },
@@ -103,21 +41,6 @@ const formatDate = (value) => {
   });
 };
 
-const getFileType = (file) => {
-  const extension =
-    file?.name?.split(".").pop()?.toUpperCase() || "FILE";
-
-  if (extension === "JPEG" || extension === "JPG") return "JPG";
-  if (extension === "PNG") return "PNG";
-  if (extension === "DOCX") return "DOCX";
-  if (extension === "DOC") return "DOC";
-  if (extension === "XLSX") return "XLSX";
-  if (extension === "XLS") return "XLS";
-  if (extension === "PDF") return "PDF";
-
-  return extension;
-};
-
 const formatFileSize = (bytes) => {
   if (!bytes) return "0 KB";
 
@@ -131,10 +54,25 @@ const formatFileSize = (bytes) => {
 };
 
 export default function EmployeeDocuments() {
+  const { user, documentsList = [], addEmployeeDocument } = useAuth();
   const fileInputRef = useRef(null);
 
-  const [documents, setDocuments] =
-    useState(INITIAL_DOCUMENTS);
+  const empId = user?.employeeId || "EMP001";
+
+  const documents = useMemo(() => {
+    return documentsList
+      .filter((d) => !d.employeeId || d.employeeId === empId || d.employee === user?.name)
+      .map((d) => ({
+        id: d.id,
+        name: d.title || d.name,
+        category: d.category,
+        fileName: d.fileName,
+        type: d.fileName?.split(".").pop()?.toUpperCase() || "PDF",
+        size: d.size || "1.5 MB",
+        uploadDate: d.uploaded || d.uploadDate || "2026-09-01",
+        status: d.status || "Pending",
+      }));
+  }, [documentsList, empId, user]);
 
   const [showUpload, setShowUpload] =
     useState(false);
@@ -321,24 +259,12 @@ export default function EmployeeDocuments() {
       return;
     }
 
-    const uploadedDocument = {
-      id: Date.now(),
-      name: `${docTitle.trim()} — ${userName}`,
+    addEmployeeDocument({
+      title: docTitle.trim(),
       category: docCategory,
       fileName: selectedFile.name,
-      type: getFileType(selectedFile),
       size: formatFileSize(selectedFile.size),
-      uploadDate: new Date()
-        .toISOString()
-        .split("T")[0],
-      status: "Pending",
-      file: selectedFile,
-    };
-
-    setDocuments((previous) => [
-      uploadedDocument,
-      ...previous,
-    ]);
+    });
 
     setShowSuccess(true);
   };

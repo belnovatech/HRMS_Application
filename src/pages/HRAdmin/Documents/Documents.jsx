@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import "./Documents.css";
 import HRLayout from "../../../layouts/HRLayout";
+import { useAuth } from "../../../context/AuthContext";
 import { downloadReportPdf } from "../../../utils/pdfGenerator";
 import {
   FiFileText,
@@ -25,117 +26,6 @@ const DOCUMENT_CATEGORIES = [
   "Other",
 ];
 
-const INITIAL_DOCUMENTS = [
-  {
-    id: "DOC-1001",
-    employeeId: "EMP1001",
-    employee: "Rahul Kumar",
-    category: "Identity",
-    title: "Aadhaar Card — Rahul Kumar",
-    fileName: "Rahul-Kumar-Aadhaar.pdf",
-    type: "PDF",
-    size: "1.2 MB",
-    uploaded: "12 Jan 2022",
-    status: "Verified",
-  },
-  {
-    id: "DOC-1002",
-    employeeId: "EMP1002",
-    employee: "Priya Sharma",
-    category: "Identity",
-    title: "PAN Card — Priya Sharma",
-    fileName: "Priya-Sharma-PAN.pdf",
-    type: "PDF",
-    size: "0.8 MB",
-    uploaded: "5 Mar 2021",
-    status: "Verified",
-  },
-  {
-    id: "DOC-1003",
-    employeeId: "EMP1003",
-    employee: "Arjun Reddy",
-    category: "Employment",
-    title: "Offer Letter — Arjun Reddy",
-    fileName: "Arjun-Reddy-Offer-Letter.pdf",
-    type: "PDF",
-    size: "0.5 MB",
-    uploaded: "1 Jun 2019",
-    status: "Verified",
-  },
-  {
-    id: "DOC-1004",
-    employeeId: "EMP1004",
-    employee: "Sneha Rao",
-    category: "Education",
-    title: "Degree Certificate — Sneha Rao",
-    fileName: "Sneha-Rao-Degree-Certificate.pdf",
-    type: "PDF",
-    size: "2.1 MB",
-    uploaded: "14 Feb 2020",
-    status: "Pending",
-  },
-  {
-    id: "DOC-1005",
-    employeeId: "EMP1005",
-    employee: "Vikram Singh",
-    category: "Salary",
-    title: "Bank Statement — Vikram Singh",
-    fileName: "Vikram-Singh-Bank-Statement.pdf",
-    type: "PDF",
-    size: "3.4 MB",
-    uploaded: "3 Apr 2018",
-    status: "Verified",
-  },
-  {
-    id: "DOC-1006",
-    employeeId: "EMP1006",
-    employee: "Meena Pillai",
-    category: "Employment",
-    title: "Resume — Meena Pillai",
-    fileName: "Meena-Pillai-Resume.doc",
-    type: "DOC",
-    size: "0.3 MB",
-    uploaded: "22 Aug 2020",
-    status: "Verified",
-  },
-  {
-    id: "DOC-1007",
-    employeeId: "EMP1001",
-    employee: "Rahul Kumar",
-    category: "Employment",
-    title: "Employment Agreement — Rahul Kumar",
-    fileName: "Rahul-Kumar-Employment-Agreement.pdf",
-    type: "PDF",
-    size: "1.7 MB",
-    uploaded: "13 Jan 2022",
-    status: "Verified",
-  },
-  {
-    id: "DOC-1008",
-    employeeId: "EMP1002",
-    employee: "Priya Sharma",
-    category: "Education",
-    title: "MBA Certificate — Priya Sharma",
-    fileName: "Priya-Sharma-MBA.pdf",
-    type: "PDF",
-    size: "1.9 MB",
-    uploaded: "6 Mar 2021",
-    status: "Pending",
-  },
-  {
-    id: "DOC-1009",
-    employeeId: "EMP1003",
-    employee: "Arjun Reddy",
-    category: "Salary",
-    title: "Bank Account Proof — Arjun Reddy",
-    fileName: "Arjun-Reddy-Bank-Proof.pdf",
-    type: "PDF",
-    size: "0.7 MB",
-    uploaded: "4 Jun 2019",
-    status: "Verified",
-  },
-];
-
 const EMPLOYEES = [
   { id: "All", name: "All Employees" },
   { id: "EMP1001", name: "Rahul Kumar" },
@@ -145,48 +35,6 @@ const EMPLOYEES = [
   { id: "EMP1005", name: "Vikram Singh" },
   { id: "EMP1006", name: "Meena Pillai" },
 ];
-
-const AVATAR_CLASSES = [
-  "bel-doc-avatar-one",
-  "bel-doc-avatar-two",
-  "bel-doc-avatar-three",
-  "bel-doc-avatar-four",
-  "bel-doc-avatar-five",
-];
-
-function getInitials(name) {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
-
-function getAvatarClass(employeeId) {
-  const number = Number(employeeId?.replace(/\D/g, "")) || 1;
-  return AVATAR_CLASSES[(number - 1) % AVATAR_CLASSES.length];
-}
-
-function getExtension(fileName) {
-  const extension = fileName.split(".").pop()?.toUpperCase();
-  return extension === "DOCX" ? "DOC" : extension || "FILE";
-}
-
-function makeDocumentFile(documentItem) {
-  return [
-    "HRMS DOCUMENT RECORD",
-    `Document ID: ${documentItem.id}`,
-    `Employee ID: ${documentItem.employeeId}`,
-    `Employee: ${documentItem.employee}`,
-    `Document: ${documentItem.title}`,
-    `Category: ${documentItem.category}`,
-    `File Type: ${documentItem.type}`,
-    `File Size: ${documentItem.size}`,
-    `Uploaded: ${documentItem.uploaded}`,
-    `Verification Status: ${documentItem.status}`,
-  ].join("\n");
-}
 
 function downloadDocument(documentItem) {
   downloadReportPdf(
@@ -253,7 +101,23 @@ function downloadEmployeeDocuments(employeeName, documents) {
 }
 
 export default function Documents() {
-  const [documents, setDocuments] = useState(INITIAL_DOCUMENTS);
+  const { documentsList = [], verifyEmployeeDocument, addEmployeeDocument } = useAuth();
+
+  const documents = useMemo(() => {
+    return documentsList.map((d) => ({
+      id: d.id,
+      employeeId: d.employeeId || "EMP001",
+      employee: d.employee || "Employee",
+      category: d.category || "General",
+      title: d.title || d.name,
+      fileName: d.fileName || `${d.title}.pdf`,
+      type: d.fileName?.split(".").pop()?.toUpperCase() || "PDF",
+      size: d.size || "1.5 MB",
+      uploaded: d.uploaded || d.uploadDate || "2026-09-01",
+      status: d.status || "Pending",
+    }));
+  }, [documentsList]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [employeeFilter, setEmployeeFilter] = useState("All");
@@ -340,11 +204,7 @@ export default function Documents() {
   };
 
   const verifyDocument = (documentId) => {
-    setDocuments((current) =>
-      current.map((item) =>
-        item.id === documentId ? { ...item, status: "Verified" } : item
-      )
-    );
+    verifyEmployeeDocument(documentId, "Verified");
 
     setSelectedDocument((current) =>
       current?.id === documentId ? { ...current, status: "Verified" } : current
@@ -364,9 +224,6 @@ export default function Documents() {
 
     if (!confirmed) return;
 
-    setDocuments((current) =>
-      current.filter((item) => item.id !== documentId)
-    );
     setSelectedDocument(null);
     showToast("Document removed from the repository.");
   };
@@ -383,31 +240,13 @@ export default function Documents() {
       (item) => item.id === uploadData.employeeId
     );
 
-    const newDocument = {
-      id: `DOC-${String(Date.now()).slice(-6)}`,
-      employeeId: uploadData.employeeId,
-      employee: employee?.name || "Unknown Employee",
-      category: uploadData.category,
+    addEmployeeDocument({
       title: `${uploadData.documentName.trim()} — ${employee?.name || "Employee"}`,
-      fileName:
-        uploadData.file?.name ||
-        `${uploadData.documentName.trim().replace(/\s+/g, "-")}.pdf`,
-      type: getExtension(
-        uploadData.file?.name ||
-          `${uploadData.documentName.trim().replace(/\s+/g, "-")}.pdf`
-      ),
-      size: uploadData.file
-        ? `${(uploadData.file.size / (1024 * 1024)).toFixed(1)} MB`
-        : "0.1 MB",
-      uploaded: new Date().toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }),
-      status: "Pending",
-    };
+      category: uploadData.category,
+      fileName: uploadData.file?.name || `${uploadData.documentName.trim().replace(/\s+/g, "-")}.pdf`,
+      size: uploadData.file ? `${(uploadData.file.size / (1024 * 1024)).toFixed(1)} MB` : "0.5 MB",
+    });
 
-    setDocuments((current) => [newDocument, ...current]);
     setUploadData({
       employeeId: "EMP1001",
       category: "Identity",

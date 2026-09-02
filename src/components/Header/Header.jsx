@@ -21,7 +21,7 @@ export default function Header({
   onToggleSidebar,
 }) {
   const navigate = useNavigate();
-  const { user, role, logout } = useAuth();
+  const { user, role, logout, notificationsList = [], markAllNotificationsAsRead } = useAuth();
 
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -31,26 +31,20 @@ export default function Header({
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
 
-  const notifications = [
-    {
-      id: 1,
-      title: "Leave Request Approved",
-      time: "10 mins ago",
-      read: false,
-    },
-    {
-      id: 2,
-      title: "Monthly Payroll Slip Available",
-      time: "1 hour ago",
-      read: false,
-    },
-    {
-      id: 3,
-      title: "Team Outing Announcement",
-      time: "Yesterday",
-      read: true,
-    },
-  ];
+  const notifications = React.useMemo(() => {
+    return notificationsList.filter((n) => {
+      if (n.recipientId && (user?.employeeId || user?.id)) {
+        if (n.recipientId === user?.employeeId || n.recipientId === user?.id) {
+          return true;
+        }
+      }
+      if (n.audience === "HR" || n.audience === "HR Administrators") return role === "hr";
+      if (n.audience === "Manager") return role === "manager" || role === "hr";
+      return true;
+    });
+  }, [notificationsList, role, user]);
+
+  const unreadCount = notifications.filter(n => n.unread).length;
 
   /*
    * Load saved theme.
@@ -321,9 +315,11 @@ export default function Header({
             >
               <FiBell size={19} />
 
-              <span className="hrms-header-notification-badge">
-                2
-              </span>
+              {unreadCount > 0 && (
+                <span className="hrms-header-notification-badge">
+                  {unreadCount}
+                </span>
+              )}
             </button>
 
             {showNotifications && (
@@ -335,6 +331,7 @@ export default function Header({
                     type="button"
                     className="hrms-header-mark-read"
                     onClick={() => {
+                      markAllNotificationsAsRead(role);
                       setShowNotifications(false);
                     }}
                   >

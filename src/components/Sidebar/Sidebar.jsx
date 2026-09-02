@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./Sidebar.css";
+
 import {
   FiGrid,
   FiUsers,
@@ -21,6 +22,7 @@ import {
   FiSend,
   FiX,
 } from "react-icons/fi";
+
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -29,61 +31,202 @@ export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const { user, role, logout } = useAuth();
 
+  // Reference to the currently active sidebar item
+  const activeItemRef = useRef(null);
+
+  // Automatically bring the active menu item into view
+  // whenever the route changes.
+  useEffect(() => {
+    activeItemRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
+  }, [location.pathname]);
+
   const handleLogout = () => {
     logout();
     navigate("/login");
-    if (onClose) onClose();
+
+    if (onClose) {
+      onClose();
+    }
   };
 
   const getMenuItems = () => {
-if (role === "hr") {
-  return [
-    { path: "/hr/dashboard", label: "Dashboard", icon: <FiGrid /> },
+    if (role === "hr") {
+      return [
+        // WORKSPACE
+        {
+          path: "/hr/dashboard",
+          label: "Dashboard",
+          icon: <FiGrid />,
+        },
 
-    // MANAGEMENT
-    { path: "/hr/organization", label: "Organization", icon: <FiBriefcase /> },
-    { path: "/hr/employees", label: "Employees", icon: <FiUsers /> },
-    { path: "/hr/attendance", label: "Attendance", icon: <FiCalendar /> },
-    { path: "/hr/leave-management", label: "Leave", icon: <FiCheckSquare /> },
-    { path: "/hr/payroll", label: "Payroll", icon: <FiDollarSign /> },
-    { path: "/hr/recruitment", label: "Recruitment", icon: <FiBriefcase /> },
+        // MANAGEMENT
+        {
+          path: "/hr/organization",
+          label: "Organization",
+          icon: <FiBriefcase />,
+        },
+        {
+          path: "/hr/employees",
+          label: "Employees",
+          icon: <FiUsers />,
+        },
+        {
+          path: "/hr/attendance",
+          label: "Attendance",
+          icon: <FiCalendar />,
+        },
+        {
+          path: "/hr/leave-management",
+          label: "Leave",
+          icon: <FiCheckSquare />,
+        },
+        {
+          path: "/hr/payroll",
+          label: "Payroll",
+          icon: <FiDollarSign />,
+        },
+        {
+          path: "/hr/recruitment",
+          label: "Recruitment",
+          icon: <FiBriefcase />,
+        },
 
-    // SYSTEM
-    { path: "/hr/roles-permissions", label: "Roles & Permissions", icon: <FiShield /> },
-    { path: "/hr/reports", label: "Reports", icon: <FiBarChart2 /> },
-    { path: "/hr/documents", label: "Documents", icon: <FiFileText /> },
-    { path: "/hr/biometric-sync", label: "Biometric", icon: <FiWifi /> },
-    { path: "/hr/notifications", label: "Notifications", icon: <FiBell /> },
-    { path: "/hr/settings", label: "Settings", icon: <FiSettings /> },
+        // SYSTEM
+        {
+          path: "/hr/roles-permissions",
+          label: "Roles & Permissions",
+          icon: <FiShield />,
+        },
+        {
+          path: "/hr/reports",
+          label: "Reports",
+          icon: <FiBarChart2 />,
+        },
+        {
+          path: "/hr/documents",
+          label: "Documents",
+          icon: <FiFileText />,
+        },
+        {
+          path: "/hr/biometric-sync",
+          label: "Biometric",
+          icon: <FiWifi />,
+        },
+        {
+          path: "/hr/notifications",
+          label: "Notifications",
+          icon: <FiBell />,
+        },
+        {
+          path: "/hr/settings",
+          label: "Settings",
+          icon: <FiSettings />,
+        },
 
-    // HELP
-    { path: "/hr/help", label: "Help & Support", icon: <FiHelpCircle /> },
-  ];
-}
+        // HELP
+        {
+          path: "/hr/help",
+          label: "Help & Support",
+          icon: <FiHelpCircle />,
+        },
+      ];
+    }
 
     if (role === "manager") {
       return [
-        { path: "/manager/dashboard", label: "Dashboard", icon: <FiGrid /> },
-        { path: "/manager/team", label: "My Team", icon: <FiUsers /> },
-        { path: "/manager/attendance", label: "Team Attendance", icon: <FiClock /> },
-        { path: "/manager/leave-approvals", label: "Leave Approvals", icon: <FiCheckSquare /> },
-        { path: "/manager/reports", label: "Team Reports", icon: <FiBarChart2 /> },
-        { path: "/manager/notifications", label: "Notifications", icon: <FiBell /> },
-        { path: "/manager/help", label: "Help & Support", icon: <FiHelpCircle /> },
+        {
+          path: "/manager/dashboard",
+          label: "Dashboard",
+          icon: <FiGrid />,
+        },
+        {
+          path: "/manager/team",
+          label: "My Team",
+          icon: <FiUsers />,
+        },
+        {
+          path: "/manager/attendance",
+          label: "Team Attendance",
+          icon: <FiClock />,
+        },
+        {
+          path: "/manager/leave-approvals",
+          label: "Leave Approvals",
+          icon: <FiCheckSquare />,
+        },
+        {
+          path: "/manager/reports",
+          label: "Team Reports",
+          icon: <FiBarChart2 />,
+        },
+        {
+          path: "/manager/notifications",
+          label: "Notifications",
+          icon: <FiBell />,
+        },
+        {
+          path: "/manager/help",
+          label: "Help & Support",
+          icon: <FiHelpCircle />,
+        },
       ];
     }
 
     return [
-      { path: "/employee/dashboard", label: "Dashboard", icon: <FiGrid /> },
-      { path: "/employee/profile", label: "My Profile", icon: <FiUser /> },
-      { path: "/employee/attendance", label: "Attendance", icon: <FiClock /> },
-      { path: "/employee/leave", label: "Leave", icon: <FiCalendar /> },
-      { path: "/employee/payslips", label: "My Payslips", icon: <FiDollarSign /> },
-      { path: "/employee/documents", label: "Documents", icon: <FiFileText /> },
-      { path: "/employee/holidays", label: "Holidays", icon: <FiBookmark /> },
-      { path: "/employee/announcements", label: "Announcements", icon: <FiBell /> },
-      { path: "/employee/requests", label: "My Requests", icon: <FiSend /> },
-      { path: "/employee/help", label: "Help & Support", icon: <FiHelpCircle /> },
+      {
+        path: "/employee/dashboard",
+        label: "Dashboard",
+        icon: <FiGrid />,
+      },
+      {
+        path: "/employee/profile",
+        label: "My Profile",
+        icon: <FiUser />,
+      },
+      {
+        path: "/employee/attendance",
+        label: "Attendance",
+        icon: <FiClock />,
+      },
+      {
+        path: "/employee/leave",
+        label: "Leave",
+        icon: <FiCalendar />,
+      },
+      {
+        path: "/employee/payslips",
+        label: "My Payslips",
+        icon: <FiDollarSign />,
+      },
+      {
+        path: "/employee/documents",
+        label: "Documents",
+        icon: <FiFileText />,
+      },
+      {
+        path: "/employee/holidays",
+        label: "Holidays",
+        icon: <FiBookmark />,
+      },
+      {
+        path: "/employee/announcements",
+        label: "Announcements",
+        icon: <FiBell />,
+      },
+      {
+        path: "/employee/requests",
+        label: "My Requests",
+        icon: <FiSend />,
+      },
+      {
+        path: "/employee/help",
+        label: "Help & Support",
+        icon: <FiHelpCircle />,
+      },
     ];
   };
 
@@ -100,7 +243,9 @@ if (role === "hr") {
       )}
 
       <aside
-        className={`belnova-sidebar ${isOpen ? "belnova-sidebar-open" : ""}`}
+        className={`belnova-sidebar ${
+          isOpen ? "belnova-sidebar-open" : ""
+        }`}
         aria-label="Main navigation"
       >
         {/* BRAND */}
@@ -138,69 +283,156 @@ if (role === "hr") {
           <div className="belnova-sidebar-nav-inner">
             {role === "hr" ? (
               <>
-                <div className="belnova-sidebar-section-label">WORKSPACE</div>
+                {/* WORKSPACE */}
+                <div className="belnova-sidebar-section-label">
+                  WORKSPACE
+                </div>
+
                 <ul className="belnova-sidebar-menu">
                   {menuItems.slice(0, 1).map((item) => {
                     const isActive = location.pathname === item.path;
+
                     return (
-                      <li key={item.path} className="belnova-sidebar-menu-item">
+                      <li
+                        key={item.path}
+                        ref={isActive ? activeItemRef : null}
+                        className="belnova-sidebar-menu-item"
+                      >
                         <NavLink
                           to={item.path}
                           end
                           className={`belnova-sidebar-link ${
-                            isActive ? "belnova-sidebar-link-active" : ""
+                            isActive
+                              ? "belnova-sidebar-link-active"
+                              : ""
                           }`}
-                          onClick={onClose}
+                          onClick={(e) => {
+                            if (location.pathname === item.path) {
+                              e.preventDefault();
+                            }
+
+                            if (onClose) {
+                              onClose();
+                            }
+                          }}
                         >
-                          <span className="belnova-sidebar-link-icon">{item.icon}</span>
-                          <span className="belnova-sidebar-link-text">{item.label}</span>
-                          {isActive && <span className="belnova-sidebar-active-indicator" />}
+                          <span className="belnova-sidebar-link-icon">
+                            {item.icon}
+                          </span>
+
+                          <span className="belnova-sidebar-link-text">
+                            {item.label}
+                          </span>
+
+                          {isActive && (
+                            <span className="belnova-sidebar-active-indicator" />
+                          )}
                         </NavLink>
                       </li>
                     );
                   })}
                 </ul>
 
-                <div className="belnova-sidebar-section-label" style={{ marginTop: "1rem" }}>MANAGEMENT</div>
+                {/* MANAGEMENT */}
+                <div
+                  className="belnova-sidebar-section-label"
+                  style={{ marginTop: "1rem" }}
+                >
+                  MANAGEMENT
+                </div>
+
                 <ul className="belnova-sidebar-menu">
                   {menuItems.slice(1, 7).map((item) => {
                     const isActive = location.pathname === item.path;
+
                     return (
-                      <li key={item.path} className="belnova-sidebar-menu-item">
+                      <li
+                        key={item.path}
+                        ref={isActive ? activeItemRef : null}
+                        className="belnova-sidebar-menu-item"
+                      >
                         <NavLink
                           to={item.path}
                           end
                           className={`belnova-sidebar-link ${
-                            isActive ? "belnova-sidebar-link-active" : ""
+                            isActive
+                              ? "belnova-sidebar-link-active"
+                              : ""
                           }`}
-                          onClick={onClose}
+                          onClick={(e) => {
+                            if (location.pathname === item.path) {
+                              e.preventDefault();
+                            }
+
+                            if (onClose) {
+                              onClose();
+                            }
+                          }}
                         >
-                          <span className="belnova-sidebar-link-icon">{item.icon}</span>
-                          <span className="belnova-sidebar-link-text">{item.label}</span>
-                          {isActive && <span className="belnova-sidebar-active-indicator" />}
+                          <span className="belnova-sidebar-link-icon">
+                            {item.icon}
+                          </span>
+
+                          <span className="belnova-sidebar-link-text">
+                            {item.label}
+                          </span>
+
+                          {isActive && (
+                            <span className="belnova-sidebar-active-indicator" />
+                          )}
                         </NavLink>
                       </li>
                     );
                   })}
                 </ul>
 
-                <div className="belnova-sidebar-section-label" style={{ marginTop: "1rem" }}>SYSTEM</div>
+                {/* SYSTEM */}
+                <div
+                  className="belnova-sidebar-section-label"
+                  style={{ marginTop: "1rem" }}
+                >
+                  SYSTEM
+                </div>
+
                 <ul className="belnova-sidebar-menu">
                   {menuItems.slice(7).map((item) => {
                     const isActive = location.pathname === item.path;
+
                     return (
-                      <li key={item.path} className="belnova-sidebar-menu-item">
+                      <li
+                        key={item.path}
+                        ref={isActive ? activeItemRef : null}
+                        className="belnova-sidebar-menu-item"
+                      >
                         <NavLink
                           to={item.path}
                           end
                           className={`belnova-sidebar-link ${
-                            isActive ? "belnova-sidebar-link-active" : ""
+                            isActive
+                              ? "belnova-sidebar-link-active"
+                              : ""
                           }`}
-                          onClick={onClose}
+                          onClick={(e) => {
+                            if (location.pathname === item.path) {
+                              e.preventDefault();
+                            }
+
+                            if (onClose) {
+                              onClose();
+                            }
+                          }}
                         >
-                          <span className="belnova-sidebar-link-icon">{item.icon}</span>
-                          <span className="belnova-sidebar-link-text">{item.label}</span>
-                          {isActive && <span className="belnova-sidebar-active-indicator" />}
+                          <span className="belnova-sidebar-link-icon">
+                            {item.icon}
+                          </span>
+
+                          <span className="belnova-sidebar-link-text">
+                            {item.label}
+                          </span>
+
+                          {isActive && (
+                            <span className="belnova-sidebar-active-indicator" />
+                          )}
                         </NavLink>
                       </li>
                     );
@@ -209,23 +441,50 @@ if (role === "hr") {
               </>
             ) : (
               <>
-                <div className="belnova-sidebar-section-label">WORKSPACE</div>
+                {/* WORKSPACE */}
+                <div className="belnova-sidebar-section-label">
+                  WORKSPACE
+                </div>
+
                 <ul className="belnova-sidebar-menu">
                   {menuItems.map((item) => {
                     const isActive = location.pathname === item.path;
+
                     return (
-                      <li key={item.path} className="belnova-sidebar-menu-item">
+                      <li
+                        key={item.path}
+                        ref={isActive ? activeItemRef : null}
+                        className="belnova-sidebar-menu-item"
+                      >
                         <NavLink
                           to={item.path}
                           end
                           className={`belnova-sidebar-link ${
-                            isActive ? "belnova-sidebar-link-active" : ""
+                            isActive
+                              ? "belnova-sidebar-link-active"
+                              : ""
                           }`}
-                          onClick={onClose}
+                          onClick={(e) => {
+                            if (location.pathname === item.path) {
+                              e.preventDefault();
+                            }
+
+                            if (onClose) {
+                              onClose();
+                            }
+                          }}
                         >
-                          <span className="belnova-sidebar-link-icon">{item.icon}</span>
-                          <span className="belnova-sidebar-link-text">{item.label}</span>
-                          {isActive && <span className="belnova-sidebar-active-indicator" />}
+                          <span className="belnova-sidebar-link-icon">
+                            {item.icon}
+                          </span>
+
+                          <span className="belnova-sidebar-link-text">
+                            {item.label}
+                          </span>
+
+                          {isActive && (
+                            <span className="belnova-sidebar-active-indicator" />
+                          )}
                         </NavLink>
                       </li>
                     );
@@ -241,13 +500,16 @@ if (role === "hr") {
           <div className="belnova-sidebar-user">
             <div
               className="belnova-sidebar-avatar"
-              style={{ background: user?.avatarBg || "#2563eb" }}
+              style={{
+                background: user?.avatarBg || "#2563eb",
+              }}
             >
               {user?.avatar || "US"}
             </div>
 
             <div className="belnova-sidebar-user-details">
               <strong>{user?.name || "User Account"}</strong>
+
               <span>
                 {user?.designation || user?.role || "Employee"}
               </span>

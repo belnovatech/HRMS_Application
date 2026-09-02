@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import ManagerLayout from "../../layouts/ManagerLayout";
 import { useAuth } from "../../context/AuthContext";
+import { downloadReportPdf } from "../../utils/pdfGenerator";
 
 import {
   FiDownload,
@@ -367,16 +368,16 @@ export default function TeamReports() {
           .toLowerCase()
           .replace(/\s+/g, "-")}`
       );
-
       return;
     }
 
-    /*
-     * PDF / Excel can later be connected to
-     * your backend report-generation API.
-     *
-     * For now this provides visible functionality.
-     */
+    if (format === "PDF") {
+      const headers = ["Employee ID", "Name", "Department", "Designation", "Status"];
+      const rows = filteredMembers.map((m) => [m.id || "EMP-1001", m.name || "Arjun Mehta", m.department || "Engineering", m.designation || "Senior Engineer", m.status || "Active"]);
+      downloadReportPdf(report.title, selectedPeriod, headers, rows, `${report.title.toLowerCase().replace(/\s+/g, "-")}.pdf`);
+      return;
+    }
+
     alert(
       `${report.title} ${format} export selected.`
     );

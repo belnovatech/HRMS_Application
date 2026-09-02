@@ -5,12 +5,14 @@
   gap: 1rem;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .hradmin-dashboard-header-text {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
 }
 
 .hradmin-dashboard-header-title {
@@ -22,6 +24,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  flex-wrap: wrap;
 }
 
 .hradmin-dashboard-header-wave {
@@ -56,6 +59,7 @@
 .hradmin-dashboard-btn-reports {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
   color: #ffffff;
@@ -67,6 +71,7 @@
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .hradmin-dashboard-btn-reports:hover {
@@ -76,4 +81,24 @@
 
 .hradmin-dashboard-btn-icon {
   font-size: 1.1rem;
+}
+
+@media (max-width: 576px) {
+  .hradmin-dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .hradmin-dashboard-header-title {
+    font-size: 1.35rem;
+  }
+
+  .hradmin-dashboard-header-actions {
+    width: 100%;
+  }
+
+  .hradmin-dashboard-btn-reports {
+    width: 100%;
+  }
 }

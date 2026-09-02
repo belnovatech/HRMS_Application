@@ -1,133 +1,292 @@
-.hr-emp-details-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.5);
+.hradmin-emp-detail-page {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  backdrop-filter: blur(4px);
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.hr-emp-details-modal {
-  background: #ffffff;
-  width: 90%;
-  max-width: 560px;
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  animation: scaleUp 0.2s ease-out;
-}
-
-@keyframes scaleUp {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.hr-emp-details-header {
+.hradmin-emp-detail-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.hr-emp-details-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #0f172a;
-}
-
-.hr-close-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.25rem;
-  color: #64748b;
+.hradmin-emp-btn-edit-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 0.55rem 1.15rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #1e293b;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
 }
 
-.hr-emp-details-body {
-  padding: 1.5rem;
+.hradmin-emp-btn-edit-profile:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
 }
 
-.hr-profile-card-hero {
+/* Hero Banner Card */
+.hradmin-emp-detail-hero-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hradmin-emp-detail-hero-top {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  padding: 1.25rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
+  gap: 1.5rem;
 }
 
-.hr-hero-avatar {
-  width: 56px;
-  height: 56px;
+.hradmin-emp-detail-avatar {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
   color: #ffffff;
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 800;
+  font-size: 1.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  flex-shrink: 0;
 }
 
-.hr-hero-info h2 {
+.hradmin-emp-detail-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.hradmin-emp-detail-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.hradmin-emp-detail-name-row h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 800;
   color: #0f172a;
 }
 
-.hr-hero-info p {
-  margin: 0.2rem 0 0.4rem 0;
-  font-size: 0.85rem;
-  color: #64748b;
+.hradmin-emp-detail-role-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #475569;
 }
 
-.hr-details-grid {
+.hradmin-emp-detail-id-text {
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.hradmin-emp-detail-meta-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #f1f5f9;
+  width: 100%;
 }
 
-.hr-detail-block .label {
+.meta-item {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.meta-item svg {
+  font-size: 1.2rem;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.meta-item div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.meta-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Tabs Content Card */
+.hradmin-emp-detail-content-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hradmin-emp-detail-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
   gap: 0.4rem;
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: #1e293b;
+  background: #f8fafc;
+}
+
+.tab-btn.active {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.hradmin-emp-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.info-block .label {
   font-size: 0.775rem;
   font-weight: 600;
   color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
-.hr-detail-block .value {
-  margin: 0.25rem 0 0 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #1e293b;
+.info-block .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  word-break: break-word;
 }
 
-.hr-emp-details-footer {
-  padding: 1rem 1.5rem;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+.hradmin-emp-docs-list {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 
-.hr-btn-sec {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  padding: 0.5rem 1.25rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #334155;
-  cursor: pointer;
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+}
+
+.doc-icon {
+  font-size: 1.25rem;
+  color: #2563eb;
+  flex-shrink: 0;
+}
+
+.doc-item strong {
+  display: block;
+  font-size: 0.875rem;
+  color: #0f172a;
+}
+
+.doc-item small {
+  font-size: 0.775rem;
+  color: #64748b;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 991px) {
+  .hradmin-emp-detail-meta-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hradmin-emp-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .hradmin-emp-detail-hero-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .hradmin-emp-detail-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hradmin-emp-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .hradmin-emp-detail-hero-card,
+  .hradmin-emp-detail-content-card {
+    padding: 1.25rem;
+  }
 }

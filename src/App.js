@@ -10,6 +10,9 @@ import Login from "./pages/Login/Login";
 import HRDashboard from "./pages/HRAdmin/Dashboard/Dashboard";
 import HROrganization from "./pages/HRAdmin/Organization/Organization";
 import HREmployees from "./pages/HRAdmin/Employees/Employees";
+import HRAddEmployee from "./pages/HRAdmin/Employees/AddEmployee";
+import HREmployeeDetails from "./pages/HRAdmin/Employees/EmployeeDetails";
+import HREditEmployee from "./pages/HRAdmin/Employees/EditEmployee";
 import HRAttendance from "./pages/HRAdmin/Attendance/Attendance";
 import HRLeaveManagement from "./pages/HRAdmin/Leave/Leave";
 import HRPayroll from "./pages/HRAdmin/Payroll/Payroll";
@@ -82,6 +85,30 @@ function AppContent() {
         element={
           <ProtectedRoute allowedRoles={["hr"]}>
             <HREmployees />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hr/employees/add"
+        element={
+          <ProtectedRoute allowedRoles={["hr"]}>
+            <HRAddEmployee />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hr/employees/:id"
+        element={
+          <ProtectedRoute allowedRoles={["hr"]}>
+            <HREmployeeDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hr/employees/:id/edit"
+        element={
+          <ProtectedRoute allowedRoles={["hr"]}>
+            <HREditEmployee />
           </ProtectedRoute>
         }
       />

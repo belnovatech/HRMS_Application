@@ -1,21 +1,18 @@
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { downloadReportPdf } from "./pdfGenerator";
 
-export const exportToPDF = async () => {
-  const report = document.getElementById("reports-container");
+export const exportToPDF = async (title = "Reports & Analytics", filename = "ReportsAnalytics.pdf") => {
+  const reportTableHtml = document.getElementById("reports-container");
+  if (!reportTableHtml) return;
 
-  if (!report) return;
-
-  const canvas = await html2canvas(report);
-
-  const imgData = canvas.toDataURL("image/png");
-
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  const width = 190;
-  const height = (canvas.height * width) / canvas.width;
-
-  pdf.addImage(imgData, "PNG", 10, 10, width, height);
-
-  pdf.save("ReportsAnalytics.pdf");
+  // Extract table data if available
+  const table = reportTableHtml.querySelector("table");
+  if (table) {
+    const headers = Array.from(table.querySelectorAll("th")).map((th) => th.innerText);
+    const rows = Array.from(table.querySelectorAll("tbody tr")).map((tr) =>
+      Array.from(tr.querySelectorAll("td")).map((td) => td.innerText)
+    );
+    await downloadReportPdf(title, "Sep 2026", headers, rows, filename);
+  } else {
+    await downloadReportPdf(title, "Sep 2026", ["Report Data"], [["Analytics Data Export"]], filename);
+  }
 };

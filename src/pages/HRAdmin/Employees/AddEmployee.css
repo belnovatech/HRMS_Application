@@ -1,1293 +1,461 @@
-/* =========================================================
-   ADD EMPLOYEE V2
-   Dedicated styles.
-   All classes are uniquely prefixed to prevent conflicts.
-   ========================================================= */
-
-.hr-addemployee-v2-page {
+.hradmin-emp-add-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 5.5rem;
+  position: relative;
   width: 100%;
-  min-height: 100vh;
   box-sizing: border-box;
-  padding: 24px 28px 110px;
-  background: #f6f8fc;
-  color: #172033;
 }
 
-/* =========================================================
-   PAGE HEADER
-   ========================================================= */
+.hradmin-emp-toast-success {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #10b981;
+  color: #ffffff;
+  padding: 0.85rem 1.35rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+  z-index: 1200;
+  animation: slideInDown 0.2s ease-out;
+}
 
-.hr-addemployee-v2-page-header {
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hradmin-emp-add-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hradmin-emp-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  width: fit-content;
+  margin-bottom: 0.25rem;
+}
+
+.hradmin-emp-btn-back:hover {
+  text-decoration: underline;
+}
+
+.hradmin-emp-add-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.hradmin-emp-add-title-row h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.hradmin-emp-draft-badge {
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 9999px;
+}
+
+.hradmin-emp-add-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Stepper */
+.hradmin-emp-stepper-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
   width: 100%;
-  max-width: 1180px;
-  margin: 0 auto 22px;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.hradmin-emp-stepper {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-}
-
-.hr-addemployee-v2-header-left {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  position: relative;
+  width: 100%;
   min-width: 0;
 }
 
-.hr-addemployee-v2-back-button {
-  width: 38px;
-  height: 38px;
-  flex: 0 0 38px;
-  margin-top: 2px;
+.hradmin-emp-step-item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border: 1px solid #dbe3ee;
-  border-radius: 9px;
-  background: #ffffff;
-  color: #475569;
+  gap: 0.65rem;
+  position: relative;
+  flex: 1;
   cursor: pointer;
-  transition: 0.2s ease;
+  min-width: 0;
 }
 
-.hr-addemployee-v2-back-button:hover {
-  border-color: #bfdbfe;
-  color: #2563eb;
-  background: #eff6ff;
-}
-
-.hr-addemployee-v2-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 5px;
-  color: #94a3b8;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.hr-addemployee-v2-breadcrumb span {
-  color: #cbd5e1;
-}
-
-.hr-addemployee-v2-page-header h1 {
-  margin: 0;
-  color: #0f172a;
-  font-size: 26px;
-  line-height: 1.2;
-  font-weight: 750;
-  letter-spacing: -0.025em;
-}
-
-.hr-addemployee-v2-page-header p {
-  margin: 5px 0 0;
-  color: #64748b;
-  font-size: 12px;
-}
-
-.hr-addemployee-v2-header-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 11px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #64748b;
-  font-size: 11px;
-  font-weight: 650;
-}
-
-.hr-addemployee-v2-header-status span {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #f59e0b;
-}
-
-/* =========================================================
-   STEPPER
-   ========================================================= */
-
-.hr-addemployee-v2-stepper {
-  width: 100%;
-  max-width: 1180px;
-  min-height: 88px;
-  margin: 0 auto 20px;
-  padding: 15px 20px;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  border: 1px solid #dfe5ee;
-  border-radius: 13px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.025);
-}
-
-.hr-addemployee-v2-step {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 135px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  text-align: left;
-}
-
-.hr-addemployee-v2-step:not(:disabled) {
-  cursor: pointer;
-}
-
-.hr-addemployee-v2-step:disabled {
-  cursor: default;
-}
-
-.hr-addemployee-v2-step-circle {
+.hradmin-emp-step-number {
   width: 32px;
   height: 32px;
-  flex: 0 0 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #dce3ec;
-  border-radius: 50%;
-  background: #ffffff;
-  color: #94a3b8;
-  font-size: 11px;
-  font-weight: 700;
-  transition: 0.2s ease;
-}
-
-.hr-addemployee-v2-step.active .hr-addemployee-v2-step-circle {
-  border-color: #2563eb;
-  background: #2563eb;
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-}
-
-.hr-addemployee-v2-step.completed .hr-addemployee-v2-step-circle {
-  border-color: #22c55e;
-  background: #22c55e;
-  color: #ffffff;
-}
-
-.hr-addemployee-v2-step-content {
-  min-width: 0;
-}
-
-.hr-addemployee-v2-step-content strong {
-  display: block;
-  color: #334155;
-  font-size: 10px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.hr-addemployee-v2-step.active .hr-addemployee-v2-step-content strong {
-  color: #2563eb;
-}
-
-.hr-addemployee-v2-step-content span {
-  display: block;
-  margin-top: 2px;
-  color: #94a3b8;
-  font-size: 9px;
-  white-space: nowrap;
-}
-
-.hr-addemployee-v2-step-line {
-  flex: 1;
-  height: 1px;
-  min-width: 20px;
-  margin: 0 9px;
-  background: #e2e8f0;
-  transition: 0.2s ease;
-}
-
-.hr-addemployee-v2-step-line.completed {
-  background: #93c5fd;
-}
-
-/* =========================================================
-   MAIN CONTENT
-   ========================================================= */
-
-.hr-addemployee-v2-content {
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-/* =========================================================
-   FORM CARD
-   ========================================================= */
-
-.hr-addemployee-v2-form-card {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 22px;
-  border: 1px solid #dfe5ee;
-  border-radius: 13px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.025);
-}
-
-.hr-addemployee-v2-section-header {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin-bottom: 22px;
-}
-
-.hr-addemployee-v2-section-icon {
-  width: 39px;
-  height: 39px;
-  flex: 0 0 39px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9px;
-  background: #eff6ff;
-  color: #2563eb;
-  font-size: 18px;
-}
-
-.hr-addemployee-v2-section-header h2 {
-  margin: 0;
-  color: #172033;
-  font-size: 16px;
-  font-weight: 750;
-}
-
-.hr-addemployee-v2-section-header p {
-  margin: 4px 0 0;
-  color: #64748b;
-  font-size: 11px;
-}
-
-/* =========================================================
-   PHOTO
-   ========================================================= */
-
-.hr-addemployee-v2-photo-section {
-  display: flex;
-  align-items: center;
-  gap: 17px;
-  margin-bottom: 24px;
-  padding: 17px;
-  border: 1px dashed #cbd5e1;
-  border-radius: 11px;
-  background: #fbfcfe;
-}
-
-.hr-addemployee-v2-photo-preview {
-  width: 78px;
-  height: 78px;
-  flex: 0 0 78px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
   border-radius: 50%;
   background: #f1f5f9;
-  color: #94a3b8;
-  font-size: 27px;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
-.hr-addemployee-v2-photo-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.hradmin-emp-step-item.active .hradmin-emp-step-number {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
-.hr-addemployee-v2-photo-content h3 {
-  margin: 0;
-  color: #334155;
-  font-size: 13px;
+.hradmin-emp-step-item.completed .hradmin-emp-step-number {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.hradmin-emp-step-text {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.hradmin-emp-step-text .label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.hradmin-emp-step-item.active .label {
+  color: #0f172a;
   font-weight: 700;
 }
 
-.hr-addemployee-v2-photo-content p {
-  margin: 4px 0 10px;
-  color: #94a3b8;
-  font-size: 10px;
+.hradmin-emp-step-line {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+  margin: 0 0.75rem;
+  min-width: 12px;
 }
 
-.hr-addemployee-v2-photo-button {
-  position: relative;
-  display: inline-flex;
+.hradmin-emp-step-item.completed .hradmin-emp-step-line {
+  background: #10b981;
+}
+
+/* Form Container */
+.hradmin-emp-form-container {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 8px 11px;
-  border: 1px solid #dbe3ee;
-  border-radius: 7px;
+  width: 100%;
+}
+
+.hradmin-emp-form-card {
   background: #ffffff;
-  color: #475569;
-  font-size: 10px;
-  font-weight: 650;
-  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 860px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
 }
 
-.hr-addemployee-v2-photo-button:hover {
-  border-color: #93c5fd;
-  color: #2563eb;
+.hradmin-emp-step-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.15rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.85rem;
 }
 
-.hr-addemployee-v2-photo-button input {
-  display: none;
-}
-
-.hr-addemployee-v2-photo-remove {
-  margin-left: 7px;
-  padding: 8px 9px;
-  border: 0;
-  background: transparent;
-  color: #dc2626;
-  font-size: 10px;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-/* =========================================================
-   FORM GRID
-   ========================================================= */
-
-.hr-addemployee-v2-form-grid {
+.hradmin-emp-form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 18px;
-  row-gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
 }
 
-.hr-addemployee-v2-field {
-  min-width: 0;
+.hradmin-emp-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
-.hr-addemployee-v2-full-field {
-  grid-column: 1 / -1;
+.hradmin-emp-field-group label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #475569;
 }
 
-.hr-addemployee-v2-field label {
-  display: block;
-  margin-bottom: 6px;
-  color: #334155;
-  font-size: 10px;
-  font-weight: 650;
-}
-
-.hr-addemployee-v2-field label span {
-  margin-left: 3px;
-  color: #ef4444;
-}
-
-.hr-addemployee-v2-field input,
-.hr-addemployee-v2-field textarea,
-.hr-addemployee-v2-field select {
+.hradmin-emp-field-group input,
+.hradmin-emp-field-group select {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s ease;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #dbe3ec;
-  border-radius: 8px;
-  outline: none;
-  background: #ffffff;
-  color: #334155;
-  font-family: inherit;
-  font-size: 11px;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
-.hr-addemployee-v2-field input,
-.hr-addemployee-v2-field select {
-  height: 39px;
+.hradmin-emp-field-group input:focus,
+.hradmin-emp-field-group select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-.hr-addemployee-v2-field input {
-  padding: 0 12px;
+.readonly-input {
+  background: #f8fafc;
+  color: #64748b;
+  cursor: not-allowed;
 }
 
-.hr-addemployee-v2-field textarea {
-  min-height: 80px;
-  padding: 10px 12px;
-  resize: vertical;
-}
-
-.hr-addemployee-v2-field input::placeholder,
-.hr-addemployee-v2-field textarea::placeholder {
-  color: #a3adbb;
-}
-
-.hr-addemployee-v2-field input:focus,
-.hr-addemployee-v2-field textarea:focus,
-.hr-addemployee-v2-field select:focus {
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.07);
-}
-
-.hr-addemployee-v2-field input.has-error,
-.hr-addemployee-v2-field textarea.has-error,
-.hr-addemployee-v2-field select.has-error {
-  border-color: #fca5a5;
-}
-
-.hr-addemployee-v2-select-wrap,
-.hr-addemployee-v2-date-wrap {
+.hradmin-emp-doc-upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  border: 2px dashed #cbd5e1;
+  border-radius: 14px;
+  background: #f8fafc;
+  text-align: center;
   position: relative;
 }
 
-.hr-addemployee-v2-select-wrap select {
-  appearance: none;
-  padding: 0 35px 0 12px;
-  cursor: pointer;
+.upload-icon {
+  font-size: 2.5rem;
+  color: #2563eb;
+  margin-bottom: 0.75rem;
 }
 
-.hr-addemployee-v2-select-wrap > svg,
-.hr-addemployee-v2-date-wrap > svg {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
+.hradmin-emp-doc-upload-box h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.hradmin-emp-doc-upload-box p {
+  margin: 0.25rem 0 1rem 0;
+  font-size: 0.825rem;
   color: #64748b;
-  font-size: 14px;
-  pointer-events: none;
 }
 
-.hr-addemployee-v2-date-wrap input {
-  padding: 0 38px 0 12px;
-}
-
-.hr-addemployee-v2-date-wrap input::-webkit-calendar-picker-indicator {
+.file-input {
+  position: absolute;
+  inset: 0;
   opacity: 0;
   cursor: pointer;
 }
 
-.hr-addemployee-v2-error {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 4px;
-  color: #dc2626;
-  font-size: 9px;
-  font-weight: 550;
-}
-
-.hr-addemployee-v2-error svg {
-  flex-shrink: 0;
-  font-size: 10px;
-}
-
-/* =========================================================
-   SUBSECTION
-   ========================================================= */
-
-.hr-addemployee-v2-subsection {
-  margin-top: 25px;
-  padding-top: 21px;
-  border-top: 1px solid #eef2f7;
-}
-
-.hr-addemployee-v2-subsection-title {
-  margin-bottom: 15px;
-}
-
-.hr-addemployee-v2-subsection-title h3 {
-  margin: 0;
-  color: #334155;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.hr-addemployee-v2-subsection-title p {
-  margin: 4px 0 0;
-  color: #94a3b8;
-  font-size: 10px;
-}
-
-/* =========================================================
-   INFO BANNER
-   ========================================================= */
-
-.hr-addemployee-v2-info-banner {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin-top: 23px;
-  padding: 12px 13px;
-  border-radius: 9px;
-  background: #f0f7ff;
-}
-
-.hr-addemployee-v2-info-banner-icon {
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.hr-addemployee-v2-info-banner strong {
-  display: block;
-  color: #1e40af;
-  font-size: 10px;
-}
-
-.hr-addemployee-v2-info-banner p {
-  margin: 3px 0 0;
-  color: #64748b;
-  font-size: 9px;
-}
-
-/* =========================================================
-   CONFIDENTIAL SALARY BANNER
-   ========================================================= */
-
-.hr-addemployee-v2-confidential-banner {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin-bottom: 22px;
-  padding: 12px 13px;
-  border-radius: 9px;
-  background: linear-gradient(
-    90deg,
-    #eef2ff,
-    #f5f3ff
-  );
-}
-
-.hr-addemployee-v2-confidential-icon {
-  width: 32px;
-  height: 32px;
-  flex: 0 0 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #6366f1;
-}
-
-.hr-addemployee-v2-confidential-banner strong {
-  display: block;
-  color: #4f46e5;
-  font-size: 10px;
-}
-
-.hr-addemployee-v2-confidential-banner p {
-  margin: 3px 0 0;
-  color: #94a3b8;
-  font-size: 9px;
-}
-
-/* =========================================================
-   DOCUMENTS
-   ========================================================= */
-
-.hr-addemployee-v2-document-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 14px;
-  padding: 13px 15px;
-  border-radius: 9px;
-  background: #f8fafc;
-}
-
-.hr-addemployee-v2-document-summary strong {
-  display: block;
-  color: #334155;
-  font-size: 11px;
-}
-
-.hr-addemployee-v2-document-summary p {
-  margin: 3px 0 0;
-  color: #94a3b8;
-  font-size: 9px;
-}
-
-.hr-addemployee-v2-document-summary > span {
-  flex-shrink: 0;
-  padding: 6px 9px;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #64748b;
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.hr-addemployee-v2-document-list {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.hr-addemployee-v2-document {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 12px 13px;
-  border: 1px solid #dfe5ee;
-  border-radius: 9px;
-  background: #ffffff;
-  transition: 0.2s ease;
-}
-
-.hr-addemployee-v2-document:hover {
-  border-color: #bfdbfe;
-  background: #fbfdff;
-}
-
-.hr-addemployee-v2-document.document-error {
-  border-color: #fca5a5;
-}
-
-.hr-addemployee-v2-document-info {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  min-width: 0;
-}
-
-.hr-addemployee-v2-document-icon {
-  width: 35px;
-  height: 35px;
-  flex: 0 0 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  background: #f1f5f9;
-  color: #64748b;
-}
-
-.hr-addemployee-v2-document-info h4 {
-  margin: 0;
-  color: #334155;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.hr-addemployee-v2-document-info p {
-  margin: 3px 0 0;
-  color: #94a3b8;
-  font-size: 9px;
-}
-
-.hr-addemployee-v2-required {
-  margin-left: 5px;
-  color: #ef4444;
-  font-size: 8px;
-  font-weight: 650;
-}
-
-.hr-addemployee-v2-uploaded-file {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  max-width: 500px;
-  margin-top: 3px;
-}
-
-.hr-addemployee-v2-uploaded-file span {
-  overflow: hidden;
-  color: #2563eb;
-  font-size: 9px;
+.file-attached {
+  font-size: 0.825rem;
+  color: #10b981;
   font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  margin-top: 0.5rem;
 }
 
-.hr-addemployee-v2-uploaded-file small {
-  flex-shrink: 0;
-  color: #94a3b8;
-  font-size: 8px;
-}
-
-.hr-addemployee-v2-upload-button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: 78px;
-  height: 34px;
-  padding: 0 11px;
-  box-sizing: border-box;
-  border: 1px solid #dbe3ee;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #475569;
-  font-size: 9px;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-.hr-addemployee-v2-upload-button:hover {
-  border-color: #93c5fd;
-  color: #2563eb;
-  background: #eff6ff;
-}
-
-.hr-addemployee-v2-upload-button input {
-  display: none;
-}
-
-.hr-addemployee-v2-remove-file {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 32px;
-  padding: 0 9px;
-  border: 1px solid #fecaca;
-  border-radius: 7px;
-  background: #fffafa;
-  color: #dc2626;
-  font-size: 9px;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-.hr-addemployee-v2-upload-note {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 13px;
-  color: #94a3b8;
-}
-
-.hr-addemployee-v2-upload-note svg {
-  flex-shrink: 0;
+/* Review Summary */
+.hradmin-emp-review-subtitle {
+  font-size: 0.875rem;
   color: #64748b;
-  font-size: 12px;
+  margin-top: -0.75rem;
+  margin-bottom: 1.25rem;
 }
 
-.hr-addemployee-v2-upload-note p {
-  margin: 0;
-  font-size: 9px;
-}
-
-/* =========================================================
-   REVIEW
-   ========================================================= */
-
-.hr-addemployee-v2-review-wrapper {
+.hradmin-emp-review-summary-grid {
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 1rem;
 }
 
-.hr-addemployee-v2-review-success {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #dbeafe;
-  border-radius: 11px;
-  background: #f8fbff;
+.hradmin-emp-review-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
 }
 
-.hr-addemployee-v2-review-success-icon {
-  width: 39px;
-  height: 39px;
-  flex: 0 0 39px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.hr-addemployee-v2-review-success h2 {
-  margin: 0;
-  color: #172033;
-  font-size: 14px;
-  font-weight: 750;
-}
-
-.hr-addemployee-v2-review-success p {
-  margin: 4px 0 0;
-  color: #64748b;
-  font-size: 10px;
-}
-
-.hr-addemployee-v2-review-card {
-  padding: 17px;
-  border: 1px solid #dfe5ee;
-  border-radius: 11px;
-  background: #ffffff;
-}
-
-.hr-addemployee-v2-review-card-header {
+.card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
-  padding-bottom: 13px;
-  border-bottom: 1px solid #eef2f7;
+  margin-bottom: 0.5rem;
 }
 
-.hr-addemployee-v2-review-card-header > div {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.hr-addemployee-v2-review-number {
-  width: 29px;
-  height: 29px;
-  flex: 0 0 29px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  background: #eff6ff;
-  color: #2563eb;
-  font-size: 9px;
-  font-weight: 750;
-}
-
-.hr-addemployee-v2-review-card-header h3 {
+.card-head h4 {
   margin: 0;
-  color: #334155;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 0.925rem;
+  color: #0f172a;
 }
 
-.hr-addemployee-v2-review-card-header p {
-  margin: 3px 0 0;
-  color: #94a3b8;
-  font-size: 9px;
-}
-
-.hr-addemployee-v2-review-card-header button {
-  border: 0;
+.card-head button {
   background: transparent;
+  border: none;
   color: #2563eb;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.hr-addemployee-v2-review-card-header button:hover {
-  text-decoration: underline;
-}
-
-.hr-addemployee-v2-review-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px 20px;
-  padding-top: 15px;
-}
-
-.hr-addemployee-v2-review-grid span,
-.hr-addemployee-v2-review-grid strong {
-  display: block;
-}
-
-.hr-addemployee-v2-review-grid span {
-  margin-bottom: 4px;
-  color: #94a3b8;
-  font-size: 9px;
   font-weight: 600;
-}
-
-.hr-addemployee-v2-review-grid strong {
-  overflow: hidden;
-  color: #334155;
-  font-size: 10px;
-  font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.hr-addemployee-v2-document-review {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding-top: 14px;
-}
-
-.hr-addemployee-v2-document-review > svg {
-  color: #16a34a;
-  font-size: 18px;
-}
-
-.hr-addemployee-v2-document-review strong,
-.hr-addemployee-v2-document-review span {
-  display: block;
-}
-
-.hr-addemployee-v2-document-review strong {
-  color: #334155;
-  font-size: 10px;
-}
-
-.hr-addemployee-v2-document-review span {
-  margin-top: 3px;
-  color: #94a3b8;
-  font-size: 9px;
-}
-
-.hr-addemployee-v2-final-confirmation {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 14px;
-  border: 1px solid #bbf7d0;
-  border-radius: 10px;
-  background: #f0fdf4;
-}
-
-.hr-addemployee-v2-final-check {
-  width: 35px;
-  height: 35px;
-  flex: 0 0 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: #dcfce7;
-  color: #16a34a;
-}
-
-.hr-addemployee-v2-final-confirmation h3 {
-  margin: 0;
-  color: #166534;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.hr-addemployee-v2-final-confirmation p {
-  margin: 3px 0 0;
-  color: #64748b;
-  font-size: 9px;
-  line-height: 1.5;
-}
-
-/* =========================================================
-   ACTION BAR
-   ========================================================= */
-
-.hr-addemployee-v2-action-bar {
-  position: fixed;
-  z-index: 50;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 65px;
-  padding: 10px 28px;
-  box-sizing: border-box;
-  border-top: 1px solid #dfe5ee;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-}
-
-.hr-addemployee-v2-action-right {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.hr-addemployee-v2-secondary-button,
-.hr-addemployee-v2-primary-button,
-.hr-addemployee-v2-create-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  height: 38px;
-  padding: 0 15px;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: 0.2s ease;
 }
 
-.hr-addemployee-v2-secondary-button {
-  border: 1px solid #dbe3ee;
-  background: #ffffff;
+.hradmin-emp-review-card p {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
   color: #475569;
 }
 
-.hr-addemployee-v2-secondary-button:hover {
-  border-color: #cbd5e1;
+/* Sticky Bottom Action Bar */
+.hradmin-emp-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 260px;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+  transition: left 0.3s ease;
+}
+
+.hradmin-emp-action-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hradmin-emp-btn-sec {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hradmin-emp-btn-sec:hover {
   background: #f8fafc;
+  border-color: #94a3b8;
 }
 
-.hr-addemployee-v2-primary-button {
-  border: 1px solid #2563eb;
-  background: #2563eb;
+.hradmin-emp-btn-draft {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+}
+
+.hradmin-emp-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
+  border: none;
+  padding: 0.65rem 1.4rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transition: all 0.2s ease;
 }
 
-.hr-addemployee-v2-primary-button:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
+.hradmin-emp-btn-primary.submit {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
-.hr-addemployee-v2-create-button {
-  border: 1px solid #2563eb;
-  background: #2563eb;
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
-}
-
-.hr-addemployee-v2-create-button:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   LARGE TABLET
-   ========================================================= */
-
-@media (max-width: 1100px) {
-  .hr-addemployee-v2-page {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .hr-addemployee-v2-review-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .hr-addemployee-v2-step {
-    min-width: 115px;
+/* Responsive Rules */
+@media (max-width: 991px) {
+  .hradmin-emp-action-bar {
+    left: 0;
   }
 }
 
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 850px) {
-  .hr-addemployee-v2-page {
-    padding: 20px 16px 100px;
+@media (max-width: 768px) {
+  .hradmin-emp-stepper-card {
+    padding: 1rem;
   }
 
-  .hr-addemployee-v2-page-header {
-    align-items: flex-start;
-  }
-
-  .hr-addemployee-v2-header-status {
+  .hradmin-emp-step-text {
     display: none;
   }
 
-  .hr-addemployee-v2-stepper {
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding: 14px;
+  .hradmin-emp-form-card {
+    padding: 1.25rem;
   }
 
-  .hr-addemployee-v2-step {
-    flex: 0 0 auto;
-  }
-
-  .hr-addemployee-v2-step-line {
-    flex: 0 0 28px;
-  }
-
-  .hr-addemployee-v2-review-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .hradmin-emp-form-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 600px) {
-  .hr-addemployee-v2-page {
-    padding: 15px 10px 100px;
+@media (max-width: 576px) {
+  .hradmin-emp-action-bar {
+    padding: 0.75rem 1rem;
   }
 
-  .hr-addemployee-v2-page-header {
-    margin-bottom: 16px;
+  .hradmin-emp-btn-draft {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.8rem;
   }
 
-  .hr-addemployee-v2-header-left {
-    gap: 10px;
-  }
-
-  .hr-addemployee-v2-back-button {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
-  }
-
-  .hr-addemployee-v2-breadcrumb {
-    font-size: 9px;
-  }
-
-  .hr-addemployee-v2-page-header h1 {
-    font-size: 20px;
-  }
-
-  .hr-addemployee-v2-page-header p {
-    font-size: 10px;
-  }
-
-  .hr-addemployee-v2-stepper {
-    min-height: auto;
-    margin-bottom: 14px;
-    padding: 11px;
-    border-radius: 10px;
-  }
-
-  .hr-addemployee-v2-step {
-    min-width: 95px;
-    gap: 6px;
-  }
-
-  .hr-addemployee-v2-step-circle {
-    width: 27px;
-    height: 27px;
-    flex-basis: 27px;
-    font-size: 9px;
-  }
-
-  .hr-addemployee-v2-step-content strong {
-    font-size: 8px;
-  }
-
-  .hr-addemployee-v2-step-content span {
-    font-size: 7px;
-  }
-
-  .hr-addemployee-v2-step-line {
-    flex-basis: 18px;
-    margin: 0 5px;
-  }
-
-  .hr-addemployee-v2-form-card {
-    padding: 15px;
-    border-radius: 10px;
-  }
-
-  .hr-addemployee-v2-section-header {
-    margin-bottom: 18px;
-  }
-
-  .hr-addemployee-v2-section-icon {
-    width: 34px;
-    height: 34px;
-    flex-basis: 34px;
-  }
-
-  .hr-addemployee-v2-section-header h2 {
-    font-size: 14px;
-  }
-
-  .hr-addemployee-v2-section-header p {
-    font-size: 9px;
-  }
-
-  .hr-addemployee-v2-photo-section {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .hr-addemployee-v2-form-grid {
-    grid-template-columns: 1fr;
-    gap: 13px;
-  }
-
-  .hr-addemployee-v2-full-field {
-    grid-column: auto;
-  }
-
-  .hr-addemployee-v2-document {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .hr-addemployee-v2-document-info {
-    width: 100%;
-  }
-
-  .hr-addemployee-v2-document > div:last-child {
-    width: 100%;
-  }
-
-  .hr-addemployee-v2-upload-button,
-  .hr-addemployee-v2-remove-file {
-    width: 100%;
-  }
-
-  .hr-addemployee-v2-review-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .hr-addemployee-v2-action-bar {
-    min-height: 61px;
-    padding: 9px 10px;
-  }
-
-  .hr-addemployee-v2-secondary-button,
-  .hr-addemployee-v2-primary-button,
-  .hr-addemployee-v2-create-button {
-    height: 37px;
-    padding: 0 12px;
-    font-size: 9px;
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-   ========================================================= */
-
-@media (max-width: 380px) {
-  .hr-addemployee-v2-page {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .hr-addemployee-v2-stepper {
-    padding: 9px;
-  }
-
-  .hr-addemployee-v2-step {
-    min-width: 82px;
-  }
-
-  .hr-addemployee-v2-step-content {
-    display: none;
-  }
-
-  .hr-addemployee-v2-step {
-    justify-content: center;
-  }
-
-  .hr-addemployee-v2-step-line {
-    flex-basis: 15px;
-  }
-
-  .hr-addemployee-v2-form-card {
-    padding: 13px;
-  }
-
-  .hr-addemployee-v2-action-bar {
-    gap: 7px;
-  }
-
-  .hr-addemployee-v2-secondary-button,
-  .hr-addemployee-v2-primary-button,
-  .hr-addemployee-v2-create-button {
-    flex: 1;
+  .hradmin-emp-btn-primary {
+    padding: 0.55rem 1rem;
+    font-size: 0.8rem;
   }
 }

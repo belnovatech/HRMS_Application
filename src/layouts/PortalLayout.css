@@ -19,7 +19,7 @@
   max-width: calc(100vw - 260px);
   min-width: 0;
   box-sizing: border-box;
-  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .portal-container {
@@ -30,6 +30,7 @@
   min-width: 0;
   box-sizing: border-box;
   margin: 0 auto;
+  overflow-x: hidden;
 }
 
 /* Common Enterprise UI Utilities */
@@ -60,10 +61,12 @@
   margin-bottom: 1.5rem;
   min-width: 0;
   box-sizing: border-box;
+  max-width: 100%;
 }
 
-/* Responsive Table Wrapper */
-.table-responsive-wrapper {
+/* Responsive Table Wrapper Utility */
+.table-responsive-wrapper,
+.hradmin-table-responsive {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
@@ -151,8 +154,8 @@
   border: 1px solid #e9d5ff;
 }
 
-/* Responsive Media Queries */
-@media (max-width: 991px) {
+/* Responsive Breakpoints */
+@media (max-width: 1199px) {
   .portal-main {
     margin-left: 0;
     width: 100%;
@@ -164,8 +167,14 @@
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 767px) {
   .portal-container {
-    padding: 1rem 0.75rem;
+    padding: 1rem 0.85rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .portal-container {
+    padding: 0.75rem 0.5rem;
   }
 }

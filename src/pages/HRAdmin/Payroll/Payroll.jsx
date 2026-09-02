@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import "./Payroll.css";
 import HRLayout from "../../../layouts/HRLayout";
+import { downloadPayslipPdf } from "../../../utils/pdfGenerator";
 import {
   FiCheck,
   FiCheckCircle,
@@ -396,44 +397,20 @@ export default function Payroll() {
       return;
     }
 
-    const headers = [
-      "Payroll Month",
-      "Employee ID",
-      "Employee",
-      "Department",
-      "Basic",
-      "HRA",
-      "Allowances",
-      "Gross Salary",
-      "Deductions",
-      "Net Salary",
-      "Paid Days",
-    ];
+    const slip = {
+      month: payrollMonth,
+      employeeName: selectedEmployee.name,
+      employeeId: selectedEmployee.id,
+      designation: selectedEmployee.department ? `${selectedEmployee.department} Staff` : "Associate Software Engineer",
+      grossSalary: formatINR(selectedEmployee.gross),
+      deductions: formatINR(selectedEmployee.deductions),
+      netSalary: formatINR(selectedEmployee.net),
+      payPeriod: MONTH_NAMES[selectedMonth],
+      payDate: `05/${String(selectedMonth + 1).padStart(2, "0")}/${selectedYear}`,
+      paidDays: selectedEmployee.paidDays || 30
+    };
 
-    const rows = [
-      [
-        payrollMonth,
-        selectedEmployee.id,
-        selectedEmployee.name,
-        selectedEmployee.department,
-        formatINR(selectedEmployee.basicPay),
-        formatINR(selectedEmployee.hraPay),
-        formatINR(selectedEmployee.allowancePay),
-        formatINR(selectedEmployee.gross),
-        formatINR(selectedEmployee.deductions),
-        formatINR(selectedEmployee.net),
-        selectedEmployee.paidDays,
-      ],
-    ];
-
-    downloadCsv(
-      `payslip-${selectedEmployee.id}-${monthToKey(
-        selectedYear,
-        selectedMonth
-      )}.csv`,
-      headers,
-      rows
-    );
+    downloadPayslipPdf(slip, selectedEmployee);
   };
 
   const processSelectedEmployee = () => {

@@ -1,25 +1,30 @@
-.hr-emp-list-container {
+.hradmin-emp-list-container {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.hr-emp-list-toolbar {
+.hradmin-emp-list-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
-.hr-emp-search-filter {
+.hradmin-emp-search-filter {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
 }
 
-.hr-emp-search-input {
+.hradmin-emp-search-input {
   position: relative;
   display: flex;
   align-items: center;
@@ -28,23 +33,26 @@
   border-radius: 10px;
   padding: 0.5rem 0.85rem 0.5rem 2.25rem;
   width: 280px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.hr-emp-search-input svg {
+.hradmin-emp-search-input svg {
   position: absolute;
   left: 0.75rem;
   color: #94a3b8;
 }
 
-.hr-emp-search-input input {
+.hradmin-emp-search-input input {
   border: none;
   outline: none;
   background: transparent;
   width: 100%;
   font-size: 0.85rem;
+  color: #1e293b;
 }
 
-.hr-emp-filter-select {
+.hradmin-emp-filter-select {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -53,9 +61,10 @@
   border-radius: 10px;
   padding: 0.5rem 0.85rem;
   color: #64748b;
+  box-sizing: border-box;
 }
 
-.hr-emp-filter-select select {
+.hradmin-emp-filter-select select {
   border: none;
   outline: none;
   background: transparent;
@@ -64,106 +73,135 @@
   cursor: pointer;
 }
 
-.hr-btn-add-emp {
+.hradmin-emp-btn-add {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background: #2563eb;
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
   color: #ffffff;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem 1.25rem;
   border-radius: 10px;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.hr-btn-add-emp:hover {
-  background: #1d4ed8;
+.hradmin-emp-btn-add:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
 }
 
-.hr-emp-table-wrapper {
+.hradmin-emp-table-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border-radius: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
 }
 
-.hr-emp-table {
+.hradmin-emp-table {
   width: 100%;
+  min-width: 750px;
   border-collapse: collapse;
   text-align: left;
 }
 
-.hr-emp-table th {
+.hradmin-emp-table th {
   background: #f8fafc;
-  padding: 0.85rem 1.25rem;
+  padding: 0.9rem 1.25rem;
   font-size: 0.775rem;
   font-weight: 700;
   color: #64748b;
   text-transform: uppercase;
   border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
 }
 
-.hr-emp-table td {
+.hradmin-emp-table td {
   padding: 1rem 1.25rem;
   border-bottom: 1px solid #f1f5f9;
   font-size: 0.85rem;
   color: #334155;
+  white-space: nowrap;
 }
 
-.hr-emp-id {
-  font-weight: 600;
+.hradmin-emp-id {
+  font-weight: 700;
   color: #2563eb;
 }
 
-.hr-emp-cell-user {
+.hradmin-emp-cell-user {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.hr-emp-cell-user strong {
+.hradmin-emp-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hradmin-emp-cell-user strong {
+  display: block;
   color: #0f172a;
+  font-size: 0.875rem;
 }
 
-.hr-emp-cell-user small {
+.hradmin-emp-cell-user small {
   color: #64748b;
+  font-size: 0.775rem;
 }
 
-.hr-emp-status-badge {
+.hradmin-emp-status-badge {
   display: inline-block;
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 9999px;
   font-size: 0.725rem;
   font-weight: 600;
 }
 
-.hr-emp-status-badge.active {
+.hradmin-emp-status-badge.active {
   background: #dcfce7;
   color: #15803d;
 }
 
-.hr-emp-status-badge.on-leave {
+.hradmin-emp-status-badge.on-leave {
   background: #fef3c7;
   color: #b45309;
 }
 
-.hr-emp-status-badge.inactive {
+.hradmin-emp-status-badge.inactive {
   background: #fee2e2;
   color: #b91c1c;
 }
 
-.hr-emp-actions {
+.hradmin-emp-actions {
   display: flex;
   gap: 0.4rem;
 }
 
-.hr-action-icon {
+.hradmin-emp-action-icon {
   background: #f1f5f9;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   width: 32px;
   height: 32px;
   display: flex;
@@ -174,119 +212,32 @@
   transition: all 0.15s ease;
 }
 
-.hr-action-icon:hover {
+.hradmin-emp-action-icon:hover {
   background: #2563eb;
   color: #ffffff;
 }
 
-
-/* =========================================================
-   EMPLOYEE RESULT SUMMARY
-   ========================================================= */
-
-.hr-emp-result-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  margin: -13px 0 14px;
-}
-
-.hr-emp-result-summary > div {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #64748b;
-  font-size: 11px;
-}
-
-.hr-emp-result-summary strong {
-  color: #334155;
-  font-weight: 700;
-}
-
-.hr-emp-clear-filter {
-  border: 0;
-  background: transparent;
-  color: #2563eb;
-  font-size: 10px;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-.hr-emp-clear-filter:hover {
-  text-decoration: underline;
-}
-
-/* =========================================================
-   EMPTY STATE
-   ========================================================= */
-
-.hr-emp-empty-state {
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.hr-emp-empty-icon {
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 13px;
-  border-radius: 50%;
-  background: #eff6ff;
-  color: #2563eb;
-  font-size: 22px;
-}
-
-.hr-emp-empty-state h3 {
-  margin: 0;
-  color: #334155;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.hr-emp-empty-state p {
-  max-width: 400px;
-  margin: 7px 0 15px;
-  color: #94a3b8;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.hr-emp-empty-state button {
-  height: 34px;
-  padding: 0 13px;
-  border: 1px solid #dbe3ee;
-  border-radius: 7px;
-  background: #ffffff;
-  color: #2563eb;
-  font-size: 10px;
-  font-weight: 650;
-  cursor: pointer;
-}
-
-.hr-emp-empty-state button:hover {
-  background: #eff6ff;
-}
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 600px) {
-  .hr-emp-result-summary {
-    margin-top: -5px;
+/* Responsive Media Queries */
+@media (max-width: 640px) {
+  .hradmin-emp-search-filter {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
   }
 
-  .hr-emp-empty-state {
-    min-height: 250px;
-    padding: 30px 15px;
+  .hradmin-emp-search-input {
+    width: 100%;
+  }
+
+  .hradmin-emp-filter-select {
+    width: 100%;
+  }
+
+  .hradmin-emp-filter-select select {
+    width: 100%;
+  }
+
+  .hradmin-emp-btn-add {
+    width: 100%;
   }
 }

@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
+import { downloadReportPdf } from "../../utils/pdfGenerator";
 import {
   FiFolder,
   FiUpload,
@@ -364,8 +365,18 @@ export default function EmployeeDocuments() {
       return;
     }
 
-    alert(
-      `Downloading ${documentItem.fileName || documentItem.name}...`
+    downloadReportPdf(
+      documentItem.name,
+      documentItem.category,
+      ["Document Field", "Information Details"],
+      [
+        ["Document Name", documentItem.name],
+        ["Document Category", documentItem.category],
+        ["Document Type", documentItem.type],
+        ["Verification Status", documentItem.status],
+        ["Upload Date", documentItem.uploadDate]
+      ],
+      documentItem.fileName || `${documentItem.name.replace(/\s+/g, "_")}.pdf`
     );
   };
 

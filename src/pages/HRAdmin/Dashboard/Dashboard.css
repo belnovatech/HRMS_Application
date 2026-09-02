@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 1.5rem;
   padding-bottom: 2.5rem;
+  width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -13,36 +14,50 @@
   grid-template-columns: 1.65fr 1fr;
   gap: 1.5rem;
   align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .hradmin-dashboard-col-left {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 .hradmin-dashboard-col-right {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 }
 
 /* Responsive Media Queries */
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
   .hradmin-dashboard-main-grid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .hradmin-dashboard-page-container {
     gap: 1.25rem;
     padding-bottom: 1.5rem;
   }
+
+  .hradmin-dashboard-col-left,
+  .hradmin-dashboard-col-right {
+    gap: 1.25rem;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 479px) {
   .hradmin-dashboard-page-container {
+    gap: 1rem;
+  }
+
+  .hradmin-dashboard-col-left,
+  .hradmin-dashboard-col-right {
     gap: 1rem;
   }
 }

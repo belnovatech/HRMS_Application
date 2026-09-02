@@ -1,0 +1,130 @@
+.hradmin-dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+@media (max-width: 1400px) {
+  .hradmin-dashboard-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hradmin-dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .hradmin-dashboard-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hradmin-dashboard-stat-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 145px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hradmin-dashboard-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.05);
+}
+
+.hradmin-dashboard-stat-card-gradient {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  border: none;
+  color: #ffffff;
+}
+
+.hradmin-dashboard-stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.hradmin-dashboard-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.hradmin-dashboard-stat-badge {
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  line-height: 1;
+}
+
+.hradmin-dashboard-stat-badge.positive-pill {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.hradmin-dashboard-stat-badge.negative-pill {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.hradmin-dashboard-stat-badge.neutral-pill {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.hradmin-dashboard-stat-badge.urgent-pill {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.hradmin-dashboard-stat-badge.gradient-pill {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+}
+
+.hradmin-dashboard-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.hradmin-dashboard-stat-value {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.hradmin-dashboard-stat-card-gradient .hradmin-dashboard-stat-value {
+  color: #ffffff;
+}
+
+.hradmin-dashboard-stat-label {
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.hradmin-dashboard-stat-card-gradient .hradmin-dashboard-stat-label {
+  color: rgba(255, 255, 255, 0.85);
+}

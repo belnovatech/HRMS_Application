@@ -1,0 +1,67 @@
+.hr-help-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+.hr-help-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 992px) {
+  .hr-help-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hr-help-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.hr-help-card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hr-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hr-faq-item strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+.hr-faq-item p {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.825rem;
+  color: #64748b;
+}
+
+.hr-support-contact-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.hr-support-contact-box p {
+  margin: 0.35rem 0;
+  font-size: 0.85rem;
+  color: #334155;
+}

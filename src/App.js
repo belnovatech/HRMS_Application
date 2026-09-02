@@ -6,19 +6,21 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 // Auth
 import Login from "./pages/Login/Login";
 
-// HR Pages
-import HRDashboard from "./pages/Dashboard/Dashboard";
-import EmployeeManagement from "./pages/Employees/EmployeeManagement";
-import AddEmployee from "./pages/AddEmployee/AddEmployee";
-import HRAttendance from "./pages/Attendance/Attendance";
-import HRLeaveManagement from "./pages/LeaveManagement/LeaveManagement";
-import HRPayroll from "./pages/Payroll/Payroll";
-import HRRolesPermissions from "./pages/RolesPermissions/RolesPermissions";
-import HRReports from "./pages/Reports/ReportsAnalytics";
-import HRDocuments from "./pages/Documents/Documents";
-import HRRecruitment from "./pages/Recruitment/Recruitment";
-import HRBiometricSync from "./pages/BiometricSync/BiometricSync";
-import HRSettings from "./pages/Settings/Settings";
+// HR Admin Pages
+import HRDashboard from "./pages/HRAdmin/Dashboard/Dashboard";
+import HROrganization from "./pages/HRAdmin/Organization/Organization";
+import HREmployees from "./pages/HRAdmin/Employees/Employees";
+import HRAttendance from "./pages/HRAdmin/Attendance/Attendance";
+import HRLeaveManagement from "./pages/HRAdmin/Leave/Leave";
+import HRPayroll from "./pages/HRAdmin/Payroll/Payroll";
+import HRRecruitment from "./pages/HRAdmin/Recruitment/Recruitment";
+import HRRolesPermissions from "./pages/HRAdmin/RolesPermissions/RolesPermissions";
+import HRReports from "./pages/HRAdmin/Reports/Reports";
+import HRDocuments from "./pages/HRAdmin/Documents/Documents";
+import HRBiometricSync from "./pages/HRAdmin/Biometric/Biometric";
+import HRNotifications from "./pages/HRAdmin/Notifications/Notifications";
+import HRSettings from "./pages/HRAdmin/Settings/Settings";
+import HRHelpSupport from "./pages/HRAdmin/HelpSupport/HelpSupport";
 
 // Manager Pages
 import ManagerDashboard from "./pages/Manager/ManagerDashboard";
@@ -68,18 +70,18 @@ function AppContent() {
         }
       />
       <Route
-        path="/hr/employees"
+        path="/hr/organization"
         element={
           <ProtectedRoute allowedRoles={["hr"]}>
-            <EmployeeManagement />
+            <HROrganization />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/hr/employees/add"
+        path="/hr/employees"
         element={
           <ProtectedRoute allowedRoles={["hr"]}>
-            <AddEmployee />
+            <HREmployees />
           </ProtectedRoute>
         }
       />
@@ -108,6 +110,14 @@ function AppContent() {
         }
       />
       <Route
+        path="/hr/recruitment"
+        element={
+          <ProtectedRoute allowedRoles={["hr"]}>
+            <HRRecruitment />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/hr/roles-permissions"
         element={
           <ProtectedRoute allowedRoles={["hr"]}>
@@ -132,14 +142,6 @@ function AppContent() {
         }
       />
       <Route
-        path="/hr/recruitment"
-        element={
-          <ProtectedRoute allowedRoles={["hr"]}>
-            <HRRecruitment />
-          </ProtectedRoute>
-        }
-      />
-      <Route
         path="/hr/biometric-sync"
         element={
           <ProtectedRoute allowedRoles={["hr"]}>
@@ -148,10 +150,26 @@ function AppContent() {
         }
       />
       <Route
+        path="/hr/notifications"
+        element={
+          <ProtectedRoute allowedRoles={["hr"]}>
+            <HRNotifications />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/hr/settings"
         element={
           <ProtectedRoute allowedRoles={["hr"]}>
             <HRSettings />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hr/help"
+        element={
+          <ProtectedRoute allowedRoles={["hr"]}>
+            <HRHelpSupport />
           </ProtectedRoute>
         }
       />

@@ -1,0 +1,73 @@
+.hradmin-dashboard-birthdays-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hradmin-dashboard-birthdays-header {
+  margin-bottom: 1.25rem;
+}
+
+.hradmin-dashboard-birthdays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hradmin-dashboard-birthday-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.2rem 0;
+}
+
+.hradmin-dashboard-birthday-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.hradmin-dashboard-birthday-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hradmin-dashboard-birthday-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.hradmin-dashboard-birthday-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.hradmin-dashboard-birthday-dept {
+  font-size: 0.775rem;
+  color: #64748b;
+}
+
+.hradmin-dashboard-birthday-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #c026d3;
+  background: #fdf4ff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}

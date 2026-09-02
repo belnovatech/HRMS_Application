@@ -1,47 +1,18 @@
-.hr-employees-page-container {
+.hradmin-emp-page-container {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding-bottom: 2rem;
-}
-/* =========================================================
-   ADD EMPLOYEE PAGE WRAPPER
-   ========================================================= */
-
-.hr-employees-add-screen-wrapper {
-  width: 100%;
-  min-height: calc(100vh - 80px);
-  box-sizing: border-box;
+  padding-bottom: 2.5rem;
 }
 
-/*
-   Remove unnecessary spacing from the employee page
-   when Add Employee is being displayed.
-*/
-
-.hr-employees-page-container:has(
-  .hr-employees-add-screen-wrapper
-) {
-  padding-top: 0;
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 768px) {
-  .hr-employees-add-screen-wrapper {
-    min-height: calc(100vh - 60px);
-  }
-}
-.hr-page-intro h2 {
+.hradmin-emp-page-intro h2 {
   margin: 0;
   font-size: 1.35rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #0f172a;
 }
 
-.hr-page-intro p {
+.hradmin-emp-page-intro p {
   margin: 0.25rem 0 0 0;
   font-size: 0.875rem;
   color: #64748b;

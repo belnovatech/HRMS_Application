@@ -1,50 +1,7 @@
-.hr-edit-emp-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  backdrop-filter: blur(4px);
-}
-
-.hr-edit-emp-modal {
-  background: #ffffff;
-  width: 90%;
-  max-width: 520px;
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  animation: scaleUp 0.2s ease-out;
-}
-
-.hr-edit-emp-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.hr-edit-emp-header h3 {
-  margin: 0;
-  font-size: 1.1rem;
-  color: #0f172a;
-}
-
-.hr-edit-emp-body {
-  padding: 1.5rem;
+.hradmin-emp-edit-page {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.hr-edit-emp-footer {
-  padding: 1rem 1.5rem;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 1.5rem;
+  padding-bottom: 5rem;
+  position: relative;
 }

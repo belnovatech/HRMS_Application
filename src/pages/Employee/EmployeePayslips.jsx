@@ -8,6 +8,8 @@ import {
   FiFileText,
 } from "react-icons/fi";
 import "./EmployeePayslips.css";
+import CompanyPdfHeader from "../../components/Common/CompanyPdfHeader";
+import { downloadPayslipPdf } from "../../utils/pdfGenerator";
 
 export default function EmployeePayslips() {
   const { payslips = [], user } = useAuth();
@@ -19,7 +21,7 @@ export default function EmployeePayslips() {
   }, [payslips]);
 
   const handleDownload = (slip) => {
-    alert(`Downloading ${slip.month} Payslip PDF...`);
+    downloadPayslipPdf(slip, user);
   };
 
   const getMonthName = (monthValue) => {
@@ -51,7 +53,6 @@ export default function EmployeePayslips() {
 
         <section className="emp-payslip-page-header">
           <h1>My Payslips</h1>
-
           <p>
             View and download your monthly payslips
           </p>
@@ -110,7 +111,7 @@ export default function EmployeePayslips() {
               }
             >
               <FiDownload />
-              Download {getMonthName(currentSlip.month)} Payslip
+              Download {getMonthName(currentSlip.month)} Payslip PDF
             </button>
 
           </section>
@@ -229,6 +230,7 @@ export default function EmployeePayslips() {
 
         </section>
 
+        {/* Payslip View Modal with Standard Company PDF Header */}
         {selectedSlip && (
           <div
             className="emp-payslip-modal-overlay"
@@ -236,52 +238,41 @@ export default function EmployeePayslips() {
           >
             <div
               className="emp-payslip-modal"
+              style={{ maxWidth: "780px" }}
               onClick={(event) =>
                 event.stopPropagation()
               }
             >
-
-              <div className="emp-payslip-modal-header">
-
-                <div>
-                  <span className="emp-payslip-modal-kicker">
-                    SALARY STATEMENT
-                  </span>
-
-                  <h2>
-                    {selectedSlip.month}
-                  </h2>
-                </div>
-
+              <div className="emp-payslip-modal-header" style={{ paddingBottom: 0 }}>
                 <button
                   type="button"
                   className="emp-payslip-modal-close"
-                  onClick={() =>
-                    setSelectedSlip(null)
-                  }
+                  onClick={() => setSelectedSlip(null)}
                   aria-label="Close payslip"
+                  style={{ marginLeft: "auto" }}
                 >
                   <FiX />
                 </button>
-
               </div>
 
-              <div className="emp-payslip-modal-body">
+              {/* Reusable Standard Company PDF Header */}
+              <CompanyPdfHeader
+                documentTitle="Payslip for the Month"
+                period={selectedSlip.month}
+              />
 
+              <div className="emp-payslip-modal-body">
                 <div className="emp-payslip-employee-info">
                   <span>Employee</span>
-
                   <strong>
-                    {user?.name || "Employee"}
+                    {user?.name || "Harish Yadav Pilli"}
                   </strong>
-
                   <small>
-                    {user?.employeeId || "EMP001"}
+                    {user?.employeeId || "BLN001"} • {user?.designation || "Associate Software Engineer"}
                   </small>
                 </div>
 
                 <div className="emp-payslip-breakdown">
-
                   <div className="emp-payslip-breakdown-row">
                     <span>Gross Earnings</span>
                     <strong className="emp-payslip-modal-green">
@@ -304,7 +295,6 @@ export default function EmployeePayslips() {
                       {selectedSlip.netSalary}
                     </strong>
                   </div>
-
                 </div>
 
                 <button
@@ -315,7 +305,7 @@ export default function EmployeePayslips() {
                   }
                 >
                   <FiDownload />
-                  Download PDF
+                  Download Official Payslip PDF
                 </button>
 
               </div>

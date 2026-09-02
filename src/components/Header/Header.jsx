@@ -128,6 +128,15 @@ export default function Header({
   };
 
   /*
+   * Notifications route based on role.
+   */
+  const getNotificationsPath = () => {
+    if (role === "employee") return "/employee/announcements";
+    if (role === "manager") return "/manager/notifications";
+    return "/hr/notifications";
+  };
+
+  /*
    * Search submit.
    * Dispatches an event so other parts of the application can
    * listen for global header searches without changing existing pages.
@@ -342,6 +351,11 @@ export default function Header({
                           ? "hrms-header-notification-read"
                           : "hrms-header-notification-unread"
                       }`}
+                      onClick={() => {
+                        setShowNotifications(false);
+                        navigate(getNotificationsPath());
+                      }}
+                      style={{ cursor: "pointer" }}
                     >
                       <span className="hrms-header-notification-dot" />
 
@@ -351,6 +365,18 @@ export default function Header({
                       </div>
                     </div>
                   ))}
+                </div>
+
+                <div className="hrms-header-dropdown-footer">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowNotifications(false);
+                      navigate(getNotificationsPath());
+                    }}
+                  >
+                    View all notifications
+                  </button>
                 </div>
               </div>
             )}

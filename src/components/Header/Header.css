@@ -546,6 +546,27 @@
   font-weight: 500;
 }
 
+.hrms-header-dropdown-footer {
+  padding: 10px 14px;
+  border-top: 1px solid #eef2f7;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.hrms-header-dropdown-footer button {
+  border: 0;
+  background: transparent;
+  color: #2563eb;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hrms-header-dropdown-footer button:hover {
+  text-decoration: underline;
+}
+
 
 /* =========================================================
    PROFILE BUTTON

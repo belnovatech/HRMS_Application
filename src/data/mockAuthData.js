@@ -236,3 +236,103 @@ export const PAYSLIPS_LIST = [
     status: "Paid",
   },
 ];
+
+export const INITIAL_HELP_TICKETS = [
+  {
+    id: "EMP-100234",
+    employeeId: "EMP001",
+    employeeName: "Arjun Mehta",
+    category: "Attendance",
+    subject: "Biometric Missed Check-in",
+    description: "Missed biometric check-in on Sep 1st due to card scanner timeout. Please update.",
+    date: "2026-09-01",
+    status: "Open",
+    priority: "Normal",
+    responseNote: "",
+  },
+  {
+    id: "EMP-100189",
+    employeeId: "EMP002",
+    employeeName: "Kavya Nair",
+    category: "Payroll",
+    subject: "Form 16 Tax Computation Query",
+    description: "Requesting breakdown of TDS deductions for Q1 2026.",
+    date: "2026-08-28",
+    status: "In Progress",
+    priority: "High",
+    responseNote: "HR Finance is reviewing the tax computation.",
+  },
+];
+
+export const INITIAL_DOCUMENTS = [
+  {
+    id: "DOC-101",
+    employeeId: "EMP001",
+    employee: "Arjun Mehta",
+    title: "Bachelor Degree Certificate",
+    fileName: "Arjun_Mehta_Degree.pdf",
+    category: "Education",
+    size: "1.8 MB",
+    uploaded: "2026-08-15",
+    status: "Verified",
+  },
+  {
+    id: "DOC-102",
+    employeeId: "EMP001",
+    employee: "Arjun Mehta",
+    title: "Relieving Letter - Previous Employer",
+    fileName: "Arjun_Mehta_Relieving.pdf",
+    category: "Experience",
+    size: "2.4 MB",
+    uploaded: "2026-08-16",
+    status: "Verified",
+  },
+  {
+    id: "DOC-103",
+    employeeId: "EMP002",
+    employee: "Kavya Nair",
+    title: "Aadhaar Identity Verification",
+    fileName: "Kavya_Nair_Aadhaar.pdf",
+    category: "Identity",
+    size: "1.2 MB",
+    uploaded: "2026-09-01",
+    status: "Pending",
+  },
+];
+
+export const INITIAL_NOTIFICATIONS = [
+  {
+    id: "NOTIF-101",
+    audience: "All",
+    recipientId: "EMP001",
+    category: "Leave",
+    title: "Leave request pending review",
+    message: "Casual Leave request for Sep 10-11 is pending manager approval.",
+    time: "10 mins ago",
+    unread: true,
+    targetPath: "/employee/leave",
+  },
+  {
+    id: "NOTIF-102",
+    audience: "HR",
+    recipientId: "HR001",
+    category: "Documents",
+    title: "New document uploaded for verification",
+    message: "Kavya Nair (EMP002) uploaded Aadhaar Identity Verification for verification.",
+    time: "1h ago",
+    unread: true,
+    targetPath: "/hr/documents",
+  },
+  {
+    id: "NOTIF-103",
+    audience: "All",
+    recipientId: "EMP001",
+    category: "Payroll",
+    title: "August 2026 payslip available",
+    message: "Your monthly payslip for August 2026 has been generated and is ready to download.",
+    time: "1d ago",
+    unread: false,
+    targetPath: "/employee/payslips",
+  },
+];
+

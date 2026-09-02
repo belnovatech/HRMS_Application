@@ -1,59 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import "./PendingApprovals.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function PendingApprovals() {
   const navigate = useNavigate();
+  const { leaveRequests = [], handleApproveLeave, handleRejectLeave } = useAuth();
 
-  const [requests, setRequests] = useState([
-    {
-      id: "req-1",
-      name: "Meena Pillai",
-      avatar: "MP",
-      avatarBg: "#4f46e5",
-      subtext: "Casual Leave · 3 days",
-      badges: [{ label: "Leave", type: "warning-pill" }]
-    },
-    {
-      id: "req-2",
-      name: "Rohan Das",
-      avatar: "RD",
-      avatarBg: "#3b82f6",
-      subtext: "Correction · Aug 28",
-      badges: [
-        { label: "Urgent", type: "danger-pill" },
-        { label: "Attendance", type: "warning-pill" }
-      ]
-    },
-    {
-      id: "req-3",
-      name: "Kavya Nair",
-      avatar: "KN",
-      avatarBg: "#2563eb",
-      subtext: "Sick Leave · 2 days",
-      badges: [{ label: "Leave", type: "warning-pill" }]
-    },
-    {
-      id: "req-4",
-      name: "Aditya Joshi",
-      avatar: "AJ",
-      avatarBg: "#3b82f6",
-      subtext: "Bank details update",
-      badges: [{ label: "Profile", type: "warning-pill" }]
-    }
-  ]);
+  const pendingRequests = React.useMemo(() => {
+    return leaveRequests
+      .filter((r) => r.status === "Pending")
+      .map((r) => ({
+        id: r.id,
+        name: r.employeeName || r.employee || "Employee",
+        avatar: r.initials || "EM",
+        avatarBg: r.avatarBg || "#2563eb",
+        subtext: `${r.leaveType} · ${r.duration || "1 Day"}`,
+        badges: [{ label: "Leave", type: "warning-pill" }],
+      }));
+  }, [leaveRequests]);
 
-  const [pendingCount, setPendingCount] = useState(18);
-
-  const handleApprove = (id) => {
-    setRequests((prev) => prev.filter((r) => r.id !== id));
-    setPendingCount((prev) => Math.max(0, prev - 1));
-  };
-
-  const handleReject = (id) => {
-    setRequests((prev) => prev.filter((r) => r.id !== id));
-    setPendingCount((prev) => Math.max(0, prev - 1));
-  };
+  const pendingCount = pendingRequests.length;
 
   return (
     <div className="hradmin-dashboard-pending-card">
@@ -75,12 +42,12 @@ export default function PendingApprovals() {
       </div>
 
       <div className="hradmin-dashboard-pending-list">
-        {requests.length === 0 ? (
+        {pendingRequests.length === 0 ? (
           <div className="hradmin-dashboard-empty-state">
             <p>All pending requests resolved! 🎉</p>
           </div>
         ) : (
-          requests.map((req) => (
+          pendingRequests.map((req) => (
             <div key={req.id} className="hradmin-dashboard-pending-item">
               <div className="hradmin-dashboard-pending-user">
                 <div
@@ -112,14 +79,14 @@ export default function PendingApprovals() {
                   <button
                     type="button"
                     className="hradmin-dashboard-btn-approve"
-                    onClick={() => handleApprove(req.id)}
+                    onClick={() => handleApproveLeave(req.id)}
                   >
                     Approve
                   </button>
                   <button
                     type="button"
                     className="hradmin-dashboard-btn-reject"
-                    onClick={() => handleReject(req.id)}
+                    onClick={() => handleRejectLeave(req.id, "Rejected from Dashboard")}
                   >
                     Reject
                   </button>

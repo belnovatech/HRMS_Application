@@ -9,8 +9,6 @@ import {
   FiClock,
   FiCpu,
   FiDownload,
-  FiEdit3,
-  FiEye,
   FiFileText,
   FiGlobe,
   FiLock,
@@ -23,7 +21,6 @@ import {
   FiShield,
   FiTrash2,
   FiUserCheck,
-  FiUsers,
   FiWifi,
   FiWifiOff,
   FiX,
@@ -202,15 +199,6 @@ const INITIAL_EVENTS = [
     time: "06:18 PM",
     result: "Accepted",
   },
-];
-
-const EMPLOYEES = [
-  { id: "EMP1001", name: "Rahul Kumar" },
-  { id: "EMP1002", name: "Priya Sharma" },
-  { id: "EMP1003", name: "Arjun Reddy" },
-  { id: "EMP1004", name: "Sneha Rao" },
-  { id: "EMP1005", name: "Vikram Singh" },
-  { id: "EMP1006", name: "Meena Pillai" },
 ];
 
 function formatNumber(value) {

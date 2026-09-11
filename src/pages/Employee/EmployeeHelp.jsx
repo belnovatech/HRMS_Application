@@ -106,7 +106,7 @@ export default function EmployeeHelp() {
     );
   }, [searchTerm]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const trimmedSubject = subject.trim();
@@ -116,12 +116,13 @@ export default function EmployeeHelp() {
       return;
     }
 
-    const ticket = addHelpTicket({
+    const ticket = await addHelpTicket({
       category,
       subject: trimmedSubject,
       description: trimmedDescription,
     });
 
+    if (!ticket) return;
     setSuccessTicket(ticket);
     setSubject("");
     setDescription("");

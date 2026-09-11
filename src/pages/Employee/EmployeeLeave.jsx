@@ -9,7 +9,6 @@ import {
 } from "react-icons/fi";
 import "./EmployeeLeave.css";
 
-const HR_NOTIFICATION_STORAGE_KEY = "hrNotifications";
 
 const calculateDuration = (startDate, endDate) => {
   if (!startDate || !endDate) return 0;
@@ -158,52 +157,7 @@ export default function EmployeeLeave() {
     setFormError("");
   };
 
-  const createHRNotification = (request) => {
-    const notification = {
-      id: `LEAVE-${Date.now()}`,
-      type: "leave_request",
-      title: "New Leave Request",
-      message: `${user?.name || "Employee"} (${employeeId}) submitted a ${request.leaveType} request.`,
-      employeeId,
-      employeeName: user?.name || "Employee",
-      leaveType: request.leaveType,
-      startDate: request.startDate,
-      endDate: request.endDate,
-      duration: request.duration,
-      reason: request.reason,
-      status: "Pending",
-      audience: "HR",
-      read: false,
-      createdAt: new Date().toISOString(),
-    };
-
-    try {
-      const existingNotifications = JSON.parse(
-        localStorage.getItem(HR_NOTIFICATION_STORAGE_KEY) || "[]"
-      );
-
-      localStorage.setItem(
-        HR_NOTIFICATION_STORAGE_KEY,
-        JSON.stringify([
-          notification,
-          ...existingNotifications,
-        ])
-      );
-
-      window.dispatchEvent(
-        new CustomEvent("hr-notification-created", {
-          detail: notification,
-        })
-      );
-    } catch (error) {
-      console.error(
-        "Unable to create HR notification:",
-        error
-      );
-    }
-  };
-
-  const handleApply = (event) => {
+  const handleApply = async (event) => {
     event.preventDefault();
     setFormError("");
 
@@ -248,10 +202,10 @@ export default function EmployeeLeave() {
     };
 
     if (typeof handleAddLeaveRequest === "function") {
-      handleAddLeaveRequest(request);
+      const created = await handleAddLeaveRequest(request);
+      if (!created) return;
     }
 
-    createHRNotification(request);
     setSubmitted(true);
   };
 

@@ -23,11 +23,11 @@ import api from "../api/axiosInstance";
 
 // Get payslip for a single employee (calculates fresh)
 export const getPayslipByEmployee = (empId) =>
-  api.get(`/payroll/calculate/${empId}`);
+  api.post(`/payroll/calculate/${empId}`, { month: new Date().getMonth() + 1, year: new Date().getFullYear() });
 
 // Calculate payroll for all employees
 export const calculateAllPayroll = () =>
-  api.get("/payroll/calculate-all");
+  api.post("/payroll/calculate-all", { month: new Date().getMonth() + 1, year: new Date().getFullYear() });
 
 // Get all payslips (list)
 export const getAllPayslips = () =>

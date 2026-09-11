@@ -10,18 +10,6 @@ import {
 } from "react-icons/fi";
 import "./EmployeeAttendance.css";
 
-/*
- * Attendance data is generated from the selected month instead of
- * hardcoding 2026 dates. When the month changes, the dates update
- * automatically.
- *
- * The correction request is stored as an HR notification in localStorage
- * and a browser event is dispatched so an HR notification component can
- * refresh immediately when it is listening for "hr-notification-created".
- */
-
-const HR_NOTIFICATION_STORAGE_KEY = "hrNotifications";
-
 const formatTime = (value) => value || "—";
 
 const getDateKey = (date) => {
@@ -49,11 +37,6 @@ const getMonthLabel = (monthValue) => {
   });
 };
 
-const getDaysInSelectedMonth = (monthValue) => {
-  const [year, month] = monthValue.split("-").map(Number);
-  return new Date(year, month, 0).getDate();
-};
-
 const getWeekdayName = (date) =>
   date.toLocaleDateString("en-US", {
     weekday: "long",
@@ -77,108 +60,8 @@ const getWorkingDaysInMonth = (monthValue) => {
   return count;
 };
 
-const getDateRangeForMonth = (monthValue) => {
-  const [year, month] = monthValue.split("-").map(Number);
-  const totalDays = getDaysInSelectedMonth(monthValue);
-
-  const today = new Date();
-  const currentMonthValue = `${today.getFullYear()}-${String(
-    today.getMonth() + 1
-  ).padStart(2, "0")}`;
-
-  const lastAllowedDay =
-    monthValue === currentMonthValue
-      ? today.getDate()
-      : totalDays;
-
-  const dates = [];
-
-  for (let day = lastAllowedDay; day >= 1; day -= 1) {
-    const date = new Date(year, month - 1, day);
-    const weekday = date.getDay();
-
-    // Only show working days in the attendance log.
-    if (weekday !== 0 && weekday !== 6) {
-      dates.push(date);
-    }
-
-    // Keep the table compact like the reference design.
-    if (dates.length === 6) break;
-  }
-
-  return dates;
-};
-
-const buildDynamicAttendance = (monthValue, todayAttendance) => {
-  const dates = getDateRangeForMonth(monthValue);
-
-  return dates.map((date, index) => {
-    const dateKey = getDateKey(date);
-    const todayKey = getDateKey(new Date());
-
-    // The first row is always connected to the actual AuthContext data
-    // when the selected month is the current month.
-    if (dateKey === todayKey) {
-      return {
-        date: dateKey,
-        day: getWeekdayName(date),
-        checkIn: formatTime(todayAttendance?.checkInTime),
-        checkOut: formatTime(todayAttendance?.checkOutTime),
-        hours: formatTime(todayAttendance?.workingHours),
-        status: todayAttendance?.status || "Present",
-      };
-    }
-
-    /*
-     * Demo fallback rows for the existing UI.
-     * Dates are dynamic; these values are only used when the application
-     * does not yet provide historical attendance from an API/context.
-     */
-    const fallbackRows = [
-      {
-        checkIn: "09:30 AM",
-        checkOut: "06:30 PM",
-        hours: "9h 00m",
-        status: "Present",
-      },
-      {
-        checkIn: "10:15 AM",
-        checkOut: "06:45 PM",
-        hours: "8h 30m",
-        status: "Late",
-      },
-      {
-        checkIn: "—",
-        checkOut: "—",
-        hours: "—",
-        status: "Leave",
-      },
-      {
-        checkIn: "09:38 AM",
-        checkOut: "06:40 PM",
-        hours: "9h 02m",
-        status: "Present",
-      },
-      {
-        checkIn: "09:50 AM",
-        checkOut: "06:35 PM",
-        hours: "8h 45m",
-        status: "Present",
-      },
-    ];
-
-    const fallback = fallbackRows[(index - 1 + fallbackRows.length) % fallbackRows.length];
-
-    return {
-      date: dateKey,
-      day: getWeekdayName(date),
-      ...fallback,
-    };
-  });
-};
-
 export default function EmployeeAttendance() {
-  const { user, todayAttendance, toggleCheckInOut } = useAuth();
+  const { user, todayAttendance, toggleCheckInOut, attendanceRecords, requestAttendanceCorrection } = useAuth();
 
   const currentMonth = useMemo(() => {
     const now = new Date();
@@ -199,11 +82,13 @@ export default function EmployeeAttendance() {
 
   const [correctionReason, setCorrectionReason] = useState("");
 
+  const [correctionCheckIn, setCorrectionCheckIn] = useState("");
+  const [correctionCheckOut, setCorrectionCheckOut] = useState("");
   const [correctionSubmitted, setCorrectionSubmitted] = useState(false);
 
   const attendanceHistory = useMemo(
-    () => buildDynamicAttendance(selectedMonth, todayAttendance),
-    [selectedMonth, todayAttendance]
+    () => attendanceRecords.filter(x => x.employeeId === user.id && x.date.startsWith(selectedMonth)).map(x => ({ ...x, day: getWeekdayName(new Date(`${x.date}T00:00:00`)), checkIn: formatTime(x.checkIn), checkOut: formatTime(x.checkOut), hours: x.workingHours })).sort((a, b) => b.date.localeCompare(a.date)),
+    [selectedMonth, attendanceRecords, user.id]
   );
 
   const summary = useMemo(() => {
@@ -247,50 +132,10 @@ export default function EmployeeAttendance() {
     setCorrectionSubmitted(false);
   };
 
-  const submitCorrectionRequest = (event) => {
+  const submitCorrectionRequest = async (event) => {
     event.preventDefault();
-
-    const employeeName = user?.name || "Employee";
-    const employeeId = user?.employeeId || "EMP001";
-
-    const notification = {
-      id: `ATT-CORR-${Date.now()}`,
-      type: "attendance_correction",
-      title: "Attendance Correction Request",
-      message: `${employeeName} (${employeeId}) requested an attendance correction for ${correctionDate}.`,
-      reason: correctionReason.trim(),
-      employeeId,
-      employeeName,
-      requestedDate: correctionDate,
-      status: "Pending",
-      createdAt: new Date().toISOString(),
-      audience: "HR",
-      read: false,
-    };
-
-    try {
-      const existingNotifications = JSON.parse(
-        localStorage.getItem(HR_NOTIFICATION_STORAGE_KEY) || "[]"
-      );
-
-      localStorage.setItem(
-        HR_NOTIFICATION_STORAGE_KEY,
-        JSON.stringify([
-          notification,
-          ...existingNotifications,
-        ])
-      );
-
-      window.dispatchEvent(
-        new CustomEvent("hr-notification-created", {
-          detail: notification,
-        })
-      );
-    } catch (error) {
-      console.error("Unable to create HR notification:", error);
-    }
-
-    setCorrectionSubmitted(true);
+    const result = await requestAttendanceCorrection({ date: correctionDate, checkIn: correctionCheckIn, checkOut: correctionCheckOut, reason: correctionReason });
+    if (result) setCorrectionSubmitted(true);
   };
 
   return (
@@ -547,6 +392,8 @@ export default function EmployeeAttendance() {
                       />
                     </label>
 
+                    <label>Correct check-in time<input type="time" value={correctionCheckIn} onChange={e => setCorrectionCheckIn(e.target.value)} required /></label>
+                    <label>Correct check-out time<input type="time" value={correctionCheckOut} onChange={e => setCorrectionCheckOut(e.target.value)} required /></label>
                     <label>
                       Reason for Correction
 

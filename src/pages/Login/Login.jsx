@@ -17,7 +17,7 @@ import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, requestOtp } = useAuth();
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ export default function Login() {
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -37,6 +37,8 @@ export default function Login() {
           setError("Please enter your Email or Mobile number to receive OTP.");
           return;
         }
+        const sent = await requestOtp(identifier);
+        if (!sent.success) { setError(sent.error); return; }
         setOtpSent(true);
         setError("");
         return;
@@ -47,7 +49,7 @@ export default function Login() {
       }
     }
 
-    const result = login(identifier, loginMode === "otp" ? "password123" : password);
+    const result = await login(identifier, loginMode === "otp" ? otpCode : password, loginMode);
 
     if (result.success) {
       if (result.role === "hr") {

@@ -26,12 +26,7 @@ export default function EmployeeDashboard() {
 
   const [showPayslipModal, setShowPayslipModal] = useState(false);
 
-  const latestPayslip = payslips?.[0] || {
-    month: "August 2026",
-    grossSalary: "₹60,000",
-    deductions: "₹11,500",
-    netSalary: "₹48,500",
-  };
+  const latestPayslip = payslips?.[0] || { month: "No payslip available", grossSalary: "?", deductions: "?", netSalary: "?" };
 
   const safeLeaveBalances = leaveBalances || {
     casual: { available: 6, used: 6, total: 12 },

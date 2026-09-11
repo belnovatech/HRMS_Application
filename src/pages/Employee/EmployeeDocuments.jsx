@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
 import { useAuth } from "../../context/AuthContext";
-import { downloadReportPdf } from "../../utils/pdfGenerator";
+import api from "../../api/axiosInstance";
 import {
   FiFolder,
   FiUpload,
@@ -64,6 +64,7 @@ export default function EmployeeDocuments() {
       .filter((d) => !d.employeeId || d.employeeId === empId || d.employee === user?.name)
       .map((d) => ({
         id: d.id,
+        fileId: d.fileId,
         name: d.title || d.name,
         category: d.category,
         fileName: d.fileName,
@@ -104,7 +105,7 @@ export default function EmployeeDocuments() {
   const [showSuccess, setShowSuccess] =
     useState(false);
 
-  const userName = "Rahul Kumar";
+  const userName = user?.name || "";
 
   const categoryCounts = useMemo(() => {
     return CATEGORY_CONFIG.reduce(
@@ -241,7 +242,7 @@ export default function EmployeeDocuments() {
     );
   };
 
-  const handleUpload = (event) => {
+  const handleUpload = async (event) => {
     event.preventDefault();
     setUploadError("");
 
@@ -259,51 +260,24 @@ export default function EmployeeDocuments() {
       return;
     }
 
-    addEmployeeDocument({
+    const created = await addEmployeeDocument({
+      file: selectedFile,
       title: docTitle.trim(),
       category: docCategory,
       fileName: selectedFile.name,
       size: formatFileSize(selectedFile.size),
     });
 
-    setShowSuccess(true);
+    if (created) setShowSuccess(true);
   };
 
-  const handleDownload = (documentItem) => {
-    if (documentItem.file) {
-      const objectUrl = URL.createObjectURL(
-        documentItem.file
-      );
-
-      const anchor =
-        document.createElement("a");
-
-      anchor.href = objectUrl;
-      anchor.download =
-        documentItem.fileName ||
-        documentItem.name;
-
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-
-      URL.revokeObjectURL(objectUrl);
-      return;
-    }
-
-    downloadReportPdf(
-      documentItem.name,
-      documentItem.category,
-      ["Document Field", "Information Details"],
-      [
-        ["Document Name", documentItem.name],
-        ["Document Category", documentItem.category],
-        ["Document Type", documentItem.type],
-        ["Verification Status", documentItem.status],
-        ["Upload Date", documentItem.uploadDate]
-      ],
-      documentItem.fileName || `${documentItem.name.replace(/\s+/g, "_")}.pdf`
-    );
+  const handleDownload = async (documentItem) => {
+    if (!documentItem.fileId) { setUploadError("No uploaded file is attached to this document."); return; }
+    try {
+      const { data } = await api.get(`/files/${documentItem.fileId}`, { responseType: "blob" });
+      const url = URL.createObjectURL(data); const anchor = document.createElement("a");
+      anchor.href = url; anchor.download = documentItem.fileName; anchor.click(); URL.revokeObjectURL(url);
+    } catch { setUploadError("The file could not be downloaded."); }
   };
 
   const getFileIcon = (type) => {

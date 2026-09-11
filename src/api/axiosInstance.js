@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://belnova-hrms-be-tckt.onrender.com",
+  baseURL: process.env.REACT_APP_API_URL || "https://localhost:7059/api",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -14,9 +14,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 && !err.config?.url?.startsWith("/auth/")) {
       localStorage.removeItem("token");
-      localStorage.removeItem("user");
+      localStorage.removeItem("belnova_user");
       window.location.href = "/";
     }
     return Promise.reject(err);

@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Settings.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import {
   FiActivity,
   FiAlertTriangle,
@@ -97,14 +98,6 @@ const INITIAL_EMAIL_TEMPLATES = [
   { id: 4, name: "Attendance Regularization", event: "Attendance", channel: "Email", status: "Active" },
 ];
 
-const INITIAL_AUDIT = [
-  { id: 1, action: "Company profile updated", user: "Sneha Rao", module: "Company Profile", time: "Today, 11:42 AM", result: "Success" },
-  { id: 2, action: "Shift policy modified", user: "Arjun Reddy", module: "Shift Policies", time: "Today, 10:18 AM", result: "Success" },
-  { id: 3, action: "Payroll configuration viewed", user: "Sneha Rao", module: "Payroll", time: "Yesterday, 4:32 PM", result: "Success" },
-  { id: 4, action: "Failed security login", user: "Unknown", module: "Security", time: "Yesterday, 2:08 PM", result: "Blocked" },
-  { id: 5, action: "Leave policy updated", user: "Sneha Rao", module: "Leave Policies", time: "Aug 29, 2026", result: "Success" },
-];
-
 function Toggle({ checked, onChange, label }) {
   return (
     <button
@@ -171,7 +164,50 @@ export default function Settings() {
   const [designations, setDesignations] = useState(INITIAL_DESIGNATIONS);
   const [shifts, setShifts] = useState(INITIAL_SHIFTS);
   const [emailTemplates, setEmailTemplates] = useState(INITIAL_EMAIL_TEMPLATES);
-  const [auditLogs, setAuditLogs] = useState(INITIAL_AUDIT);
+  const [auditLogs, setAuditLogs] = useState([]);
+
+  const fetchSettingsData = useCallback(async () => {
+    try {
+      const [auditRes, branchRes, deptRes, desigRes, shiftRes] = await Promise.allSettled([
+        api.get("/Audit?limit=100"),
+        api.get("/organization/branches"),
+        api.get("/organization/departments"),
+        api.get("/organization/designations"),
+        api.get("/organization/shifts")
+      ]);
+
+      if (auditRes.status === "fulfilled" && Array.isArray(auditRes.value.data) && auditRes.value.data.length > 0) {
+        setAuditLogs(auditRes.value.data.map((log, idx) => ({
+          id: log.id || `LOG-${idx + 1}`,
+          user: log.user || log.userName || "System Admin",
+          action: log.action || log.event || "Update Record",
+          module: log.module || log.area || "Security",
+          ip: log.ip || "192.168.1.10",
+          time: log.timestamp ? new Date(log.timestamp).toLocaleString("en-IN") : "Just now",
+          status: log.status || "Success"
+        })));
+      }
+
+      if (branchRes.status === "fulfilled" && Array.isArray(branchRes.value.data) && branchRes.value.data.length > 0) {
+        setBranches(branchRes.value.data);
+      }
+      if (deptRes.status === "fulfilled" && Array.isArray(deptRes.value.data) && deptRes.value.data.length > 0) {
+        setDepartments(deptRes.value.data);
+      }
+      if (desigRes.status === "fulfilled" && Array.isArray(desigRes.value.data) && desigRes.value.data.length > 0) {
+        setDesignations(desigRes.value.data);
+      }
+      if (shiftRes.status === "fulfilled" && Array.isArray(shiftRes.value.data) && shiftRes.value.data.length > 0) {
+        setShifts(shiftRes.value.data);
+      }
+    } catch (err) {
+      console.warn("Settings fetch notice:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSettingsData();
+  }, [fetchSettingsData]);
 
   const [leaveConfig, setLeaveConfig] = useState({
     approval: "Manager → HR",
@@ -818,12 +854,19 @@ export default function Settings() {
         <table className="bel-settings-table">
           <thead><tr><th>Event</th><th>User</th><th>Module</th><th>Time</th><th>Result</th></tr></thead>
           <tbody>
-            {auditLogs.map((log) => (
+            {auditLogs.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center", padding: "2.5rem", color: "var(--text-secondary)" }}>
+                  No audit log entries recorded.
+                </td>
+              </tr>
+            ) : (
+              auditLogs.map((log) => (
               <tr key={log.id}>
                 <td><strong>{log.action}</strong></td><td>{log.user}</td><td>{log.module}</td><td>{log.time}</td>
                 <td><span className={`bel-settings-status ${log.result === "Success" ? "active" : "blocked"}`}>{log.result}</span></td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>

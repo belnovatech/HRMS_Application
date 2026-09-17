@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./RolesPermissions.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import {
   FiCheck,
   FiChevronDown,
@@ -37,129 +38,6 @@ const PERMISSION_LABELS = {
   export: "Export",
 };
 
-const INITIAL_ROLES = [
-  {
-    id: "ROLE-001",
-    role: "Super Admin",
-    description: "Full platform administration and security control",
-    users: 2,
-    status: "Active",
-    scope: "Organization-wide",
-    permissions: {
-      Employees: ["view", "create", "edit", "delete", "approve", "export"],
-      Attendance: ["view", "create", "edit", "delete", "approve", "export"],
-      Leave: ["view", "create", "edit", "delete", "approve", "export"],
-      Payroll: ["view", "create", "edit", "delete", "approve", "export"],
-      Documents: ["view", "create", "edit", "delete", "approve", "export"],
-      Reports: ["view", "create", "edit", "delete", "approve", "export"],
-      Recruitment: ["view", "create", "edit", "delete", "approve", "export"],
-      Settings: ["view", "create", "edit", "delete", "approve", "export"],
-      Biometric: ["view", "create", "edit", "delete", "approve", "export"],
-      "Audit Logs": ["view", "export"],
-    },
-  },
-  {
-    id: "ROLE-002",
-    role: "HR Administrator",
-    description: "Manage employees, HR operations and approvals",
-    users: 6,
-    status: "Active",
-    scope: "All HR modules",
-    permissions: {
-      Employees: ["view", "create", "edit", "delete", "export"],
-      Attendance: ["view", "create", "edit", "approve", "export"],
-      Leave: ["view", "create", "edit", "approve", "export"],
-      Payroll: ["view", "create", "edit", "approve", "export"],
-      Documents: ["view", "create", "edit", "delete", "export"],
-      Reports: ["view", "export"],
-      Recruitment: ["view", "create", "edit", "approve", "export"],
-      Settings: ["view"],
-      Biometric: ["view", "edit"],
-      "Audit Logs": ["view", "export"],
-    },
-  },
-  {
-    id: "ROLE-003",
-    role: "HR Executive",
-    description: "Day-to-day HR operations and employee services",
-    users: 9,
-    status: "Active",
-    scope: "HR operations",
-    permissions: {
-      Employees: ["view", "create", "edit", "export"],
-      Attendance: ["view", "edit", "export"],
-      Leave: ["view", "create", "edit", "approve", "export"],
-      Payroll: ["view", "export"],
-      Documents: ["view", "create", "edit", "export"],
-      Reports: ["view", "export"],
-      Recruitment: ["view", "create", "edit"],
-      Settings: [],
-      Biometric: ["view"],
-      "Audit Logs": ["view"],
-    },
-  },
-  {
-    id: "ROLE-004",
-    role: "Department Manager",
-    description: "Team-level management, approvals and reporting",
-    users: 24,
-    status: "Active",
-    scope: "Assigned department",
-    permissions: {
-      Employees: ["view"],
-      Attendance: ["view", "approve", "export"],
-      Leave: ["view", "approve", "export"],
-      Payroll: ["view"],
-      Documents: ["view", "create", "edit"],
-      Reports: ["view", "export"],
-      Recruitment: ["view", "approve"],
-      Settings: [],
-      Biometric: [],
-      "Audit Logs": [],
-    },
-  },
-  {
-    id: "ROLE-005",
-    role: "Finance Manager",
-    description: "Payroll, financial reports and compensation access",
-    users: 5,
-    status: "Active",
-    scope: "Finance & payroll",
-    permissions: {
-      Employees: ["view", "export"],
-      Attendance: ["view", "export"],
-      Leave: ["view", "export"],
-      Payroll: ["view", "create", "edit", "approve", "export"],
-      Documents: ["view", "export"],
-      Reports: ["view", "export"],
-      Recruitment: [],
-      Settings: [],
-      Biometric: [],
-      "Audit Logs": ["view", "export"],
-    },
-  },
-  {
-    id: "ROLE-006",
-    role: "Employee",
-    description: "Self-service access for individual employee data",
-    users: 1248,
-    status: "Active",
-    scope: "Own records",
-    permissions: {
-      Employees: ["view"],
-      Attendance: ["view", "create"],
-      Leave: ["view", "create"],
-      Payroll: ["view"],
-      Documents: ["view", "create"],
-      Reports: [],
-      Recruitment: [],
-      Settings: ["view"],
-      Biometric: [],
-      "Audit Logs": [],
-    },
-  },
-];
-
 const ROLE_COLORS = ["purple", "blue", "indigo", "green", "orange", "cyan"];
 
 function clonePermissions(permissions) {
@@ -188,11 +66,9 @@ function RoleIcon({ index }) {
 }
 
 export default function RolesPermissions() {
-  const [roles, setRoles] = useState(INITIAL_ROLES);
-  const [selectedRoleId, setSelectedRoleId] = useState(INITIAL_ROLES[0].id);
-  const [draftPermissions, setDraftPermissions] = useState(
-    clonePermissions(INITIAL_ROLES[0].permissions)
-  );
+  const [roles, setRoles] = useState([]);
+  const [selectedRoleId, setSelectedRoleId] = useState(null);
+  const [draftPermissions, setDraftPermissions] = useState(emptyPermissions());
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
@@ -206,7 +82,28 @@ export default function RolesPermissions() {
     scope: "Organization-wide",
   });
 
-  const selectedRole = roles.find((role) => role.id === selectedRoleId) || roles[0];
+  const fetchRolesData = useCallback(async () => {
+    try {
+      const res = await api.get("/roles");
+      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+        setRoles(res.data);
+        if (!selectedRoleId || !res.data.some((r) => r.id === selectedRoleId)) {
+          setSelectedRoleId(res.data[0].id);
+          if (res.data[0].permissions) {
+            setDraftPermissions(clonePermissions(res.data[0].permissions));
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Roles fetch notice:", err.message);
+    }
+  }, [selectedRoleId]);
+
+  useEffect(() => {
+    fetchRolesData();
+  }, [fetchRolesData]);
+
+  const selectedRole = roles.find((role) => role.id === selectedRoleId) || null;
 
   const filteredRoles = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -249,7 +146,7 @@ export default function RolesPermissions() {
     draftPermissions[module]?.includes(permission);
 
   const togglePermission = (module, permission) => {
-    if (selectedRole.role === "Super Admin") {
+    if (selectedRole?.role === "Super Admin") {
       showToast("Super Admin permissions cannot be restricted.");
       return;
     }
@@ -270,7 +167,7 @@ export default function RolesPermissions() {
   };
 
   const toggleModule = (module, enabled) => {
-    if (selectedRole.role === "Super Admin") {
+    if (selectedRole?.role === "Super Admin") {
       showToast("Super Admin permissions cannot be restricted.");
       return;
     }
@@ -284,7 +181,7 @@ export default function RolesPermissions() {
   };
 
   const toggleAllPermission = (permission, enabled) => {
-    if (selectedRole.role === "Super Admin") {
+    if (selectedRole?.role === "Super Admin") {
       showToast("Super Admin permissions cannot be restricted.");
       return;
     }
@@ -305,7 +202,16 @@ export default function RolesPermissions() {
     setDirty(true);
   };
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
+    if (!selectedRole) return;
+    try {
+      await api.patch(`/roles/${selectedRole.id}`, {
+        permissions: draftPermissions,
+      });
+    } catch (err) {
+      console.warn("Save role permissions API notice:", err.message);
+    }
+
     setRoles((current) =>
       current.map((role) =>
         role.id === selectedRole.id
@@ -322,12 +228,14 @@ export default function RolesPermissions() {
   };
 
   const resetChanges = () => {
+    if (!selectedRole) return;
     setDraftPermissions(clonePermissions(selectedRole.permissions));
     setDirty(false);
     showToast("Unsaved permission changes were discarded.");
   };
 
   const openEditRole = () => {
+    if (!selectedRole) return;
     setRoleForm({
       role: selectedRole.role,
       description: selectedRole.description,
@@ -337,13 +245,24 @@ export default function RolesPermissions() {
     setModal("editRole");
   };
 
-  const submitRole = (event) => {
+  const submitRole = async (event) => {
     event.preventDefault();
 
     const roleName = roleForm.role.trim();
     if (!roleName) return;
 
-    if (modal === "editRole") {
+    if (modal === "editRole" && selectedRole) {
+      try {
+        await api.patch(`/roles/${selectedRole.id}`, {
+          role: roleName,
+          description: roleForm.description.trim() || "Custom HRMS role",
+          users: Number(roleForm.users) || 0,
+          scope: roleForm.scope,
+        });
+      } catch (err) {
+        console.warn("Update role API notice:", err.message);
+      }
+
       setRoles((current) =>
         current.map((role) =>
           role.id === selectedRole.id
@@ -372,6 +291,12 @@ export default function RolesPermissions() {
       permissions: emptyPermissions(),
     };
 
+    try {
+      await api.post("/roles", newRole);
+    } catch (err) {
+      console.warn("Create role API notice:", err.message);
+    }
+
     setRoles((current) => [...current, newRole]);
     setSelectedRoleId(newRole.id);
     setDraftPermissions(emptyPermissions());
@@ -386,7 +311,8 @@ export default function RolesPermissions() {
     showToast("New role created successfully.");
   };
 
-  const deleteRole = () => {
+  const deleteRole = async () => {
+    if (!selectedRole) return;
     if (selectedRole.role === "Super Admin") {
       showToast("The Super Admin role cannot be deleted.");
       return;
@@ -403,12 +329,18 @@ export default function RolesPermissions() {
 
     if (!shouldDelete) return;
 
+    try {
+      await api.delete(`/roles/${selectedRole.id}`);
+    } catch (err) {
+      console.warn("Delete role API notice:", err.message);
+    }
+
     const remainingRoles = roles.filter((role) => role.id !== selectedRole.id);
-    const nextRole = remainingRoles[0];
+    const nextRole = remainingRoles[0] || null;
 
     setRoles(remainingRoles);
-    setSelectedRoleId(nextRole.id);
-    setDraftPermissions(clonePermissions(nextRole.permissions));
+    setSelectedRoleId(nextRole ? nextRole.id : null);
+    setDraftPermissions(nextRole ? clonePermissions(nextRole.permissions) : emptyPermissions());
     setDirty(false);
     showToast("Role deleted.");
   };
@@ -589,7 +521,7 @@ export default function RolesPermissions() {
               {filteredRoles.length > 0 ? (
                 filteredRoles.map((role) => {
                   const originalIndex = roles.findIndex((item) => item.id === role.id);
-                  const selected = role.id === selectedRole.id;
+                  const selected = selectedRole && role.id === selectedRole.id;
 
                   return (
                     <button
@@ -640,6 +572,12 @@ export default function RolesPermissions() {
           </aside>
 
           <main className="bel-rbac-permissions-panel">
+            {!selectedRole ? (
+              <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)" }}>
+                <p>No role selected or available.</p>
+              </div>
+            ) : (
+              <>
             <div className="bel-rbac-panel-header">
               <div className="bel-rbac-panel-title">
                 <RoleIcon index={roles.findIndex((role) => role.id === selectedRole.id)} />
@@ -846,6 +784,8 @@ export default function RolesPermissions() {
                 </button>
               </div>
             </div>
+              </>
+            )}
           </main>
         </section>
 

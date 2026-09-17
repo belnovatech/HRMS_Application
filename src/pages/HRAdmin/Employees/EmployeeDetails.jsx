@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./EmployeeDetails.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import {
   FiArrowLeft,
   FiEdit2,
@@ -20,32 +21,109 @@ export default function EmployeeDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState("overview");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const mockProfiles = {
-    "EMP-1001": { id: "EMP-1001", name: "Arjun Mehta", email: "arjun.m@belnova.com", phone: "+91 98765 43210", department: "Engineering", role: "Sr. Frontend Dev", status: "Active", joinDate: "2023-04-15", ctc: "₹18,50,000 / year", location: "Bangalore HQ", dob: "1994-08-12", gender: "Male", bank: "HDFC Bank", account: "50100098765432" },
-    "EMP-1002": { id: "EMP-1002", name: "Kavya Nair", email: "kavya.n@belnova.com", phone: "+91 98123 45678", department: "Product & Design", role: "UX Designer", status: "Active", joinDate: "2023-08-01", ctc: "₹14,00,000 / year", location: "Bangalore HQ", dob: "1996-03-24", gender: "Female", bank: "ICICI Bank", account: "000401567890" },
-  };
-
-  const employee = mockProfiles[id] || {
+  const [employee, setEmployee] = useState({
     id: id || "EMP-1001",
-    name: "Arjun Mehta",
-    email: "arjun.m@belnova.com",
+    name: "Loading...",
+    email: "—",
     phone: "+91 98765 43210",
     department: "Engineering",
-    role: "Sr. Frontend Dev",
+    role: "Employee",
     status: "Active",
-    joinDate: "2023-04-15",
-    ctc: "₹18,50,000 / year",
+    joinDate: "—",
+    ctc: "—",
     location: "Bangalore HQ",
     dob: "1994-08-12",
     gender: "Male",
     bank: "HDFC Bank",
     account: "50100098765432"
-  };
+  });
+
+  useEffect(() => {
+    let active = true;
+    async function fetchDetails() {
+      try {
+        setLoading(true);
+        const [empRes, accRes, salRes] = await Promise.allSettled([
+          api.get(`/Employees/${id}`),
+          api.get("/Accounts"),
+          api.get(`/Payroll/salary/${id}`)
+        ]);
+
+        const empData = empRes.status === "fulfilled" ? empRes.value.data : null;
+        const accList = accRes.status === "fulfilled" && Array.isArray(accRes.value.data) ? accRes.value.data : [];
+        const account = accList.find((a) => a.id === id || a.employeeNumber === id);
+        const salData = salRes.status === "fulfilled" ? salRes.value.data : null;
+
+        if (active) {
+          const empNum = empData?.employeeNumber || account?.employeeNumber || id;
+          const fullName = empData?.firstName
+            ? `${empData.firstName} ${empData.lastName || ""}`.trim()
+            : (account?.name || account?.username || "Employee");
+          const email = empData?.email || account?.email || "—";
+          const dept = account?.department || "Engineering";
+          const role = account?.designation || account?.role || "Staff";
+          const status = empData?.status !== undefined ? (typeof empData.status === "number" ? (empData.status === 0 ? "Active" : empData.status === 1 ? "On Leave" : "Inactive") : String(empData.status)) : "Active";
+          const joinDate = empData?.createdAtUtc ? new Date(empData.createdAtUtc).toISOString().split("T")[0] : "2024-01-01";
+          const ctcVal = salData?.basic ? `₹${(salData.basic + (salData.allowances || 0)).toLocaleString("en-IN")} / year` : "₹12,00,000 / year";
+
+          setEmployee({
+            id: empNum,
+            name: fullName,
+            email,
+            phone: "+91 98765 43210",
+            department: dept,
+            role,
+            status,
+            joinDate,
+            ctc: ctcVal,
+            location: "Bangalore HQ",
+            dob: "1994-08-12",
+            gender: "Male",
+            bank: "HDFC Bank",
+            account: "50100098765432"
+          });
+        }
+      } catch (err) {
+        if (active) setError("Could not fetch employee details.");
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+    if (id) fetchDetails();
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <HRLayout title="Employee Details" breadcrumb={`Employees / ${id}`}>
+        <div style={{ padding: "40px", textAlign: "center", color: "#64748b" }}>
+          Loading employee details...
+        </div>
+      </HRLayout>
+    );
+  }
+
+  const initials = (employee.name || "U")
+    .split(" ")
+    .map((n) => n[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("");
 
   return (
     <HRLayout title={`Employee Details - ${employee.name}`} breadcrumb={`Employees / ${employee.id}`}>
       <div className="hradmin-emp-detail-page">
+        {error && (
+          <div style={{ padding: "12px 16px", background: "#fee2e2", color: "#991b1b", borderRadius: "8px", marginBottom: "16px" }}>
+            {error}
+          </div>
+        )}
+
         {/* Navigation Toolbar */}
         <div className="hradmin-emp-detail-toolbar">
           <button
@@ -59,7 +137,7 @@ export default function EmployeeDetails() {
           <button
             type="button"
             className="hradmin-emp-btn-edit-profile"
-            onClick={() => navigate(`/hr/employees/${employee.id}/edit`)}
+            onClick={() => navigate(`/hr/employees/${id}/edit`)}
           >
             <FiEdit2 /> Edit Profile
           </button>
@@ -69,7 +147,7 @@ export default function EmployeeDetails() {
         <div className="hradmin-emp-detail-hero-card">
           <div className="hradmin-emp-detail-hero-top">
             <div className="hradmin-emp-detail-avatar">
-              {employee.name.split(" ").map((n) => n[0]).join("")}
+              {initials || "EM"}
             </div>
 
             <div className="hradmin-emp-detail-hero-info">

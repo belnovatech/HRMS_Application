@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
+import api from "../../../api/axiosInstance";
 import {
   FiCalendar,
   FiCheck,
@@ -17,122 +18,6 @@ import {
 } from "react-icons/fi";
 import HRLayout from "../../../layouts/HRLayout";
 import "./Attendance.css";
-
-const INITIAL_LOGS = [
-  {
-    id: "EMP1001",
-    name: "Rahul Kumar",
-    initials: "RK",
-    date: "Sep 1, 2026",
-    checkIn: "09:42 AM",
-    checkOut: "06:38 PM",
-    hours: "8h 56m",
-    shift: "General",
-    status: "Present",
-  },
-  {
-    id: "EMP1002",
-    name: "Priya Sharma",
-    initials: "PS",
-    date: "Sep 1, 2026",
-    checkIn: "09:12 AM",
-    checkOut: "06:15 PM",
-    hours: "9h 03m",
-    shift: "General",
-    status: "Present",
-  },
-  {
-    id: "EMP1003",
-    name: "Arjun Reddy",
-    initials: "AR",
-    date: "Sep 1, 2026",
-    checkIn: "10:15 AM",
-    checkOut: "06:45 PM",
-    hours: "8h 30m",
-    shift: "General",
-    status: "Late",
-  },
-  {
-    id: "EMP1004",
-    name: "Sneha Rao",
-    initials: "SR",
-    date: "Sep 1, 2026",
-    checkIn: "06:05 AM",
-    checkOut: "02:10 PM",
-    hours: "8h 05m",
-    shift: "Morning",
-    status: "Present",
-  },
-  {
-    id: "EMP1005",
-    name: "Vikram Singh",
-    initials: "VS",
-    date: "Sep 1, 2026",
-    checkIn: "02:18 PM",
-    checkOut: "10:06 PM",
-    hours: "7h 48m",
-    shift: "Evening",
-    status: "Late",
-  },
-  {
-    id: "EMP1006",
-    name: "Ananya Patel",
-    initials: "AP",
-    date: "Sep 1, 2026",
-    checkIn: "-",
-    checkOut: "-",
-    hours: "0h",
-    shift: "General",
-    status: "Absent",
-  },
-  {
-    id: "EMP1007",
-    name: "Rohan Das",
-    initials: "RD",
-    date: "Sep 1, 2026",
-    checkIn: "09:05 AM",
-    checkOut: "06:30 PM",
-    hours: "9h 25m",
-    shift: "General",
-    status: "WFH",
-  },
-];
-
-const INITIAL_REQUESTS = [
-  {
-    id: 1,
-    employee: "Rohan Das",
-    empId: "EMP1007",
-    initials: "RD",
-    date: "Aug 28, 2026",
-    requestedIn: "09:45 AM",
-    requestedOut: "07:00 PM",
-    reason: "Biometric device failure",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    employee: "Deepika Iyer",
-    empId: "EMP1012",
-    initials: "DI",
-    date: "Aug 26, 2026",
-    requestedIn: "09:30 AM",
-    requestedOut: "06:30 PM",
-    reason: "Forgot to punch out",
-    status: "Approved",
-  },
-  {
-    id: 3,
-    employee: "Kiran Reddy",
-    empId: "EMP1011",
-    initials: "KR",
-    date: "Aug 25, 2026",
-    requestedIn: "10:00 AM",
-    requestedOut: "06:45 PM",
-    reason: "Missed biometric punch",
-    status: "Rejected",
-  },
-];
 
 const STATUS_OPTIONS = ["All", "Present", "Absent", "Late", "WFH", "Leave"];
 
@@ -220,10 +105,90 @@ export default function Attendance() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [showFilter, setShowFilter] = useState(false);
-  const [logs, setLogs] = useState(INITIAL_LOGS);
-  const [requests, setRequests] = useState(INITIAL_REQUESTS);
+  const [logs, setLogs] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [modal, setModal] = useState(null);
   const [editForm, setEditForm] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const stats = useMemo(() => {
+    return {
+      present: logs.filter((l) => l.status === "Present").length,
+      absent: logs.filter((l) => l.status === "Absent").length,
+      late: logs.filter((l) => l.status === "Late").length,
+      wfh: logs.filter((l) => l.status === "WFH").length,
+      overtime: logs.filter((l) => l.status === "Overtime" || parseFloat(l.overtime || 0) > 0).length,
+    };
+  }, [logs]);
+
+  const shiftCounts = useMemo(() => {
+    return {
+      general: logs.filter((l) => l.shift === "General").length,
+      morning: logs.filter((l) => l.shift === "Morning").length,
+      evening: logs.filter((l) => l.shift === "Evening").length,
+      night: logs.filter((l) => l.shift === "Night").length,
+    };
+  }, [logs]);
+
+  const fetchAttendanceData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const [attRes, corrRes, empRes] = await Promise.allSettled([
+        api.get("/Attendance"),
+        api.get("/attendance/corrections"),
+        api.get("/Employees")
+      ]);
+
+      if (attRes.status === "fulfilled" && Array.isArray(attRes.value.data) && attRes.value.data.length > 0) {
+        const empMap = new Map();
+        if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data)) {
+          empRes.value.data.forEach((e) => {
+            empMap.set(e.id, `${e.firstName || ""} ${e.lastName || ""}`.trim() || e.email);
+            if (e.employeeNumber) empMap.set(e.employeeNumber, `${e.firstName || ""} ${e.lastName || ""}`.trim() || e.email);
+          });
+        }
+
+        const mappedLogs = attRes.value.data.map((item, idx) => {
+          const empName = empMap.get(item.employeeId) || item.employeeName || `Employee ${item.employeeId || idx + 1}`;
+          const initials = empName.split(" ").map((n) => n[0]).join("").slice(0, 2);
+          return {
+            id: item.employeeId || `EMP${1000 + idx}`,
+            name: empName,
+            initials: initials || "EM",
+            date: item.date || "Sep 1, 2026",
+            checkIn: item.checkIn || "-",
+            checkOut: item.checkOut || "-",
+            hours: item.workingHours || "8h 30m",
+            shift: item.shift || "General",
+            status: item.status || (item.checkIn ? "Present" : "Absent")
+          };
+        });
+        setLogs(mappedLogs);
+      }
+
+      if (corrRes.status === "fulfilled" && Array.isArray(corrRes.value.data) && corrRes.value.data.length > 0) {
+        setRequests(corrRes.value.data.map((c) => ({
+          id: c.id,
+          employee: c.employeeName || `Employee ${c.employeeId}`,
+          empId: c.employeeId,
+          initials: (c.employeeName || "EM").split(" ").map((n) => n[0]).join("").slice(0, 2),
+          date: c.date || "Aug 28, 2026",
+          requestedIn: c.requestedIn || "09:00 AM",
+          requestedOut: c.requestedOut || "06:00 PM",
+          reason: c.reason || "Attendance correction requested",
+          status: c.status || "Pending"
+        })));
+      }
+    } catch (err) {
+      console.warn("Failed to fetch live attendance:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAttendanceData();
+  }, [fetchAttendanceData]);
 
   const filteredLogs = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -261,8 +226,17 @@ export default function Attendance() {
     setEditForm(null);
   };
 
-  const saveAttendance = (event) => {
+  const saveAttendance = async (event) => {
     event.preventDefault();
+
+    try {
+      await api.post("/Attendance/check-in", {
+        employeeId: editForm.id,
+        employeeName: editForm.name
+      });
+    } catch (err) {
+      console.warn("Check-in API notice:", err.message);
+    }
 
     setLogs((current) =>
       current.map((item) =>
@@ -282,8 +256,21 @@ export default function Attendance() {
     closeModal();
   };
 
-  const submitRegularization = (event) => {
+  const submitRegularization = async (event) => {
     event.preventDefault();
+
+    try {
+      await api.post("/attendance/corrections", {
+        employeeId: editForm.id,
+        employeeName: editForm.name,
+        date: editForm.date,
+        requestedIn: editForm.requestedIn,
+        requestedOut: editForm.requestedOut,
+        reason: editForm.reason || "Attendance correction requested"
+      });
+    } catch (err) {
+      console.warn("Correction submission notice:", err.message);
+    }
 
     setRequests((current) => [
       {
@@ -304,7 +291,16 @@ export default function Attendance() {
     closeModal();
   };
 
-  const updateRequestStatus = (id, status) => {
+  const updateRequestStatus = async (id, status) => {
+    try {
+      await api.post(`/attendance/corrections/${id}/decision`, {
+        status,
+        note: `Decision marked as ${status}`
+      });
+    } catch (err) {
+      console.warn("Correction decision API notice:", err.message);
+    }
+
     setRequests((current) =>
       current.map((request) =>
         request.id === id ? { ...request, status } : request
@@ -376,21 +372,21 @@ export default function Attendance() {
           <StatCard
             tone="present"
             icon={<FiCheckCircle />}
-            value="1,086"
+            value={stats.present}
             label="Present"
           />
           <StatCard
             tone="absent"
             icon={<FiAlertCircle />}
-            value="72"
+            value={stats.absent}
             label="Absent"
           />
-          <StatCard tone="late" icon={<FiClock />} value="45" label="Late" />
-          <StatCard tone="wfh" icon={<FiHome />} value="38" label="WFH" />
+          <StatCard tone="late" icon={<FiClock />} value={stats.late} label="Late" />
+          <StatCard tone="wfh" icon={<FiHome />} value={stats.wfh} label="WFH" />
           <StatCard
             tone="overtime"
             icon={<FiArrowRight />}
-            value="23"
+            value={stats.overtime}
             label="Overtime"
           />
         </section>
@@ -425,25 +421,25 @@ export default function Attendance() {
               <ShiftCard
                 color="#2879f6"
                 name="General Shift"
-                count="890"
+                count={shiftCounts.general}
                 time="09:30 AM – 06:30 PM"
               />
               <ShiftCard
                 color="#16c7df"
                 name="Morning Shift"
-                count="96"
+                count={shiftCounts.morning}
                 time="06:00 AM – 02:00 PM"
               />
               <ShiftCard
                 color="#8655ee"
                 name="Evening Shift"
-                count="72"
+                count={shiftCounts.evening}
                 time="02:00 PM – 10:00 PM"
               />
               <ShiftCard
                 color="#d03ee5"
                 name="Night Shift"
-                count="28"
+                count={shiftCounts.night}
                 time="10:00 PM – 06:00 AM"
               />
             </section>
@@ -524,7 +520,13 @@ export default function Attendance() {
                   </thead>
 
                   <tbody>
-                    {filteredLogs.length === 0 ? (
+                    {loading ? (
+                      <tr>
+                        <td colSpan="8" className="bel-attendance-empty">
+                          Loading attendance records...
+                        </td>
+                      </tr>
+                    ) : filteredLogs.length === 0 ? (
                       <tr>
                         <td colSpan="8" className="bel-attendance-empty">
                           No attendance records found.
@@ -651,7 +653,12 @@ export default function Attendance() {
             </div>
 
             <div className="bel-attendance-request-list">
-              {requests.map((request) => (
+              {requests.length === 0 ? (
+                <div style={{ textAlign: "center", padding: "2rem", color: "var(--text-secondary)" }}>
+                  No pending attendance regularization requests.
+                </div>
+              ) : (
+                requests.map((request) => (
                 <article
                   className="bel-attendance-request"
                   key={request.id}
@@ -716,7 +723,7 @@ export default function Attendance() {
                     </div>
                   )}
                 </article>
-              ))}
+              ))) }
             </div>
           </section>
         )}

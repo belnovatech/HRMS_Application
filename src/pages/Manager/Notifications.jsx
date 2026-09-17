@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import ManagerLayout from "../../layouts/ManagerLayout";
-
+import { useAuth } from "../../context/AuthContext";
 import {
   FiBell,
   FiCheck,
@@ -17,72 +17,21 @@ import {
 import "./Notifications.css";
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "Leave request approved",
-      desc: "Your Casual Leave request for Sep 5–7 has been approved by Arjun Reddy.",
-      time: "2 min ago",
-      type: "leave",
-      unread: true,
-    },
-    {
-      id: 2,
-      title: "August payslip available",
-      desc: "Your payslip for August 2026 has been processed and is ready to download.",
-      time: "1h ago",
-      type: "payroll",
-      unread: true,
-    },
-    {
-      id: 3,
-      title: "Attendance correction approved",
-      desc: "Your attendance regularization request for Aug 28 has been approved.",
-      time: "3h ago",
-      type: "attendance",
-      unread: true,
-    },
-    {
-      id: 4,
-      title: "Document verification request",
-      desc: "HR has requested verification of your educational certificates.",
-      time: "1d ago",
-      type: "hr",
-      unread: false,
-    },
-    {
-      id: 5,
-      title: "Payroll processing completed",
-      desc: "August 2026 payroll cycle has been successfully processed for all employees.",
-      time: "1d ago",
-      type: "payroll",
-      unread: false,
-    },
-    {
-      id: 6,
-      title: "New policy update",
-      desc: "A new company policy has been published and is available for review.",
-      time: "2d ago",
-      type: "hr",
-      unread: false,
-    },
-    {
-      id: 7,
-      title: "System maintenance scheduled",
-      desc: "HRMS system maintenance is scheduled for this weekend.",
-      time: "3d ago",
-      type: "system",
-      unread: false,
-    },
-    {
-      id: 8,
-      title: "Team attendance reminder",
-      desc: "Please review pending attendance regularization requests for your team.",
-      time: "4d ago",
-      type: "attendance",
-      unread: false,
-    },
-  ]);
+  const { notificationsList = [], markNotificationAsRead, markAllNotificationsAsRead } = useAuth();
+
+  const notifications = useMemo(() => {
+    if (notificationsList && notificationsList.length > 0) {
+      return notificationsList.map((n) => ({
+        id: n.id,
+        title: n.title,
+        desc: n.message || n.desc || "",
+        time: n.createdAtUtc ? new Date(n.createdAtUtc).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : (n.time || "Today"),
+        type: (n.category || n.type || "system").toLowerCase(),
+        unread: !n.isRead && !n.read,
+      }));
+    }
+    return [];
+  }, [notificationsList]);
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -153,25 +102,11 @@ export default function Notifications() {
   ]);
 
   const markAllRead = () => {
-    setNotifications((current) =>
-      current.map((notification) => ({
-        ...notification,
-        unread: false,
-      }))
-    );
+    if (markAllNotificationsAsRead) markAllNotificationsAsRead();
   };
 
   const markAsRead = (id) => {
-    setNotifications((current) =>
-      current.map((notification) =>
-        notification.id === id
-          ? {
-              ...notification,
-              unread: false,
-            }
-          : notification
-      )
-    );
+    if (markNotificationAsRead) markNotificationAsRead(id);
   };
 
   const handleNotificationClick = (notification) => {

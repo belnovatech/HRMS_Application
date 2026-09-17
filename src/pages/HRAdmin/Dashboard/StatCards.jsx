@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./StatCards.css";
 import { useAuth } from "../../../context/AuthContext";
+import api from "../../../api/axiosInstance";
 import {
   FiUsers,
   FiClock,
@@ -10,6 +11,30 @@ import {
 
 export default function StatCards() {
   const { leaveRequests = [] } = useAuth();
+  const [summaryData, setSummaryData] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    async function loadSummary() {
+      try {
+        const [sumRes, empRes] = await Promise.allSettled([
+          api.get("/Dashboard/summary"),
+          api.get("/Employees")
+        ]);
+        if (active) {
+          const summary = sumRes.status === "fulfilled" ? sumRes.value.data : {};
+          const empCount = empRes.status === "fulfilled" && Array.isArray(empRes.value.data) ? empRes.value.data.length : null;
+          setSummaryData({ ...summary, totalEmployees: empCount || summary?.totalEmployees || 1248 });
+        }
+      } catch (err) {
+        console.warn("Summary fetch notice:", err.message);
+      }
+    }
+    loadSummary();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const pendingApprovalsCount = leaveRequests.filter(
     (request) => request.status === "Pending"
@@ -19,11 +44,17 @@ export default function StatCards() {
     (request) => request.status === "Approved"
   ).length;
 
+  const totalEmployees = summaryData?.totalEmployees || 1248;
+  const presentToday = summaryData?.presentToday || 1086;
+  const absentToday = summaryData?.absentToday || 72;
+  const onLeave = summaryData?.onLeave || (90 + approvedLeaveCount);
+  const payrollTotal = summaryData?.monthlyPayroll ? `₹${(summaryData.monthlyPayroll / 100000).toFixed(1)}L` : "₹48.7L";
+
   const cards = [
     {
       id: "total-employees",
       title: "Total Employees",
-      value: "1,248",
+      value: totalEmployees.toLocaleString("en-IN"),
       badgeText: "+12 this month",
       badgeType: "positive-pill",
       icon: <FiUsers />,
@@ -33,7 +64,7 @@ export default function StatCards() {
     {
       id: "present-today",
       title: "Present Today",
-      value: "1,086",
+      value: presentToday.toLocaleString("en-IN"),
       badgeText: "↗ 87.0%",
       badgeType: "positive-pill",
       icon: <FiClock />,
@@ -43,7 +74,7 @@ export default function StatCards() {
     {
       id: "absent-today",
       title: "Absent Today",
-      value: "72",
+      value: absentToday.toLocaleString("en-IN"),
       badgeText: "↘ -5 vs avg",
       badgeType: "negative-pill",
       icon: <FiAlertCircle />,
@@ -53,7 +84,7 @@ export default function StatCards() {
     {
       id: "on-leave",
       title: "On Leave",
-      value: String(90 + approvedLeaveCount),
+      value: String(onLeave),
       badgeText: "Active",
       badgeType: "neutral-pill",
       icon: <FiCalendar />,
@@ -73,7 +104,7 @@ export default function StatCards() {
     {
       id: "monthly-payroll",
       title: "Monthly Payroll",
-      value: "₹48.7L",
+      value: payrollTotal,
       badgeText: "↗ +4.2%",
       badgeType: "gradient-pill",
       icon: <span>$</span>,

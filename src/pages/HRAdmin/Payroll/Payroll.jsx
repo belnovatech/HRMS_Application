@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Payroll.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import { downloadPayslipPdf } from "../../../utils/pdfGenerator";
 import {
   FiCheck,
@@ -236,16 +237,62 @@ export default function Payroll() {
   const [processedEmployees, setProcessedEmployees] = useState({});
   const [processStep, setProcessStep] = useState(0);
   const [modal, setModal] = useState(null);
+  const [employeeList, setEmployeeList] = useState(EMPLOYEES);
+
+  const fetchPayrollData = useCallback(async () => {
+    try {
+      const [empRes, slipRes] = await Promise.allSettled([
+        api.get("/Employees"),
+        api.get("/Payroll/payslips")
+      ]);
+
+      if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data) && empRes.value.data.length > 0) {
+        const mapped = empRes.value.data.map((e, idx) => {
+          const empNum = e.employeeNumber || e.id || `EMP${1001 + idx}`;
+          const fullName = `${e.firstName || ""} ${e.lastName || ""}`.trim() || e.email || `Employee ${idx + 1}`;
+          const initials = fullName.split(" ").map((n) => n[0]).join("").slice(0, 2);
+          return {
+            id: empNum,
+            name: fullName,
+            department: e.department || "Engineering",
+            initials: initials || "EM",
+            basic: 35000 + (idx * 5000),
+            hra: 14000 + (idx * 2000),
+            allowances: 8000 + (idx * 1000),
+            deductions: 6500 + (idx * 1000)
+          };
+        });
+        setEmployeeList(mapped);
+      }
+
+      if (slipRes.status === "fulfilled" && Array.isArray(slipRes.value.data) && slipRes.value.data.length > 0) {
+        const processedMap = {};
+        slipRes.value.data.forEach((ps) => {
+          if (ps.employeeId && ps.month && ps.year) {
+            const key = `${ps.year}-${String(ps.month).padStart(2, "0")}-${ps.employeeId}`;
+            processedMap[key] = true;
+          }
+        });
+        setProcessedEmployees((prev) => ({ ...prev, ...processedMap }));
+      }
+    } catch (err) {
+      console.warn("Payroll fetch error:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPayrollData();
+  }, [fetchPayrollData]);
 
   const payrollMonth = formatMonth(selectedYear, selectedMonth);
   const payrollKey = monthToKey(selectedYear, selectedMonth);
 
   const employeePayroll = useMemo(
     () =>
-      EMPLOYEES.map((employee) =>
+      employeeList.map((employee) =>
         calculateEmployee(employee, selectedYear, selectedMonth)
       ),
-    [selectedYear, selectedMonth]
+    [employeeList, selectedYear, selectedMonth]
   );
 
   const selectedEmployee = employeePayroll.find(

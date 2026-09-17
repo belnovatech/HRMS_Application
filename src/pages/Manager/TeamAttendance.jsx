@@ -20,7 +20,7 @@ import {
 import "./TeamAttendance.css";
 
 export default function TeamAttendance() {
-  const { teamMembers = [] } = useAuth();
+  const { teamMembers = [], attendanceRecords: liveRecords = [] } = useAuth();
 
   const [selectedDate, setSelectedDate] = useState("2026-09-01");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -60,10 +60,10 @@ export default function TeamAttendance() {
     });
   };
 
-  const getInitials = (name = "") => {
-    const parts = name.trim().split(" ").filter(Boolean);
+  const getInitials = (name) => {
+    if (!name) return "EM";
 
-    if (!parts.length) return "NA";
+    const parts = name.trim().split(" ");
 
     if (parts.length === 1) {
       return parts[0].substring(0, 2).toUpperCase();
@@ -85,85 +85,30 @@ export default function TeamAttendance() {
    */
 
   const attendanceRecords = useMemo(() => {
-    return teamMembers.map((member, index) => {
-      const originalStatus = String(
-        member.status || "Present"
-      ).toLowerCase();
+    return teamMembers.map((member) => {
+      // Find matching live record for this member
+      const liveRecord = liveRecords.find(
+        (rec) => rec.employeeId === member.id || rec.employeeId === member.employeeNumber
+      );
 
-      let attendanceStatus = "Present";
-
-      if (originalStatus.includes("absent")) {
-        attendanceStatus = "Absent";
-      } else if (originalStatus.includes("wfh")) {
-        attendanceStatus = "WFH";
-      } else if (originalStatus.includes("late")) {
-        attendanceStatus = "Late";
-      } else if (originalStatus.includes("leave")) {
-        attendanceStatus = "Absent";
-      }
-
-      /*
-       * Keep existing check-in if available.
-       * Otherwise generate a realistic fallback.
-       */
-      const fallbackCheckIns = [
-        "09:42 AM",
-        "09:12 AM",
-        "10:15 AM",
-        "—",
-        "09:28 AM",
-        "09:05 AM",
-        "09:48 AM",
-        "10:02 AM",
-      ];
-
-      const checkIn =
-        member.checkIn ||
-        (attendanceStatus === "Absent"
-          ? "—"
-          : fallbackCheckIns[index % fallbackCheckIns.length]);
-
-      let checkOut = member.checkOut;
-
-      if (!checkOut) {
-        if (attendanceStatus === "Absent") {
-          checkOut = "—";
-        } else if (attendanceStatus === "WFH") {
-          checkOut = "06:00 PM";
-        } else if (attendanceStatus === "Late") {
-          checkOut = "06:45 PM";
-        } else {
-          checkOut = "06:38 PM";
-        }
-      }
-
-      let workingHours = member.workingHours;
-
-      if (!workingHours) {
-        if (attendanceStatus === "Absent") {
-          workingHours = "—";
-        } else if (attendanceStatus === "Late") {
-          workingHours = "8h 30m";
-        } else if (attendanceStatus === "WFH") {
-          workingHours = "8h 52m";
-        } else {
-          workingHours = "8h 56m";
-        }
-      }
+      const status = liveRecord?.status || "Absent";
+      const checkIn = liveRecord?.checkIn || "—";
+      const checkOut = liveRecord?.checkOut || "—";
+      const workingHours = liveRecord?.workingHours || "—";
 
       return {
         ...member,
-        attendanceStatus,
+        attendanceStatus: status,
         checkIn,
         checkOut,
         workingHours,
         shift: member.shift || "General",
         initials: member.initials || getInitials(member.name),
         color: member.color || "#2563eb",
-        overtime: member.overtime || "0h",
+        overtime: liveRecord?.overtime || member.overtime || "0h",
       };
     });
-  }, [teamMembers]);
+  }, [teamMembers, liveRecords]);
 
   /*
    * -------------------------------------------------------
@@ -230,19 +175,12 @@ export default function TeamAttendance() {
       }
     ).length;
 
-    /*
-     * If your context does not contain enough overtime
-     * information, use a small realistic fallback.
-     */
     return {
       present,
       absent,
       late,
       wfh,
-      overtime:
-        overtime > 0
-          ? overtime
-          : Math.min(23, attendanceRecords.length),
+      overtime,
     };
   }, [attendanceRecords]);
 

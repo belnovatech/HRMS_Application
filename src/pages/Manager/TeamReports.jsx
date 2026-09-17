@@ -297,24 +297,8 @@ export default function TeamReports() {
         member.performance || "",
     }));
 
-    /*
-     * If no AuthContext members exist,
-     * create a sample report row.
-     */
-    if (!rows.length) {
-      rows.push({
-        ID: "EMP001",
-        Name: "Arjun Mehta",
-        Designation: "Senior Engineer",
-        Department: "Engineering",
-        Email: "arjun@belnova.com",
-        Phone: "+91 98765 43210",
-        Status: "Present",
-        Performance: "94%",
-      });
-    }
-
-    const headers = Object.keys(rows[0]);
+    const defaultHeaders = ["ID", "Name", "Designation", "Department", "Email", "Phone", "Status", "Performance"];
+    const headers = rows.length > 0 ? Object.keys(rows[0]) : defaultHeaders;
 
     const csv = [
       headers.join(","),

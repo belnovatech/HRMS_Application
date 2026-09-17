@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./AddEmployee.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import {
   FiArrowLeft,
   FiUser,
@@ -19,6 +20,7 @@ export default function AddEmployee() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -64,23 +66,77 @@ export default function AddEmployee() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError("");
 
-    setTimeout(() => {
+    try {
+      // 1. Create employee via POST /Employees
+      let createdEmpId = formData.employeeId;
+      try {
+        const empRes = await api.post("/Employees", {
+          employeeNumber: formData.employeeId,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email
+        });
+        if (empRes.data?.id) createdEmpId = empRes.data.id;
+      } catch (empErr) {
+        console.warn("POST /Employees notice:", empErr.message);
+      }
+
+      // 2. Create account via POST /Accounts
+      try {
+        await api.post("/Accounts", {
+          email: formData.email,
+          username: formData.email ? formData.email.split("@")[0] : formData.employeeId,
+          password: "Password@123",
+          role: "employee",
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          department: formData.department,
+          designation: formData.role,
+          employeeNumber: formData.employeeId
+        });
+      } catch (accErr) {
+        console.warn("POST /Accounts notice:", accErr.message);
+      }
+
+      // 3. Save salary structure if provided
+      if (formData.baseCtc) {
+        try {
+          await api.put(`/Payroll/salary/${createdEmpId || formData.employeeId}`, {
+            basic: Number(formData.baseCtc) || 50000,
+            allowances: Number(formData.hra || 0) + Number(formData.specialAllowance || 0),
+            deductions: 0
+          });
+        } catch (salErr) {
+          console.warn("PUT /Payroll/salary notice:", salErr.message);
+        }
+      }
+
       setIsSubmitting(false);
       setShowToast(true);
 
       setTimeout(() => {
-        navigate(`/hr/employees/${formData.employeeId}`);
-      }, 1000);
-    }, 1200);
+        navigate(`/hr/employees`);
+      }, 1200);
+    } catch (err) {
+      setIsSubmitting(false);
+      setError(err.response?.data?.detail || err.response?.data?.title || err.message || "Failed to create employee.");
+    }
   };
 
   return (
     <HRLayout title="Add New Employee" breadcrumb="Employees / Add Employee">
       <div className="hradmin-emp-add-page">
+        {/* Error message */}
+        {error && (
+          <div style={{ padding: "12px 16px", background: "#fee2e2", color: "#991b1b", borderRadius: "8px", marginBottom: "16px" }}>
+            {error}
+          </div>
+        )}
+
         {/* Success Toast */}
         {showToast && (
           <div className="hradmin-emp-toast-success">

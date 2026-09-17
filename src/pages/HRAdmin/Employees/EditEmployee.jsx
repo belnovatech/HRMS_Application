@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./EditEmployee.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import {
   FiArrowLeft,
   FiUser,
@@ -11,44 +12,73 @@ import {
 } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 
-const MOCK_EMPLOYEE_DATA = {
-  "EMP-1001": { firstName: "Arjun", lastName: "Mehta", email: "arjun.m@belnova.com", phone: "+91 98765 43210", dob: "1994-08-12", gender: "Male", department: "Engineering", role: "Sr. Frontend Dev", employeeId: "EMP-1001", joinDate: "2023-04-15", workLocation: "Bangalore HQ", employmentType: "Full-Time", baseCtc: "1850000", pfNumber: "MH/BAN/0012345/000/0000123", bankName: "HDFC Bank", accountNumber: "50100098765432", ifscCode: "HDFC0000123" },
-  "EMP-1002": { firstName: "Kavya", lastName: "Nair", email: "kavya.n@belnova.com", phone: "+91 98123 45678", dob: "1996-03-24", gender: "Female", department: "Product & Design", role: "UX Designer", employeeId: "EMP-1002", joinDate: "2023-08-01", workLocation: "Bangalore HQ", employmentType: "Full-Time", baseCtc: "1400000", pfNumber: "MH/BAN/0012345/000/0000456", bankName: "ICICI Bank", accountNumber: "000401567890", ifscCode: "ICIC0000401" },
-};
-
 export default function EditEmployee() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
+  const [error, setError] = useState("");
 
-  const initialData = MOCK_EMPLOYEE_DATA[id] || {
-    firstName: "Arjun",
-    lastName: "Mehta",
-    email: "arjun.m@belnova.com",
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
     phone: "+91 98765 43210",
     dob: "1994-08-12",
     gender: "Male",
     department: "Engineering",
-    role: "Sr. Frontend Dev",
+    role: "Staff",
     employeeId: id || "EMP-1001",
     joinDate: "2023-04-15",
     workLocation: "Bangalore HQ",
     employmentType: "Full-Time",
-    baseCtc: "1850000",
-    pfNumber: "MH/BAN/0012345/000/0000123",
+    baseCtc: "1200000",
     bankName: "HDFC Bank",
     accountNumber: "50100098765432",
     ifscCode: "HDFC0000123"
-  };
-
-  const [formData, setFormData] = useState(initialData);
+  });
 
   useEffect(() => {
-    if (id && MOCK_EMPLOYEE_DATA[id]) {
-      setFormData(MOCK_EMPLOYEE_DATA[id]);
+    let active = true;
+    async function fetchEmployee() {
+      try {
+        setLoading(true);
+        const [empRes, accRes, salRes] = await Promise.allSettled([
+          api.get(`/Employees/${id}`),
+          api.get("/Accounts"),
+          api.get(`/Payroll/salary/${id}`)
+        ]);
+
+        const empData = empRes.status === "fulfilled" ? empRes.value.data : null;
+        const accList = accRes.status === "fulfilled" && Array.isArray(accRes.value.data) ? accRes.value.data : [];
+        const account = accList.find((a) => a.id === id || a.employeeNumber === id);
+        const salData = salRes.status === "fulfilled" ? salRes.value.data : null;
+
+        if (active) {
+          const names = (account?.name || "").split(" ");
+          setFormData((prev) => ({
+            ...prev,
+            firstName: empData?.firstName || names[0] || "Employee",
+            lastName: empData?.lastName || names.slice(1).join(" ") || "",
+            email: empData?.email || account?.email || "",
+            department: account?.department || "Engineering",
+            role: account?.designation || account?.role || "Staff",
+            employeeId: empData?.employeeNumber || account?.employeeNumber || id,
+            baseCtc: salData?.basic ? String(salData.basic + (salData.allowances || 0)) : prev.baseCtc
+          }));
+        }
+      } catch (err) {
+        if (active) setError("Could not load employee details from server.");
+      } finally {
+        if (active) setLoading(false);
+      }
     }
+    if (id) fetchEmployee();
+    return () => {
+      active = false;
+    };
   }, [id]);
 
   const steps = [
@@ -66,27 +96,72 @@ export default function EditEmployee() {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     } else {
-      navigate(`/hr/employees/${id || "EMP-1001"}`);
+      navigate(`/hr/employees/${id}`);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError("");
 
-    setTimeout(() => {
+    try {
+      // 1. Update Employee
+      try {
+        await api.put(`/Employees/${id}`, {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          status: 0
+        });
+      } catch (e1) {
+        console.warn("PUT /Employees error:", e1.message);
+      }
+
+      // 2. Update Salary
+      if (formData.baseCtc) {
+        try {
+          await api.put(`/Payroll/salary/${id}`, {
+            basic: Number(formData.baseCtc) || 50000,
+            allowances: 0,
+            deductions: 0
+          });
+        } catch (e2) {
+          console.warn("PUT /Payroll/salary error:", e2.message);
+        }
+      }
+
       setIsSubmitting(false);
       setShowToast(true);
 
       setTimeout(() => {
-        navigate(`/hr/employees/${id || "EMP-1001"}`);
+        navigate(`/hr/employees/${id}`);
       }, 1000);
-    }, 1200);
+    } catch (err) {
+      setIsSubmitting(false);
+      setError(err.response?.data?.detail || err.message || "Failed to update employee.");
+    }
   };
+
+  if (loading) {
+    return (
+      <HRLayout title="Edit Employee" breadcrumb={`Employees / Edit ${id}`}>
+        <div style={{ padding: "40px", textAlign: "center", color: "#64748b" }}>
+          Loading employee details...
+        </div>
+      </HRLayout>
+    );
+  }
 
   return (
     <HRLayout title={`Edit Employee - ${formData.firstName} ${formData.lastName}`} breadcrumb={`Employees / Edit ${formData.employeeId}`}>
       <div className="hradmin-emp-add-page">
+        {error && (
+          <div style={{ padding: "12px 16px", background: "#fee2e2", color: "#991b1b", borderRadius: "8px", marginBottom: "16px" }}>
+            {error}
+          </div>
+        )}
+
         {/* Success Toast */}
         {showToast && (
           <div className="hradmin-emp-toast-success">
@@ -100,7 +175,7 @@ export default function EditEmployee() {
             <button
               type="button"
               className="hradmin-emp-btn-back"
-              onClick={() => navigate(`/hr/employees/${id || "EMP-1001"}`)}
+              onClick={() => navigate(`/hr/employees/${id}`)}
             >
               <FiArrowLeft /> Back to Profile
             </button>

@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Recruitment.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import {
   FiArrowRight,
   FiBriefcase,
@@ -14,132 +15,6 @@ import {
   FiSend,
   FiX,
 } from "react-icons/fi";
-
-const INITIAL_CANDIDATES = [
-  {
-    id: "CAN-1001",
-    name: "Amit Gupta",
-    role: "Sr. Software Engineer",
-    stage: "Applied",
-    applied: "Aug 30",
-    experience: "5 yrs",
-    email: "amit.gupta@example.com",
-    phone: "+91 90000 10001",
-  },
-  {
-    id: "CAN-1002",
-    name: "Rina Das",
-    role: "UX Designer",
-    stage: "Applied",
-    applied: "Aug 29",
-    experience: "3 yrs",
-    email: "rina.das@example.com",
-    phone: "+91 90000 10002",
-  },
-  {
-    id: "CAN-1003",
-    name: "Suresh Kumar",
-    role: "DevOps Engineer",
-    stage: "Applied",
-    applied: "Aug 28",
-    experience: "4 yrs",
-    email: "suresh.kumar@example.com",
-    phone: "+91 90000 10003",
-  },
-  {
-    id: "CAN-1004",
-    name: "Pooja Verma",
-    role: "Product Manager",
-    stage: "Screening",
-    applied: "Aug 25",
-    experience: "6 yrs",
-    email: "pooja.verma@example.com",
-    phone: "+91 90000 10004",
-  },
-  {
-    id: "CAN-1005",
-    name: "Nikhil Shah",
-    role: "Sr. Software Engineer",
-    stage: "Screening",
-    applied: "Aug 24",
-    experience: "7 yrs",
-    email: "nikhil.shah@example.com",
-    phone: "+91 90000 10005",
-  },
-  {
-    id: "CAN-1006",
-    name: "Lavanya Menon",
-    role: "HR Manager",
-    stage: "Interview",
-    applied: "Aug 20",
-    experience: "8 yrs",
-    email: "lavanya.menon@example.com",
-    phone: "+91 90000 10006",
-  },
-  {
-    id: "CAN-1007",
-    name: "Rajesh Nair",
-    role: "Finance Analyst",
-    stage: "Interview",
-    applied: "Aug 18",
-    experience: "4 yrs",
-    email: "rajesh.nair@example.com",
-    phone: "+91 90000 10007",
-  },
-  {
-    id: "CAN-1008",
-    name: "Sanya Kapoor",
-    role: "Marketing Lead",
-    stage: "Offer",
-    applied: "Aug 15",
-    experience: "5 yrs",
-    email: "sanya.kapoor@example.com",
-    phone: "+91 90000 10008",
-  },
-];
-
-const INITIAL_JOBS = [
-  {
-    id: "JOB-101",
-    title: "Senior Software Engineer",
-    dept: "Engineering",
-    openings: 3,
-    applicants: 24,
-    status: "Active",
-  },
-  {
-    id: "JOB-102",
-    title: "Product Manager",
-    dept: "Product",
-    openings: 1,
-    applicants: 18,
-    status: "Active",
-  },
-  {
-    id: "JOB-103",
-    title: "HR Executive",
-    dept: "Human Resources",
-    openings: 2,
-    applicants: 12,
-    status: "Active",
-  },
-  {
-    id: "JOB-104",
-    title: "DevOps Engineer",
-    dept: "Engineering",
-    openings: 1,
-    applicants: 8,
-    status: "Active",
-  },
-  {
-    id: "JOB-105",
-    title: "Marketing Specialist",
-    dept: "Marketing",
-    openings: 1,
-    applicants: 15,
-    status: "Closed",
-  },
-];
 
 const STAGES = ["Applied", "Screening", "Interview", "Offer", "Hired", "Rejected"];
 
@@ -254,16 +129,19 @@ function CandidateCard({ candidate, index, onAdvance, onReject, onView, onOffer 
 
 export default function Recruitment() {
   const [activeTab, setActiveTab] = useState("pipeline");
-  const [candidates, setCandidates] = useState(INITIAL_CANDIDATES);
-  const [jobs, setJobs] = useState(INITIAL_JOBS);
-  const [stageCounts, setStageCounts] = useState({
-    Applied: 48,
-    Screening: 24,
-    Interview: 12,
-    Offer: 5,
-    Hired: 3,
-    Rejected: 16,
-  });
+  const [candidates, setCandidates] = useState([]);
+  const [jobs, setJobs] = useState([]);
+
+  const stageCounts = useMemo(() => {
+    return {
+      Applied: candidates.filter((c) => c.stage === "Applied").length,
+      Screening: candidates.filter((c) => c.stage === "Screening").length,
+      Interview: candidates.filter((c) => c.stage === "Interview").length,
+      Offer: candidates.filter((c) => c.stage === "Offer").length,
+      Hired: candidates.filter((c) => c.stage === "Hired").length,
+      Rejected: candidates.filter((c) => c.stage === "Rejected").length,
+    };
+  }, [candidates]);
   const [stageFilter, setStageFilter] = useState("All");
   const [departmentFilter, setDepartmentFilter] = useState("All");
   const [search, setSearch] = useState("");
@@ -272,6 +150,28 @@ export default function Recruitment() {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [toast, setToast] = useState("");
+
+  const fetchRecruitmentData = useCallback(async () => {
+    try {
+      const [candRes, jobRes] = await Promise.allSettled([
+        api.get("/recruitment/candidates"),
+        api.get("/recruitment/jobs")
+      ]);
+
+      if (candRes.status === "fulfilled" && Array.isArray(candRes.value.data) && candRes.value.data.length > 0) {
+        setCandidates(candRes.value.data);
+      }
+      if (jobRes.status === "fulfilled" && Array.isArray(jobRes.value.data) && jobRes.value.data.length > 0) {
+        setJobs(jobRes.value.data);
+      }
+    } catch (err) {
+      console.warn("Recruitment fetch notice:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRecruitmentData();
+  }, [fetchRecruitmentData]);
 
   const filteredCandidates = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -311,7 +211,7 @@ export default function Recruitment() {
     window.setTimeout(() => setToast(""), 2600);
   };
 
-  const advanceCandidate = (candidateId) => {
+  const advanceCandidate = async (candidateId) => {
     const candidate = candidates.find((item) => item.id === candidateId);
     if (!candidate) return;
 
@@ -320,24 +220,30 @@ export default function Recruitment() {
 
     if (candidate.stage === nextStage) return;
 
+    try {
+      await api.post(`/recruitment/candidates/${candidateId}/stage`, { stage: nextStage });
+    } catch (err) {
+      console.warn("Stage update API notice:", err.message);
+    }
+
     setCandidates((current) =>
       current.map((item) =>
         item.id === candidateId ? { ...item, stage: nextStage } : item
       )
     );
 
-    setStageCounts((current) => ({
-      ...current,
-      [candidate.stage]: Math.max(0, current[candidate.stage] - 1),
-      [nextStage]: current[nextStage] + 1,
-    }));
-
     showToast(`Candidate moved to ${nextStage}.`);
   };
 
-  const rejectCandidate = (candidateId) => {
+  const rejectCandidate = async (candidateId) => {
     const candidate = candidates.find((item) => item.id === candidateId);
     if (!candidate || candidate.stage === "Rejected") return;
+
+    try {
+      await api.post(`/recruitment/candidates/${candidateId}/stage`, { stage: "Rejected" });
+    } catch (err) {
+      console.warn("Stage update API notice:", err.message);
+    }
 
     setCandidates((current) =>
       current.map((item) =>
@@ -345,33 +251,26 @@ export default function Recruitment() {
       )
     );
 
-    setStageCounts((current) => ({
-      ...current,
-      [candidate.stage]: Math.max(0, current[candidate.stage] - 1),
-      Rejected: current.Rejected + 1,
-    }));
-
     showToast("Candidate moved to Rejected.");
   };
 
-  const sendOffer = (candidateId) => {
+  const sendOffer = async (candidateId) => {
     const candidate = candidates.find((item) => item.id === candidateId);
     if (!candidate) return;
 
+    try {
+      await api.post(`/recruitment/candidates/${candidateId}/stage`, { stage: "Offer" });
+    } catch (err) {
+      console.warn("Offer stage API notice:", err.message);
+    }
+
     setCandidates((current) =>
       current.map((item) =>
-        item.id === candidateId ? { ...item, stage: "Hired" } : item
+        item.id === candidateId ? { ...item, stage: "Offer" } : item
       )
     );
 
-    setStageCounts((current) => ({
-      ...current,
-      [candidate.stage]: Math.max(0, current[candidate.stage] - 1),
-      Hired: current.Hired + 1,
-    }));
-
-    setModal(null);
-    showToast("Offer sent successfully. Candidate moved to Hired.");
+    showToast("Offer released and candidate moved to Offer stage.");
   };
 
   const createJob = (event) => {
@@ -645,7 +544,14 @@ export default function Recruitment() {
                 </thead>
 
                 <tbody>
-                  {filteredJobs.map((job) => (
+                  {filteredJobs.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" style={{ textAlign: "center", padding: "2.5rem", color: "var(--text-secondary)" }}>
+                        No open job positions found.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredJobs.map((job) => (
                     <tr key={job.id}>
                       <td>
                         <div className="bel-recruit-job-name">
@@ -685,7 +591,7 @@ export default function Recruitment() {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  ))) }
                 </tbody>
               </table>
             </div>

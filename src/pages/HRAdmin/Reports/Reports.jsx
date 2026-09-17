@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Reports.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 import { getCompanyPdfHeaderHtml } from "../../../utils/pdfGenerator";
 import {
   FiBarChart2,
@@ -292,6 +293,49 @@ export default function Reports() {
   const [period, setPeriod] = useState("2026");
   const [format, setFormat] = useState("All Formats");
   const [toast, setToast] = useState("");
+  const [liveReportData, setLiveReportData] = useState(REPORT_DATA);
+
+  const fetchReportsData = useCallback(async () => {
+    try {
+      const [empRes, attRes] = await Promise.allSettled([
+        api.get("/Reports/employees"),
+        api.get("/Reports/attendance")
+      ]);
+
+      setLiveReportData((prev) => {
+        const next = { ...prev };
+        if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data) && empRes.value.data.length > 0) {
+          const header = ["Employee ID", "Employee Name", "Department", "Designation", "Employment Status"];
+          const rows = empRes.value.data.map((e) => [
+            e.employeeNumber || e.id,
+            `${e.firstName || ""} ${e.lastName || ""}`.trim() || e.name || "Employee",
+            e.department || "Engineering",
+            e.designation || e.role || "Staff",
+            e.status || "Active"
+          ]);
+          next.employee = [header, ...rows];
+        }
+        if (attRes.status === "fulfilled" && Array.isArray(attRes.value.data) && attRes.value.data.length > 0) {
+          const header = ["Employee ID", "Employee Name", "Date", "Status", "Working Hours"];
+          const rows = attRes.value.data.map((a) => [
+            a.employeeId,
+            a.employeeName || "Employee",
+            a.date || "Sep 1, 2026",
+            a.status || "Present",
+            a.workingHours || "8h 30m"
+          ]);
+          next.attendance = [header, ...rows];
+        }
+        return next;
+      });
+    } catch (err) {
+      console.warn("Reports fetch error:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchReportsData();
+  }, [fetchReportsData]);
 
   const filteredReports = useMemo(() => {
     return INITIAL_REPORTS.filter((report) => {
@@ -313,7 +357,7 @@ export default function Reports() {
     window.setTimeout(() => setToast(""), 2600);
   };
 
-  const getRows = (reportId) => REPORT_DATA[reportId] || [];
+  const getRows = (reportId) => liveReportData[reportId] || REPORT_DATA[reportId] || [];
 
   const downloadReport = (report, outputFormat) => {
     const rows = getRows(report.id);

@@ -23,6 +23,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [loginMode, setLoginMode] = useState("password"); // 'password' or 'otp'
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState("");
@@ -34,10 +35,12 @@ export default function Login() {
     if (loginMode === "otp") {
       if (!otpSent) {
         if (!identifier.trim()) {
-          setError("Please enter your Email or Mobile number to receive OTP.");
+          setError("Please enter your email or mobile number to receive OTP.");
           return;
         }
+        setLoading(true);
         const sent = await requestOtp(identifier);
+        setLoading(false);
         if (!sent.success) { setError(sent.error); return; }
         setOtpSent(true);
         setError("");
@@ -47,9 +50,20 @@ export default function Login() {
         setError("Please enter the 6-digit OTP received.");
         return;
       }
+    } else {
+      if (!identifier.trim()) {
+        setError("Please enter your email, username, or employee ID.");
+        return;
+      }
+      if (!password) {
+        setError("Please enter your password.");
+        return;
+      }
     }
 
+    setLoading(true);
     const result = await login(identifier, loginMode === "otp" ? otpCode : password, loginMode);
+    setLoading(false);
 
     if (result.success) {
       if (result.role === "hr") {
@@ -98,22 +112,6 @@ export default function Login() {
           <div className="feature">
             <ShieldCheck size={20} />
             <span>Secure role-based authentication & data protection</span>
-          </div>
-        </div>
-
-        {/* Dynamic Demo Credentials Hint Box */}
-        <div className="demo-credentials-box">
-          <small className="demo-title">⚡ QUICK LOGIN DEMO CREDENTIALS</small>
-          <div className="demo-credentials-grid">
-            <div className="demo-item" onClick={() => { setIdentifier("admin@hr.com"); setPassword("password123"); }}>
-              <strong>HR Portal:</strong> admin@hr.com
-            </div>
-            <div className="demo-item" onClick={() => { setIdentifier("manager@belnova.com"); setPassword("password123"); }}>
-              <strong>Manager:</strong> manager@belnova.com
-            </div>
-            <div className="demo-item" onClick={() => { setIdentifier("EMP001"); setPassword("password123"); }}>
-              <strong>Employee ID:</strong> EMP001
-            </div>
           </div>
         </div>
 
@@ -223,8 +221,14 @@ export default function Login() {
             </>
           )}
 
-          <button className="login-btn" type="submit">
-            <span>{loginMode === "otp" && !otpSent ? "Send OTP" : "Sign In to BELNOVA"}</span>
+          <button className="login-btn" type="submit" disabled={loading}>
+            <span>
+              {loading
+                ? "Signing In..."
+                : loginMode === "otp" && !otpSent
+                ? "Send OTP"
+                : "Sign In to BELNOVA"}
+            </span>
             <ArrowRight size={18} />
           </button>
 

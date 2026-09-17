@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ManagerLayout from "../../layouts/ManagerLayout";
+import { useAuth } from "../../context/AuthContext";
 
 import {
   FiSend,
@@ -19,6 +20,7 @@ import "./ManagerHelp.css";
 
 
 export default function ManagerHelp() {
+  const { addHelpTicket } = useAuth();
 
   /* =====================================================
      FORM STATE
@@ -82,7 +84,7 @@ export default function ManagerHelp() {
      SUBMIT TICKET
      ===================================================== */
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (
@@ -94,28 +96,26 @@ export default function ManagerHelp() {
     }
 
     const generatedId = generateTicketId();
-
     setTicketId(generatedId);
 
-    setSubmitted(true);
+    if (addHelpTicket) {
+      try {
+        await addHelpTicket({
+          subject: ticketSubject,
+          category: ticketCategory,
+          priority: ticketPriority,
+          description: ticketMessage
+        });
+      } catch (err) {
+        console.warn("Support ticket submission notice:", err.message);
+      }
+    }
 
+    setSubmitted(true);
     setTicketSubject("");
     setTicketCategory("");
     setTicketPriority("Medium");
     setTicketMessage("");
-
-    /*
-     * This is where an API call can later be added.
-     *
-     * Example:
-     *
-     * await createSupportTicket({
-     *   subject: ticketSubject,
-     *   category: ticketCategory,
-     *   priority: ticketPriority,
-     *   description: ticketMessage
-     * });
-     */
   };
 
 

@@ -1,12 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Organization.css";
 import HRLayout from "../../../layouts/HRLayout";
+import api from "../../../api/axiosInstance";
 
 import {
-  FiBriefcase,
   FiUsers,
-  FiLayers,
-  FiCheckCircle,
   FiSearch,
   FiChevronDown,
   FiChevronRight,
@@ -18,144 +16,6 @@ import {
   FiMoreHorizontal,
 } from "react-icons/fi";
 
-const INITIAL_DEPARTMENTS = [
-  {
-    id: "engineering",
-    name: "Engineering & Tech",
-    shortName: "Engineering",
-    head: "Vikram Malhotra",
-    role: "Engineering Manager",
-    initials: "VM",
-    total: 45,
-    budget: "₹1.2 Cr",
-    openPositions: 6,
-    growth: "+12%",
-    status: "Growing",
-    icon: <FiLayers />,
-    color: "blue",
-    employees: [
-      {
-        name: "Rahul Kumar",
-        role: "Senior Software Engineer",
-        initials: "RK",
-      },
-      {
-        name: "Kiran Reddy",
-        role: "Software Engineer",
-        initials: "KR",
-      },
-      {
-        name: "Deepika Iyer",
-        role: "Software Engineer",
-        initials: "DI",
-      },
-    ],
-  },
-  {
-    id: "product",
-    name: "Product & UI/UX",
-    shortName: "Product",
-    head: "Kavya Nair",
-    role: "Product Manager",
-    initials: "KN",
-    total: 22,
-    budget: "₹65 Lakhs",
-    openPositions: 3,
-    growth: "+8%",
-    status: "Growing",
-    icon: <FiBriefcase />,
-    color: "purple",
-    employees: [
-      {
-        name: "Anjali Menon",
-        role: "Product Designer",
-        initials: "AM",
-      },
-      {
-        name: "Rohit Verma",
-        role: "Product Analyst",
-        initials: "RV",
-      },
-    ],
-  },
-  {
-    id: "sales",
-    name: "Sales & Growth",
-    shortName: "Sales",
-    head: "Rajesh Sharma",
-    role: "Sales Manager",
-    initials: "RS",
-    total: 28,
-    budget: "₹80 Lakhs",
-    openPositions: 4,
-    growth: "+15%",
-    status: "High Growth",
-    icon: <FiUsers />,
-    color: "orange",
-    employees: [
-      {
-        name: "Rohan Das",
-        role: "Sales Executive",
-        initials: "RD",
-      },
-      {
-        name: "Neha Kapoor",
-        role: "Business Executive",
-        initials: "NK",
-      },
-    ],
-  },
-  {
-    id: "hr",
-    name: "HR & Operations",
-    shortName: "HR",
-    head: "Sneha Kapur",
-    role: "HR Manager",
-    initials: "SK",
-    total: 18,
-    budget: "₹45 Lakhs",
-    openPositions: 2,
-    growth: "+5%",
-    status: "Stable",
-    icon: <FiCheckCircle />,
-    color: "green",
-    employees: [
-      {
-        name: "Priya Sharma",
-        role: "HR Executive",
-        initials: "PS",
-      },
-      {
-        name: "Aarav Mehta",
-        role: "HR Associate",
-        initials: "AM",
-      },
-    ],
-  },
-  {
-    id: "finance",
-    name: "Finance & Accounts",
-    shortName: "Finance",
-    head: "Ananya Deshmukh",
-    role: "Finance Manager",
-    initials: "AD",
-    total: 11,
-    budget: "₹35 Lakhs",
-    openPositions: 1,
-    growth: "+3%",
-    status: "Stable",
-    icon: <FiDollarSign />,
-    color: "cyan",
-    employees: [
-      {
-        name: "Anjali Nair",
-        role: "Finance Executive",
-        initials: "AN",
-      },
-    ],
-  },
-];
-
 export default function Organization() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("All");
@@ -165,10 +25,25 @@ export default function Organization() {
     Finance: true,
     Sales: true,
   });
-  const departments = INITIAL_DEPARTMENTS;
+  const [departments, setDepartments] = useState([]);
+
+  const fetchOrgData = useCallback(async () => {
+    try {
+      const deptRes = await api.get("/organization/departments").catch(() => null);
+      if (deptRes && Array.isArray(deptRes.data) && deptRes.data.length > 0) {
+        setDepartments(deptRes.data);
+      }
+    } catch (err) {
+      console.warn("Organization fetch notice:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOrgData();
+  }, [fetchOrgData]);
 
   const totalEmployees = departments.reduce(
-    (sum, department) => sum + department.total,
+    (sum, department) => sum + (department.total || (department.employees ? department.employees.length : 0)),
     0
   );
 
@@ -339,8 +214,12 @@ export default function Organization() {
         </div>
 
         <div className="hr-organization-v2-department-grid">
-
-          {filteredDepartments.map((department) => (
+          {filteredDepartments.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2.5rem", gridColumn: "1 / -1", color: "var(--text-secondary)" }}>
+              No departments found.
+            </div>
+          ) : (
+            filteredDepartments.map((department) => (
             <div
               className="hr-organization-v2-department-card"
               key={department.id}
@@ -416,8 +295,7 @@ export default function Organization() {
               </div>
 
             </div>
-          ))}
-
+          ))) }
         </div>
 
         {/* Organization Chart */}

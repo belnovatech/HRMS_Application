@@ -1,46 +1,45 @@
-// import axios from "axios";
-
-// const API = axios.create({
-//   baseURL: process.env.REACT_APP_API_URL,
-// });
-
-// export const getDashboard = () =>
-//   API.get("/payroll/dashboard");
-
-// export const calculatePayroll = (data) =>
-//   API.post("/payroll/calculate", data);
-
-// export const processPayroll = (data) =>
-//   API.post("/payroll/process", data);
-
-// export const getPayslips = () =>
-//   API.get("/payroll/payslips");
-
-// export const getHistory = () =>
-//   API.get("/payroll/history");
-
 import api from "../api/axiosInstance";
 
-// Get payslip for a single employee (calculates fresh)
-export const getPayslipByEmployee = (empId) =>
-  api.post(`/payroll/calculate/${empId}`, { month: new Date().getMonth() + 1, year: new Date().getFullYear() });
+// Dashboard overview
+export const getDashboard = () =>
+  api.get("/payroll/dashboard");
+
+// Calculate payroll for a single employee
+export const calculatePayroll = (empId, period = { month: new Date().getMonth() + 1, year: new Date().getFullYear() }) =>
+  api.post(`/payroll/calculate/${empId}`, period);
 
 // Calculate payroll for all employees
-export const calculateAllPayroll = () =>
-  api.post("/payroll/calculate-all", { month: new Date().getMonth() + 1, year: new Date().getFullYear() });
+export const calculateAllPayroll = (period = { month: new Date().getMonth() + 1, year: new Date().getFullYear() }) =>
+  api.post("/payroll/calculate-all", period);
 
-// Get all payslips (list)
+// Process payroll batch
+export const processPayroll = (payslipIds) =>
+  api.post("/payroll/process", { payslipIds });
+
+// Get all payslips
 export const getAllPayslips = () =>
   api.get("/payroll/payslips");
 
-// Get a single payslip by its ID
+// Get payroll history
+export const getHistory = () =>
+  api.get("/payroll/history");
+
+// Get a single payslip by ID
 export const getPayslipById = (payslipId) =>
   api.get(`/payroll/${payslipId}`);
 
-// Get all payslips for one employee (history per employee)
+// Get all payslips for an employee
 export const getEmployeePayslips = (empId) =>
   api.get(`/payroll/employee/${empId}`);
 
-// Get current logged-in employee's monthly payslip
+// Get monthly payslip for current user
 export const getMonthlyPayslip = () =>
   api.get("/payroll/employee/monthly");
+
+// Get salary structure
+export const getSalaryStructure = (empId) =>
+  api.get(`/payroll/salary/${empId}`);
+
+// Update salary structure
+export const updateSalaryStructure = (empId, salaryStructure) =>
+  api.put(`/payroll/salary/${empId}`, salaryStructure);

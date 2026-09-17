@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
+import api from "../../../api/axiosInstance";
 import "./Biometric.css";
 import HRLayout from "../../../layouts/HRLayout";
 import {
@@ -29,178 +30,6 @@ import {
 
 import { MdFingerprint } from "react-icons/md";
 
-const INITIAL_DEVICES = [
-  {
-    id: "BIO-001",
-    name: "Main Entrance",
-    location: "Mumbai HQ",
-    zone: "Ground Floor",
-    ip: "192.168.1.101",
-    port: "4370",
-    model: "ZKTeco SpeedFace-V5L",
-    vendor: "ZKTeco",
-    status: "Connected",
-    mode: "Face + Fingerprint",
-    lastSync: "2 min ago",
-    lastHeartbeat: "12 sec ago",
-    records: 1086,
-    pending: 0,
-    todayScans: 284,
-    firmware: "6.3.1",
-    attendanceMode: "IN / OUT",
-    sync: "Automatic",
-  },
-  {
-    id: "BIO-002",
-    name: "Second Floor Gate",
-    location: "Mumbai HQ",
-    zone: "2nd Floor",
-    ip: "192.168.1.102",
-    port: "4370",
-    model: "ZKTeco uFace 302",
-    vendor: "ZKTeco",
-    status: "Connected",
-    mode: "Face + Fingerprint",
-    lastSync: "5 min ago",
-    lastHeartbeat: "18 sec ago",
-    records: 420,
-    pending: 0,
-    todayScans: 196,
-    firmware: "6.2.8",
-    attendanceMode: "IN / OUT",
-    sync: "Automatic",
-  },
-  {
-    id: "BIO-003",
-    name: "Cafeteria Entry",
-    location: "Mumbai HQ",
-    zone: "Basement",
-    ip: "192.168.1.103",
-    port: "4370",
-    model: "Suprema FaceLite",
-    vendor: "Suprema",
-    status: "Syncing",
-    mode: "Face Recognition",
-    lastSync: "Syncing...",
-    lastHeartbeat: "8 sec ago",
-    records: 312,
-    pending: 23,
-    todayScans: 151,
-    firmware: "2.7.4",
-    attendanceMode: "IN / OUT",
-    sync: "Automatic",
-  },
-  {
-    id: "BIO-004",
-    name: "Bangalore Office",
-    location: "Bangalore",
-    zone: "Entry Gate",
-    ip: "10.0.0.51",
-    port: "4370",
-    model: "ZKTeco SpeedFace-V5L",
-    vendor: "ZKTeco",
-    status: "Disconnected",
-    mode: "Face + Fingerprint",
-    lastSync: "4h ago",
-    lastHeartbeat: "4h ago",
-    records: 740,
-    pending: 37,
-    todayScans: 0,
-    firmware: "6.1.9",
-    attendanceMode: "IN / OUT",
-    sync: "Automatic",
-  },
-  {
-    id: "BIO-005",
-    name: "Delhi Branch",
-    location: "Delhi",
-    zone: "Main Gate",
-    ip: "172.16.0.21",
-    port: "4370",
-    model: "Suprema BioStation 3",
-    vendor: "Suprema",
-    status: "Error",
-    mode: "Fingerprint",
-    lastSync: "1d ago",
-    lastHeartbeat: "1d ago",
-    records: 198,
-    pending: 64,
-    todayScans: 0,
-    firmware: "3.4.2",
-    attendanceMode: "IN / OUT",
-    sync: "Automatic",
-  },
-];
-
-const INITIAL_EVENTS = [
-  {
-    id: 1,
-    device: "BIO-001",
-    deviceName: "Main Entrance",
-    employee: "Rahul Kumar",
-    employeeId: "EMP1001",
-    event: "Check In",
-    method: "Face",
-    time: "09:12 AM",
-    result: "Accepted",
-  },
-  {
-    id: 2,
-    device: "BIO-001",
-    deviceName: "Main Entrance",
-    employee: "Priya Sharma",
-    employeeId: "EMP1002",
-    event: "Check In",
-    method: "Fingerprint",
-    time: "09:18 AM",
-    result: "Accepted",
-  },
-  {
-    id: 3,
-    device: "BIO-002",
-    deviceName: "Second Floor Gate",
-    employee: "Arjun Reddy",
-    employeeId: "EMP1003",
-    event: "Check In",
-    method: "Face",
-    time: "09:24 AM",
-    result: "Accepted",
-  },
-  {
-    id: 4,
-    device: "BIO-003",
-    deviceName: "Cafeteria Entry",
-    employee: "Sneha Rao",
-    employeeId: "EMP1004",
-    event: "Break Out",
-    method: "Face",
-    time: "01:08 PM",
-    result: "Accepted",
-  },
-  {
-    id: 5,
-    device: "BIO-005",
-    deviceName: "Delhi Branch",
-    employee: "Vikram Singh",
-    employeeId: "EMP1005",
-    event: "Check In",
-    method: "Fingerprint",
-    time: "09:42 AM",
-    result: "Device Error",
-  },
-  {
-    id: 6,
-    device: "BIO-001",
-    deviceName: "Main Entrance",
-    employee: "Meena Pillai",
-    employeeId: "EMP1006",
-    event: "Check Out",
-    method: "Face",
-    time: "06:18 PM",
-    result: "Accepted",
-  },
-];
-
 function formatNumber(value) {
   return Number(value || 0).toLocaleString("en-IN");
 }
@@ -219,8 +48,8 @@ function getStatusClass(status) {
 }
 
 export default function Biometric() {
-  const [devices, setDevices] = useState(INITIAL_DEVICES);
-  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [devices, setDevices] = useState([]);
+  const [events, setEvents] = useState([]);
   const [activeTab, setActiveTab] = useState("overview");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -242,10 +71,72 @@ export default function Biometric() {
     mode: "Face + Fingerprint",
   });
 
+  const fetchBiometricData = useCallback(async () => {
+    try {
+      const [devRes, evRes] = await Promise.allSettled([
+        api.get("/biometric/devices"),
+        api.get("/biometric/events")
+      ]);
+
+      if (devRes.status === "fulfilled" && Array.isArray(devRes.value.data) && devRes.value.data.length > 0) {
+        setDevices(devRes.value.data);
+      }
+      if (evRes.status === "fulfilled" && Array.isArray(evRes.value.data) && evRes.value.data.length > 0) {
+        setEvents(evRes.value.data);
+      }
+    } catch (err) {
+      console.warn("Biometric fetch notice:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBiometricData();
+  }, [fetchBiometricData]);
+
   const showToast = (message) => {
     setToast(message);
     window.clearTimeout(window.__belBioToastTimer);
     window.__belBioToastTimer = window.setTimeout(() => setToast(""), 2800);
+  };
+
+  const syncDevice = async (deviceId) => {
+    const device = devices.find((item) => item.id === deviceId);
+    if (!device || syncingDevice) return;
+
+    setSyncingDevice(deviceId);
+
+    setDevices((current) =>
+      current.map((item) =>
+        item.id === deviceId
+          ? { ...item, status: "Syncing", lastSync: "Syncing..." }
+          : item
+      )
+    );
+
+    try {
+      await api.post(`/biometric/devices/${deviceId}/sync`);
+    } catch (err) {
+      console.warn("Device sync API notice:", err.message);
+    }
+
+    setDevices((current) =>
+      current.map((item) =>
+        item.id === deviceId
+          ? {
+              ...item,
+              status: "Connected",
+              lastSync: "Just now",
+              lastHeartbeat: "5 sec ago",
+              pending: 0,
+              records: item.records + (item.pending || 0),
+            }
+          : item
+      )
+    );
+
+    addEvent(device, "Sync Completed");
+    setSyncingDevice(null);
+    showToast(`${device.name} synced successfully.`);
   };
 
   const stats = useMemo(() => {
@@ -320,42 +211,6 @@ export default function Biometric() {
       },
       ...current,
     ]);
-  };
-
-  const syncDevice = (deviceId) => {
-    const device = devices.find((item) => item.id === deviceId);
-    if (!device || syncingDevice) return;
-
-    setSyncingDevice(deviceId);
-
-    setDevices((current) =>
-      current.map((item) =>
-        item.id === deviceId
-          ? { ...item, status: "Syncing", lastSync: "Syncing..." }
-          : item
-      )
-    );
-
-    window.setTimeout(() => {
-      setDevices((current) =>
-        current.map((item) =>
-          item.id === deviceId
-            ? {
-                ...item,
-                status: "Connected",
-                lastSync: "Just now",
-                lastHeartbeat: "5 sec ago",
-                pending: 0,
-                records: item.records + item.pending,
-              }
-            : item
-        )
-      );
-
-      addEvent(device, "Sync Completed");
-      setSyncingDevice(null);
-      showToast(`${device.name} synced successfully.`);
-    }, 1300);
   };
 
   const syncAll = () => {
@@ -989,7 +844,14 @@ export default function Biometric() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredEvents.map((event) => (
+                  {filteredEvents.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" style={{ textAlign: "center", padding: "2.5rem", color: "var(--text-secondary)" }}>
+                        No biometric activity events recorded.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredEvents.map((event) => (
                     <tr key={event.id}>
                       <td>
                         <div className="bel-biometric-employee-cell">
@@ -1028,7 +890,7 @@ export default function Biometric() {
                         </span>
                       </td>
                     </tr>
-                  ))}
+                  ))) }
                 </tbody>
               </table>
             </div>

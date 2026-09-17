@@ -1,29 +1,21 @@
 import React, { useState } from "react";
 import "./EmployeeList.css";
-import { FiSearch, FiFilter, FiEdit2, FiEye, FiUserPlus } from "react-icons/fi";
+import { FiSearch, FiFilter, FiEdit2, FiEye, FiUserPlus, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-export default function EmployeeList({ employees: initialEmployees }) {
+export default function EmployeeList({ employees = [], loading = false, onDelete }) {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [deptFilter, setDeptFilter] = useState("All");
 
-  const defaultEmployees = [
-    { id: "EMP-1001", name: "Arjun Mehta", email: "arjun.m@belnova.com", department: "Engineering", role: "Sr. Frontend Dev", status: "Active", joinDate: "2023-04-15" },
-    { id: "EMP-1002", name: "Kavya Nair", email: "kavya.n@belnova.com", department: "Product & Design", role: "UX Designer", status: "Active", joinDate: "2023-08-01" },
-    { id: "EMP-1003", name: "Rahul Verma", email: "rahul.v@belnova.com", department: "Engineering", role: "Backend Dev", status: "On Leave", joinDate: "2024-01-10" },
-    { id: "EMP-1004", name: "Sneha Sharma", email: "sneha.s@belnova.com", department: "HR & Operations", role: "HR Specialist", status: "Active", joinDate: "2022-11-20" },
-    { id: "EMP-1005", name: "Vikram Singh", email: "vikram.s@belnova.com", department: "Sales & Marketing", role: "Sales Lead", status: "Active", joinDate: "2024-05-12" },
-    { id: "EMP-1006", name: "Ananya Deshmukh", email: "ananya.d@belnova.com", department: "Finance & Legal", role: "Financial Analyst", status: "Inactive", joinDate: "2021-06-18" },
-  ];
-
-  const employeeData = initialEmployees && initialEmployees.length > 0 ? initialEmployees : defaultEmployees;
-
-  const filtered = employeeData.filter((e) => {
+  const filtered = employees.filter((e) => {
+    const name = e.name || "";
+    const email = e.email || "";
+    const id = e.id || "";
     const matchesSearch =
-      e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      e.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      e.id.toLowerCase().includes(searchTerm.toLowerCase());
+      name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDept = deptFilter === "All" || e.department === deptFilter;
     return matchesSearch && matchesDept;
   });
@@ -51,6 +43,7 @@ export default function EmployeeList({ employees: initialEmployees }) {
               <option value="HR & Operations">HR & Operations</option>
               <option value="Sales & Marketing">Sales & Marketing</option>
               <option value="Finance & Legal">Finance & Legal</option>
+              <option value="General">General</option>
             </select>
           </div>
         </div>
@@ -65,65 +58,97 @@ export default function EmployeeList({ employees: initialEmployees }) {
       </div>
 
       <div className="hradmin-emp-table-card">
-        <table className="hradmin-emp-table">
-          <thead>
-            <tr>
-              <th>Employee ID</th>
-              <th>Name & Email</th>
-              <th>Department</th>
-              <th>Designation</th>
-              <th>Status</th>
-              <th>Joining Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((emp) => (
-              <tr key={emp.id}>
-                <td className="hradmin-emp-id">{emp.id}</td>
-                <td>
-                  <div className="hradmin-emp-cell-user">
-                    <div className="hradmin-emp-avatar">
-                      {emp.name.split(" ").map((n) => n[0]).join("")}
-                    </div>
-                    <div>
-                      <strong>{emp.name}</strong>
-                      <small>{emp.email}</small>
-                    </div>
-                  </div>
-                </td>
-                <td>{emp.department}</td>
-                <td>{emp.role}</td>
-                <td>
-                  <span className={`hradmin-emp-status-badge ${emp.status.toLowerCase().replace(" ", "-")}`}>
-                    {emp.status}
-                  </span>
-                </td>
-                <td>{emp.joinDate}</td>
-                <td>
-                  <div className="hradmin-emp-actions">
-                    <button
-                      type="button"
-                      className="hradmin-emp-action-icon"
-                      title="View Profile"
-                      onClick={() => navigate(`/hr/employees/${emp.id}`)}
-                    >
-                      <FiEye />
-                    </button>
-                    <button
-                      type="button"
-                      className="hradmin-emp-action-icon"
-                      title="Edit Profile"
-                      onClick={() => navigate(`/hr/employees/${emp.id}/edit`)}
-                    >
-                      <FiEdit2 />
-                    </button>
-                  </div>
-                </td>
+        {loading ? (
+          <div style={{ padding: "32px", textAlign: "center", color: "#64748b" }}>
+            Loading employees...
+          </div>
+        ) : filtered.length === 0 ? (
+          <div style={{ padding: "32px", textAlign: "center", color: "#64748b" }}>
+            No employee records found.
+          </div>
+        ) : (
+          <table className="hradmin-emp-table">
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Name & Email</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Status</th>
+                <th>Joining Date</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((emp) => {
+                const initials = (emp.name || "U")
+                  .split(" ")
+                  .map((n) => n[0])
+                  .filter(Boolean)
+                  .slice(0, 2)
+                  .join("");
+
+                const statusClass = (emp.status || "active").toLowerCase().replace(/\s+/g, "-");
+
+                return (
+                  <tr key={emp.id || emp.rawId}>
+                    <td className="hradmin-emp-id">{emp.id}</td>
+                    <td>
+                      <div className="hradmin-emp-cell-user">
+                        <div className="hradmin-emp-avatar">
+                          {initials || "EM"}
+                        </div>
+                        <div>
+                          <strong>{emp.name}</strong>
+                          <small>{emp.email}</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{emp.department}</td>
+                    <td>{emp.role}</td>
+                    <td>
+                      <span className={`hradmin-emp-status-badge ${statusClass}`}>
+                        {emp.status}
+                      </span>
+                    </td>
+                    <td>{emp.joinDate}</td>
+                    <td>
+                      <div className="hradmin-emp-actions">
+                        <button
+                          type="button"
+                          className="hradmin-emp-action-icon"
+                          title="View Profile"
+                          onClick={() => navigate(`/hr/employees/${emp.rawId || emp.id}`)}
+                        >
+                          <FiEye />
+                        </button>
+                        <button
+                          type="button"
+                          className="hradmin-emp-action-icon"
+                          title="Edit Profile"
+                          onClick={() => navigate(`/hr/employees/${emp.rawId || emp.id}/edit`)}
+                        >
+                          <FiEdit2 />
+                        </button>
+                        {onDelete && (
+                          <button
+                            type="button"
+                            className="hradmin-emp-action-icon delete"
+                            title="Delete Employee"
+                            style={{ color: "#ef4444" }}
+                            onClick={() => onDelete(emp.id, emp.rawId)}
+                          >
+                            <FiTrash2 />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Leave.css";
 import HRLayout from "../../../layouts/HRLayout";
 import { useAuth } from "../../../context/AuthContext";
+import api from "../../../api/axiosInstance";
 import {
   FiCheck,
   FiChevronDown,
@@ -11,97 +12,6 @@ import {
   FiFilter,
   FiX,
 } from "react-icons/fi";
-
-const INITIAL_POLICIES = [
-  {
-    id: "casual",
-    name: "Casual Leave",
-    annual: 12,
-    used: 4,
-    remaining: 8,
-    carryForward: "Yes (max 5 days)",
-    encashment: "Enabled",
-    approval: "Manager → HR",
-  },
-  {
-    id: "sick",
-    name: "Sick Leave",
-    annual: 12,
-    used: 3,
-    remaining: 9,
-    carryForward: "Yes (max 5 days)",
-    encashment: "Enabled",
-    approval: "Manager → HR",
-  },
-  {
-    id: "earned",
-    name: "Earned Leave",
-    annual: 18,
-    used: 6,
-    remaining: 12,
-    carryForward: "Yes (max 5 days)",
-    encashment: "Enabled",
-    approval: "Manager → HR",
-  },
-  {
-    id: "optional",
-    name: "Optional Leave",
-    annual: 3,
-    used: 1,
-    remaining: 2,
-    carryForward: "Yes (max 5 days)",
-    encashment: "Enabled",
-    approval: "Manager → HR",
-  },
-];
-
-const INITIAL_BALANCES = [
-  {
-    id: "EMP1001",
-    employee: "Rahul Kumar",
-    initials: "RK",
-    casual: 8,
-    sick: 9,
-    earned: 12,
-    optional: 2,
-  },
-  {
-    id: "EMP1002",
-    employee: "Priya Sharma",
-    initials: "PS",
-    casual: 6,
-    sick: 4,
-    earned: 12,
-    optional: 2,
-  },
-  {
-    id: "EMP1003",
-    employee: "Arjun Reddy",
-    initials: "AR",
-    casual: 10,
-    sick: 11,
-    earned: 15,
-    optional: 3,
-  },
-  {
-    id: "EMP1004",
-    employee: "Sneha Rao",
-    initials: "SR",
-    casual: 7,
-    sick: 8,
-    earned: 10,
-    optional: 1,
-  },
-  {
-    id: "EMP1005",
-    employee: "Vikram Singh",
-    initials: "VS",
-    casual: 12,
-    sick: 12,
-    earned: 18,
-    optional: 3,
-  },
-];
 
 const FILTER_OPTIONS = [
   "All",
@@ -153,8 +63,30 @@ function StatCard({ value, label, tone }) {
 export default function Leave() {
   const { leaveRequests = [], handleApproveLeave, handleRejectLeave } = useAuth();
   const [activeTab, setActiveTab] = useState("requests");
-  const [policies, setPolicies] = useState(INITIAL_POLICIES);
-  const [balances] = useState(INITIAL_BALANCES);
+  const [policies, setPolicies] = useState([]);
+  const [balances, setBalances] = useState([]);
+
+  const fetchLeaveData = useCallback(async () => {
+    try {
+      const [polRes, balRes] = await Promise.allSettled([
+        api.get("/leave/policies"),
+        api.get("/leave/balances")
+      ]);
+
+      if (polRes.status === "fulfilled" && Array.isArray(polRes.value.data) && polRes.value.data.length > 0) {
+        setPolicies(polRes.value.data);
+      }
+      if (balRes.status === "fulfilled" && Array.isArray(balRes.value.data) && balRes.value.data.length > 0) {
+        setBalances(balRes.value.data);
+      }
+    } catch (err) {
+      console.warn("Leave policies/balances fetch notice:", err.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLeaveData();
+  }, [fetchLeaveData]);
 
   const [statusFilter, setStatusFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All Leave Types");
@@ -579,7 +511,12 @@ export default function Leave() {
 
         {activeTab === "policies" && (
           <section className="bel-leave-policy-grid">
-            {policies.map((policy) => {
+            {policies.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "2.5rem", gridColumn: "1 / -1", color: "var(--text-secondary)" }}>
+                No leave policies configured.
+              </div>
+            ) : (
+              policies.map((policy) => {
               const utilization =
                 policy.annual > 0
                   ? Math.round((policy.used / policy.annual) * 100)
@@ -642,7 +579,7 @@ export default function Leave() {
                   </dl>
                 </article>
               );
-            })}
+            }))}
           </section>
         )}
 
@@ -662,7 +599,14 @@ export default function Leave() {
                 </thead>
 
                 <tbody>
-                  {balances.map((employee, index) => {
+                  {balances.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" style={{ textAlign: "center", padding: "2.5rem", color: "var(--text-secondary)" }}>
+                        No leave balances found.
+                      </td>
+                    </tr>
+                  ) : (
+                    balances.map((employee, index) => {
                     const total =
                       employee.casual +
                       employee.sick +
@@ -702,7 +646,7 @@ export default function Leave() {
                         </td>
                       </tr>
                     );
-                  })}
+                  })) }
                 </tbody>
               </table>
             </div>

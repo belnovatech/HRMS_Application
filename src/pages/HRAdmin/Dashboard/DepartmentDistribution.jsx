@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./DepartmentDistribution.css";
 import {
   PieChart,
@@ -7,23 +7,62 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
+import api from "../../../api/axiosInstance";
+
+const COLOR_PALETTE = ["#2563eb", "#8b5cf6", "#10b981", "#06b6d4", "#f59e0b", "#ec4899", "#6366f1"];
 
 export default function DepartmentDistribution() {
-  const deptData = [
-    { name: "Engineering", count: 342, color: "#2563eb" },
-    { name: "Sales", count: 215, color: "#8b5cf6" },
-    { name: "HR", count: 86, color: "#a855f7" },
-    { name: "Finance", count: 124, color: "#06b6d4" },
-    { name: "Product & Design", count: 481, color: "#10b981" }
-  ];
+  const [employees, setEmployees] = useState([]);
 
-  const totalEmployees = 1248;
+  useEffect(() => {
+    let active = true;
+    Promise.allSettled([
+      api.get("/Employees"),
+      api.get("/Accounts")
+    ]).then(([empRes, accRes]) => {
+      if (!active) return;
+      const list = [];
+      if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data)) {
+        empRes.value.data.forEach(e => list.push(e));
+      }
+      if (accRes.status === "fulfilled" && Array.isArray(accRes.value.data)) {
+        accRes.value.data.forEach(a => {
+          if (!list.some(e => (e.email && e.email === a.email) || e.employeeNumber === a.employeeNumber)) {
+            list.push(a);
+          }
+        });
+      }
+      setEmployees(list);
+    });
+    return () => { active = false; };
+  }, []);
+
+  const deptData = useMemo(() => {
+    if (employees.length === 0) {
+      return [
+        { name: "Engineering", count: 1, color: COLOR_PALETTE[0] },
+        { name: "HR", count: 1, color: COLOR_PALETTE[1] }
+      ];
+    }
+    const counts = {};
+    employees.forEach((emp) => {
+      const d = emp.department || "Engineering";
+      counts[d] = (counts[d] || 0) + 1;
+    });
+    return Object.entries(counts).map(([name, count], index) => ({
+      name,
+      count,
+      color: COLOR_PALETTE[index % COLOR_PALETTE.length]
+    }));
+  }, [employees]);
+
+  const totalEmployees = employees.length || deptData.reduce((sum, d) => sum + d.count, 0);
 
   return (
     <div className="hradmin-dashboard-dept-card">
       <div className="hradmin-dashboard-dept-header">
         <h3 className="hradmin-dashboard-card-title">Department Distribution</h3>
-        <span className="hradmin-dashboard-card-subtitle">{totalEmployees.toLocaleString()} total employees</span>
+        <span className="hradmin-dashboard-card-subtitle">{totalEmployees.toLocaleString()} total members</span>
       </div>
 
       <div className="hradmin-dashboard-dept-chart-wrapper">
@@ -49,7 +88,7 @@ export default function DepartmentDistribution() {
                 border: "1px solid #e2e8f0",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
               }}
-              formatter={(val, name) => [`${val} Employees`, name]}
+              formatter={(val, name) => [`${val} Members`, name]}
             />
           </PieChart>
         </ResponsiveContainer>

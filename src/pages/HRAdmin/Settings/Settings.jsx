@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback } from "react";
 import "./Settings.css";
 import HRLayout from "../../../layouts/HRLayout";
 import api from "../../../api/axiosInstance";
+import { useAuth } from "../../../context/AuthContext";
 import {
   FiActivity,
   FiAlertTriangle,
@@ -294,12 +295,14 @@ export default function Settings() {
     setCompany((current) => ({ ...current, [field]: value }));
   };
 
+  const { user } = useAuth();
+
   const saveSection = (label) => {
     setAuditLogs((current) => [
       {
         id: Date.now(),
         action: `${label} settings saved`,
-        user: "Sneha Rao",
+        user: user?.fullName || user?.name || user?.username || "HR Admin",
         module: label,
         time: "Just now",
         result: "Success",

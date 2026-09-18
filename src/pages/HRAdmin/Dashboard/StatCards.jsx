@@ -24,7 +24,7 @@ export default function StatCards() {
         if (active) {
           const summary = sumRes.status === "fulfilled" ? sumRes.value.data : {};
           const empCount = empRes.status === "fulfilled" && Array.isArray(empRes.value.data) ? empRes.value.data.length : null;
-          setSummaryData({ ...summary, totalEmployees: empCount || summary?.totalEmployees || 1248 });
+          setSummaryData({ ...summary, totalEmployees: empCount ?? summary?.total_employees?.count ?? 0 });
         }
       } catch (err) {
         console.warn("Summary fetch notice:", err.message);
@@ -44,18 +44,20 @@ export default function StatCards() {
     (request) => request.status === "Approved"
   ).length;
 
-  const totalEmployees = summaryData?.totalEmployees || 1248;
-  const presentToday = summaryData?.presentToday || 1086;
-  const absentToday = summaryData?.absentToday || 72;
-  const onLeave = summaryData?.onLeave || (90 + approvedLeaveCount);
-  const payrollTotal = summaryData?.monthlyPayroll ? `₹${(summaryData.monthlyPayroll / 100000).toFixed(1)}L` : "₹48.7L";
+  const totalEmployees = summaryData?.totalEmployees ?? summaryData?.total_employees?.count ?? 0;
+  const activeEmployees = summaryData?.active_employees?.count ?? totalEmployees;
+  const presentToday = summaryData?.presentToday ?? activeEmployees;
+  const absentToday = summaryData?.absentToday ?? summaryData?.inactive_employees?.count ?? 0;
+  const onLeave = summaryData?.onLeave ?? approvedLeaveCount;
+  const monthlyAmount = summaryData?.monthly_payroll?.amount || summaryData?.monthlyPayroll || 0;
+  const payrollTotal = monthlyAmount > 0 ? `₹${(monthlyAmount / 100000).toFixed(1)}L` : "₹0.0";
 
   const cards = [
     {
       id: "total-employees",
       title: "Total Employees",
       value: totalEmployees.toLocaleString("en-IN"),
-      badgeText: "+12 this month",
+      badgeText: `${activeEmployees} Active`,
       badgeType: "positive-pill",
       icon: <FiUsers />,
       iconBg: "#eff6ff",
@@ -65,7 +67,7 @@ export default function StatCards() {
       id: "present-today",
       title: "Present Today",
       value: presentToday.toLocaleString("en-IN"),
-      badgeText: "↗ 87.0%",
+      badgeText: totalEmployees > 0 ? `${Math.round((presentToday / totalEmployees) * 100)}%` : "0%",
       badgeType: "positive-pill",
       icon: <FiClock />,
       iconBg: "#ecfdf5",
@@ -75,8 +77,8 @@ export default function StatCards() {
       id: "absent-today",
       title: "Absent Today",
       value: absentToday.toLocaleString("en-IN"),
-      badgeText: "↘ -5 vs avg",
-      badgeType: "negative-pill",
+      badgeText: "Recorded",
+      badgeType: "neutral-pill",
       icon: <FiAlertCircle />,
       iconBg: "#fef2f2",
       iconColor: "#ef4444"
@@ -85,7 +87,7 @@ export default function StatCards() {
       id: "on-leave",
       title: "On Leave",
       value: String(onLeave),
-      badgeText: "Active",
+      badgeText: "Approved",
       badgeType: "neutral-pill",
       icon: <FiCalendar />,
       iconBg: "#fffbeb",
@@ -95,7 +97,7 @@ export default function StatCards() {
       id: "pending-approvals",
       title: "Pending Approvals",
       value: String(pendingApprovalsCount),
-      badgeText: pendingApprovalsCount > 0 ? "↑ Action needed" : "All clear",
+      badgeText: pendingApprovalsCount > 0 ? "Action needed" : "All clear",
       badgeType: pendingApprovalsCount > 0 ? "urgent-pill" : "positive-pill",
       icon: <FiAlertCircle />,
       iconBg: "#faf5ff",
@@ -105,9 +107,9 @@ export default function StatCards() {
       id: "monthly-payroll",
       title: "Monthly Payroll",
       value: payrollTotal,
-      badgeText: "↗ +4.2%",
+      badgeText: "Current Period",
       badgeType: "gradient-pill",
-      icon: <span>$</span>,
+      icon: <span>₹</span>,
       isGradient: true
     }
   ];

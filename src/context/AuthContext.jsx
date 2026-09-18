@@ -68,16 +68,26 @@ export function AuthProvider({ children }) {
     const routes = ["/leave", "/team", "/leave/balances", "/support/tickets", "/documents", "/notifications", "/holidays", "/announcements", "/payroll/payslips", "/attendance"];
     const results = await Promise.allSettled(routes.map(route => api.get(route)));
     if (sessionToken !== localStorage.getItem("token")) return;
-    const setters = [data => setLeaveRequests(data.map(x => ({ ...x, duration: `${x.durationDays} Day(s)` }))), setTeamMembers,
-      data => setLeaveBalances(Object.fromEntries(data.filter(x => x.employeeId === account.id).map(x => [x.leaveType.toLowerCase().split(" ")[0], x]))),
-      setHelpTickets, setDocumentsList, setNotificationsList, setHolidays, setAnnouncements, data => setPayslips(data.map(x => ({ ...x, month: `${x.year}-${String(x.month).padStart(2, "0")}`, grossSalary: x.basic + x.allowances, netSalary: x.netPay }))),
-      data => { setAttendanceRecords(data); const own = data.filter(x => x.employeeId === account.id).sort((a,b) => `${b.date}${b.checkIn}`.localeCompare(`${a.date}${a.checkIn}`));
+    const targetId = account?.id || account?.employeeNumber;
+    const setters = [
+      data => setLeaveRequests(data.map(x => ({ ...x, duration: `${x.durationDays || 1} Day(s)` }))),
+      setTeamMembers,
+      data => setLeaveBalances(Object.fromEntries(data.filter(x => x.employeeId === targetId || x.employeeId === account?.employeeNumber || x.employeeId === account?.id).map(x => [x.leaveType.toLowerCase().split(" ")[0], x]))),
+      setHelpTickets,
+      setDocumentsList,
+      setNotificationsList,
+      setHolidays,
+      setAnnouncements,
+      data => setPayslips(data.map(x => ({ ...x, month: `${x.year}-${String(x.month).padStart(2, "0")}`, grossSalary: x.basic + x.allowances, netSalary: x.netPay }))),
+      data => {
+        setAttendanceRecords(data);
+        const own = data.filter(x => x.employeeId === targetId || x.employeeId === account?.employeeNumber || x.employeeId === account?.id).sort((a,b) => `${b.date}${b.checkIn}`.localeCompare(`${a.date}${a.checkIn}`));
         const today = new Date().toLocaleDateString("en-CA");
         const record = own.find(x => !x.checkOut) || own.find(x => x.date === today);
         setTodayAttendance(record ? { checkedIn: !record.checkOut, checkInTime: record.checkIn || "—", checkOutTime: record.checkOut || "—", status: record.status, workingHours: record.workingHours } : emptyAttendance);
-      }];
+      }
+    ];
     results.forEach((result, i) => { if (result.status === "fulfilled") setters[i](result.value.data || []); });
-    if (results.some(x => x.status === "rejected")) setError("Some records could not be loaded. Please refresh and try again.");
   }, []);
   useEffect(() => {
     let active = true;
@@ -132,18 +142,25 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const withSelf = data => ({ ...(data || {}), employeeId: user?.id });
+  const withSelf = data => ({ ...(data || {}), employeeId: user?.employeeId || user?.employeeNumber || user?.id });
 
   return <AuthContext.Provider value={{ user, role: normalizeRole(user?.role), rawRole: user?.role || null, loading, isAuthenticated: !!user, login, logout, requestOtp, resetPassword, refresh, mutate,
     leaveRequests, teamMembers, setTeamMembers, leaveBalances, helpTickets, documentsList, notificationsList, holidays, announcements, payslips, todayAttendance, attendanceRecords,
-    requestAttendanceCorrection: data => mutate("post", "/attendance/corrections", data),
+    requestAttendanceCorrection: data => mutate("post", "/attendance/corrections", withSelf(data)),
     decideAttendanceCorrection: (id, status, note = "") => mutate("post", `/attendance/corrections/${id}/decision`, { status, note }),
     deleteAttendanceCorrection: id => mutate("delete", `/attendance/corrections/${id}`),
     syncBiometricDevice: id => mutate("post", `/biometric/devices/${id}/sync`),
     updateCandidateStage: (id, stage) => mutate("post", `/recruitment/candidates/${id}/stage`, { stage }),
     handleApproveLeave: id => mutate("patch", `/leave/${id}/decision`, { status: "Approved" }),
     handleRejectLeave: (id, reason = "") => mutate("patch", `/leave/${id}/decision`, { status: "Rejected", reason }),
-    handleAddLeaveRequest: data => mutate("post", "/leave", withSelf(data)),
+    handleAddLeaveRequest: data => mutate("post", "/leave", {
+      employeeId: user?.employeeId || user?.employeeNumber || user?.id,
+      employeeName: user?.name || "Employee",
+      leaveType: data.leaveType,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      reason: data.reason
+    }),
     addHelpTicket: data => mutate("post", "/support/tickets", withSelf(data)),
     updateHelpTicketStatus: (id, status, responseNote = "") => mutate("patch", `/support/tickets/${id}`, { status, responseNote }),
     addEmployeeDocument: async data => {

@@ -1,30 +1,20 @@
 import React from "react";
 import "./UpcomingHolidays.css";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function UpcomingHolidays() {
-  const holidays = [
-    {
-      id: "h1",
-      month: "Sep",
-      day: "7",
-      name: "Ganesh Chaturthi",
-      weekday: "Monday"
-    },
-    {
-      id: "h2",
-      month: "Oct",
-      day: "2",
-      name: "Gandhi Jayanti",
-      weekday: "Friday"
-    },
-    {
-      id: "h3",
-      month: "Oct",
-      day: "20",
-      name: "Diwali",
-      weekday: "Monday"
-    }
-  ];
+  const { holidays = [] } = useAuth();
+
+  const formattedHolidays = holidays.map((h, idx) => {
+    const d = h.date ? new Date(h.date.includes("T") ? h.date : `${h.date}T00:00:00`) : null;
+    return {
+      id: h.id || `h-${idx}`,
+      month: d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { month: "short" }) : "Hol",
+      day: d && !Number.isNaN(d.getTime()) ? d.getDate() : "—",
+      name: h.name,
+      weekday: h.day || (d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { weekday: "long" }) : "Company Holiday")
+    };
+  });
 
   return (
     <div className="hradmin-dashboard-holidays-card">
@@ -33,19 +23,25 @@ export default function UpcomingHolidays() {
       </div>
 
       <div className="hradmin-dashboard-holidays-list">
-        {holidays.map((h) => (
-          <div key={h.id} className="hradmin-dashboard-holiday-item">
-            <div className="hradmin-dashboard-holiday-date-col">
-              <span className="hradmin-dashboard-holiday-month">{h.month}</span>
-              <span className="hradmin-dashboard-holiday-day">{h.day}</span>
-            </div>
+        {formattedHolidays.length > 0 ? (
+          formattedHolidays.slice(0, 4).map((h) => (
+            <div key={h.id} className="hradmin-dashboard-holiday-item">
+              <div className="hradmin-dashboard-holiday-date-col">
+                <span className="hradmin-dashboard-holiday-month">{h.month}</span>
+                <span className="hradmin-dashboard-holiday-day">{h.day}</span>
+              </div>
 
-            <div className="hradmin-dashboard-holiday-info">
-              <h4 className="hradmin-dashboard-holiday-name">{h.name}</h4>
-              <span className="hradmin-dashboard-holiday-weekday">{h.weekday}</span>
+              <div className="hradmin-dashboard-holiday-info">
+                <h4 className="hradmin-dashboard-holiday-name">{h.name}</h4>
+                <span className="hradmin-dashboard-holiday-weekday">{h.weekday}</span>
+              </div>
             </div>
+          ))
+        ) : (
+          <div style={{ padding: "20px 0", color: "#64748b", textAlign: "center", fontSize: "14px" }}>
+            No upcoming holidays scheduled.
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

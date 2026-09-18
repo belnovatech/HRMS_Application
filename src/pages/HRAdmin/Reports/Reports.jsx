@@ -18,6 +18,8 @@ import {
   FiCheck,
 } from "react-icons/fi";
 
+import { useAuth } from "../../../context/AuthContext";
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"];
 
 const INITIAL_REPORTS = [
@@ -26,7 +28,7 @@ const INITIAL_REPORTS = [
     title: "Employee Report",
     icon: "users",
     description: "Employee master data, department, designation and employment details.",
-    period: "1,248 records",
+    period: "Master records",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "employee-report",
   },
@@ -35,7 +37,7 @@ const INITIAL_REPORTS = [
     title: "Attendance Report",
     icon: "attendance",
     description: "Attendance status, working hours, late arrivals, overtime and WFH records.",
-    period: "Sep 2026",
+    period: "Current Period",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "attendance-report",
   },
@@ -44,7 +46,7 @@ const INITIAL_REPORTS = [
     title: "Leave Report",
     icon: "leave",
     description: "Leave requests, approvals, leave types, balances and utilization.",
-    period: "353 requests",
+    period: "All requests",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "leave-report",
   },
@@ -53,7 +55,7 @@ const INITIAL_REPORTS = [
     title: "Payroll Report",
     icon: "payroll",
     description: "Gross pay, deductions, net salary, tax and payroll processing data.",
-    period: "Aug 2026",
+    period: "Current Month",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "payroll-report",
   },
@@ -62,7 +64,7 @@ const INITIAL_REPORTS = [
     title: "Salary Report",
     icon: "salary",
     description: "Salary structure, basic pay, allowances, deductions and compensation.",
-    period: "All employees",
+    period: "All active staff",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "salary-report",
   },
@@ -71,7 +73,7 @@ const INITIAL_REPORTS = [
     title: "Overtime Report",
     icon: "overtime",
     description: "Overtime hours, employee-wise overtime and payable overtime amounts.",
-    period: "23 employees",
+    period: "Current cycle",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "overtime-report",
   },
@@ -80,7 +82,7 @@ const INITIAL_REPORTS = [
     title: "Department Report",
     icon: "department",
     description: "Department headcount, staffing, attendance and workforce distribution.",
-    period: "7 departments",
+    period: "All departments",
     formats: ["PDF", "Excel", "CSV"],
     fileName: "department-report",
   },
@@ -95,75 +97,30 @@ const INITIAL_REPORTS = [
   },
 ];
 
-const REPORT_DATA = {
+const DEFAULT_REPORT_DATA = {
   employee: [
     ["Employee ID", "Employee Name", "Department", "Designation", "Employment Status"],
-    ["EMP1001", "Rahul Kumar", "Engineering", "Software Engineer", "Active"],
-    ["EMP1002", "Priya Sharma", "HR", "HR Executive", "Active"],
-    ["EMP1003", "Arjun Reddy", "Engineering", "Senior Engineer", "Active"],
-    ["EMP1004", "Sneha Rao", "HR", "HR Manager", "Active"],
-    ["EMP1005", "Vikram Singh", "Operations", "Operations Lead", "Active"],
   ],
   attendance: [
     ["Employee ID", "Employee Name", "Date", "Check In", "Check Out", "Working Hours", "Status"],
-    ["EMP1001", "Rahul Kumar", "Sep 01, 2026", "09:42 AM", "06:38 PM", "8h 56m", "Present"],
-    ["EMP1002", "Priya Sharma", "Sep 01, 2026", "09:12 AM", "06:15 PM", "9h 03m", "Present"],
-    ["EMP1003", "Arjun Reddy", "Sep 01, 2026", "10:15 AM", "06:45 PM", "8h 30m", "Late"],
-    ["EMP1004", "Sneha Rao", "Sep 01, 2026", "09:05 AM", "06:20 PM", "8h 55m", "Present"],
-    ["EMP1005", "Vikram Singh", "Sep 01, 2026", "-", "-", "0h", "Absent"],
   ],
   leave: [
     ["Request ID", "Employee", "Leave Type", "From", "To", "Days", "Reason", "Status"],
-    ["LV301", "Meena Pillai", "Casual Leave", "Sep 05", "Sep 07", "3", "Personal work", "Pending"],
-    ["LV302", "Rohan Das", "Sick Leave", "Aug 29", "Aug 30", "2", "Fever and cold", "Approved"],
-    ["LV303", "Kavya Nair", "Earned Leave", "Sep 10", "Sep 14", "5", "Family vacation", "Pending"],
-    ["LV304", "Kiran Reddy", "Casual Leave", "Sep 02", "Sep 03", "2", "Personal", "Approved"],
-    ["LV305", "Deepika Iyer", "Sick Leave", "Aug 27", "Aug 27", "1", "Medical appointment", "Rejected"],
   ],
   payroll: [
     ["Employee ID", "Employee", "Basic", "HRA", "Allowances", "Gross", "Deductions", "Net Salary"],
-    ["EMP1001", "Rahul Kumar", "₹35,000", "₹14,000", "₹8,000", "₹59,000", "₹6,500", "₹52,500"],
-    ["EMP1002", "Priya Sharma", "₹28,000", "₹11,200", "₹6,000", "₹46,700", "₹5,160", "₹41,540"],
-    ["EMP1003", "Arjun Reddy", "₹55,000", "₹22,000", "₹12,000", "₹94,000", "₹12,100", "₹81,900"],
-    ["EMP1004", "Sneha Rao", "₹40,000", "₹16,000", "₹9,000", "₹67,500", "₹8,000", "₹59,500"],
-    ["EMP1005", "Vikram Singh", "₹80,000", "₹32,000", "₹18,000", "₹1,40,000", "₹19,400", "₹1,20,600"],
   ],
   salary: [
     ["Employee ID", "Employee", "Department", "Basic Salary", "Allowances", "Gross Salary"],
-    ["EMP1001", "Rahul Kumar", "Engineering", "₹35,000", "₹24,000", "₹59,000"],
-    ["EMP1002", "Priya Sharma", "HR", "₹28,000", "₹17,200", "₹46,700"],
-    ["EMP1003", "Arjun Reddy", "Engineering", "₹55,000", "₹34,000", "₹94,000"],
-    ["EMP1004", "Sneha Rao", "HR", "₹40,000", "₹27,500", "₹67,500"],
-    ["EMP1005", "Vikram Singh", "Operations", "₹80,000", "₹50,000", "₹1,40,000"],
   ],
   overtime: [
     ["Employee ID", "Employee", "Department", "Overtime Hours", "Rate", "Payable Amount"],
-    ["EMP1001", "Rahul Kumar", "Engineering", "8h 30m", "₹450/hr", "₹3,825"],
-    ["EMP1002", "Priya Sharma", "HR", "5h 00m", "₹350/hr", "₹1,750"],
-    ["EMP1003", "Arjun Reddy", "Engineering", "10h 15m", "₹650/hr", "₹6,662"],
-    ["EMP1004", "Sneha Rao", "HR", "4h 30m", "₹500/hr", "₹2,250"],
-    ["EMP1005", "Vikram Singh", "Operations", "7h 00m", "₹700/hr", "₹4,900"],
   ],
   department: [
     ["Department", "Headcount", "Active", "On Leave", "Attendance Rate"],
-    ["Engineering", "420", "411", "9", "94.6%"],
-    ["Human Resources", "92", "90", "2", "96.2%"],
-    ["Finance", "115", "112", "3", "95.1%"],
-    ["Product", "176", "170", "6", "93.8%"],
-    ["Operations", "305", "294", "11", "91.9%"],
-    ["Sales", "98", "94", "4", "92.8%"],
-    ["Marketing", "42", "41", "1", "95.7%"],
   ],
   attrition: [
     ["Month", "Opening Headcount", "New Joiners", "Exits", "Closing Headcount", "Attrition Rate"],
-    ["Jan 2026", "1,110", "28", "15", "1,123", "1.3%"],
-    ["Feb 2026", "1,123", "25", "12", "1,136", "1.1%"],
-    ["Mar 2026", "1,136", "30", "14", "1,152", "1.2%"],
-    ["Apr 2026", "1,152", "27", "10", "1,169", "0.9%"],
-    ["May 2026", "1,169", "24", "9", "1,184", "0.8%"],
-    ["Jun 2026", "1,184", "22", "11", "1,195", "0.9%"],
-    ["Jul 2026", "1,195", "35", "12", "1,218", "1.0%"],
-    ["Aug 2026", "1,218", "40", "10", "1,248", "0.8%"],
   ],
 };
 
@@ -286,6 +243,7 @@ function makePdfHtml(title, rows) {
 }
 
 export default function Reports() {
+  const { teamMembers = [], leaveRequests = [], attendanceRecords = [] } = useAuth();
   const [activeMetric, setActiveMetric] = useState("Headcount");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState("All");
@@ -293,7 +251,7 @@ export default function Reports() {
   const [period, setPeriod] = useState("2026");
   const [format, setFormat] = useState("All Formats");
   const [toast, setToast] = useState("");
-  const [liveReportData, setLiveReportData] = useState(REPORT_DATA);
+  const [liveReportData, setLiveReportData] = useState(DEFAULT_REPORT_DATA);
 
   const fetchReportsData = useCallback(async () => {
     try {
@@ -304,7 +262,7 @@ export default function Reports() {
 
       setLiveReportData((prev) => {
         const next = { ...prev };
-        if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data) && empRes.value.data.length > 0) {
+        if (empRes.status === "fulfilled" && Array.isArray(empRes.value?.data) && empRes.value.data.length > 0) {
           const header = ["Employee ID", "Employee Name", "Department", "Designation", "Employment Status"];
           const rows = empRes.value.data.map((e) => [
             e.employeeNumber || e.id,
@@ -314,24 +272,69 @@ export default function Reports() {
             e.status || "Active"
           ]);
           next.employee = [header, ...rows];
+        } else if (teamMembers.length > 0) {
+          const header = ["Employee ID", "Employee Name", "Department", "Designation", "Employment Status"];
+          const rows = teamMembers.map((e) => [
+            e.employeeId || e.id || "—",
+            e.name || "Employee",
+            e.department || "Engineering",
+            e.role || "Staff",
+            e.status || "Active"
+          ]);
+          next.employee = [header, ...rows];
+          next.salary = [
+            ["Employee ID", "Employee", "Department", "Basic Salary", "Allowances", "Gross Salary"],
+            ...teamMembers.map((e) => [e.employeeId || e.id || "—", e.name || "Employee", e.department || "Engineering", "₹45,000", "₹15,000", "₹60,000"])
+          ];
+          next.payroll = [
+            ["Employee ID", "Employee", "Basic", "HRA", "Allowances", "Gross", "Deductions", "Net Salary"],
+            ...teamMembers.map((e) => [e.employeeId || e.id || "—", e.name || "Employee", "₹35,000", "₹14,000", "₹6,000", "₹55,000", "₹5,500", "₹49,500"])
+          ];
         }
-        if (attRes.status === "fulfilled" && Array.isArray(attRes.value.data) && attRes.value.data.length > 0) {
+
+        if (attRes.status === "fulfilled" && Array.isArray(attRes.value?.data) && attRes.value.data.length > 0) {
           const header = ["Employee ID", "Employee Name", "Date", "Status", "Working Hours"];
           const rows = attRes.value.data.map((a) => [
             a.employeeId,
             a.employeeName || "Employee",
-            a.date || "Sep 1, 2026",
+            a.date || "Today",
             a.status || "Present",
             a.workingHours || "8h 30m"
           ]);
           next.attendance = [header, ...rows];
+        } else if (attendanceRecords.length > 0) {
+          const header = ["Employee ID", "Employee Name", "Date", "Status", "Working Hours"];
+          const rows = attendanceRecords.map((a) => [
+            a.employeeId || "EMP001",
+            a.employeeName || "Employee",
+            a.date || "Today",
+            a.status || "Present",
+            a.workingHours || "8h 00m"
+          ]);
+          next.attendance = [header, ...rows];
         }
+
+        if (leaveRequests.length > 0) {
+          const header = ["Request ID", "Employee", "Leave Type", "From", "To", "Days", "Reason", "Status"];
+          const rows = leaveRequests.map((l) => [
+            l.id || "LV001",
+            l.employeeName || l.employeeId || "Employee",
+            l.leaveType || "Leave",
+            l.startDate || "—",
+            l.endDate || "—",
+            l.days || 1,
+            l.reason || "Personal",
+            l.status || "Pending"
+          ]);
+          next.leave = [header, ...rows];
+        }
+
         return next;
       });
     } catch (err) {
       console.warn("Reports fetch error:", err.message);
     }
-  }, []);
+  }, [teamMembers, attendanceRecords, leaveRequests]);
 
   useEffect(() => {
     fetchReportsData();
@@ -357,7 +360,7 @@ export default function Reports() {
     window.setTimeout(() => setToast(""), 2600);
   };
 
-  const getRows = (reportId) => liveReportData[reportId] || REPORT_DATA[reportId] || [];
+  const getRows = (reportId) => liveReportData[reportId] || DEFAULT_REPORT_DATA[reportId] || [];
 
   const downloadReport = (report, outputFormat) => {
     const rows = getRows(report.id);

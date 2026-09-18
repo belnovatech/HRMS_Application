@@ -22,93 +22,79 @@ export default function EmployeeDashboard() {
     leaveBalances,
     holidays,
     payslips,
+    attendanceRecords = [],
+    announcements = [],
   } = useAuth();
 
   const [showPayslipModal, setShowPayslipModal] = useState(false);
 
-  const latestPayslip = payslips?.[0] || { month: "No payslip available", grossSalary: "?", deductions: "?", netSalary: "?" };
+  const latestPayslip = payslips?.[0] || null;
 
-  const safeLeaveBalances = leaveBalances || {
-    casual: { available: 6, used: 6, total: 12 },
-    sick: { available: 4, used: 8, total: 12 },
-    earned: { available: 12, used: 6, total: 18 },
-  };
+  const safeLeaveBalances = leaveBalances || {};
+  const casualBal = safeLeaveBalances.casual || { available: 0, used: 0, total: 12 };
+  const sickBal = safeLeaveBalances.sick || { available: 0, used: 0, total: 12 };
+  const earnedBal = safeLeaveBalances.earned || { available: 0, used: 0, total: 18 };
 
   const safeAttendance = todayAttendance || {
-    checkedIn: true,
-    checkInTime: "09:42 AM",
+    checkedIn: false,
+    checkInTime: "—",
     checkOutTime: "—",
-    workingHours: "04h 32m",
-    status: "Present",
+    workingHours: "—",
+    status: "Not checked in",
   };
 
-  const safeHolidays = holidays || [
-    {
-      id: 1,
-      date: "2026-09-07",
-      name: "Ganesh Chaturthi",
-      day: "Monday",
-      type: "Holiday",
-    },
-    {
-      id: 2,
-      date: "2026-10-02",
-      name: "Gandhi Jayanti",
-      day: "Friday",
-      type: "Holiday",
-    },
-    {
-      id: 3,
-      date: "2026-10-20",
-      name: "Diwali",
-      day: "Tuesday",
-      type: "Holiday",
-    },
-  ];
+  const safeHolidays = holidays || [];
 
-  const recentAttendance = [
-    { date: "Sep 1", checkIn: "09:42 AM", checkOut: "06:38 PM", hours: "8h 56m", status: "Present" },
-    { date: "Aug 31", checkIn: "09:30 AM", checkOut: "06:30 PM", hours: "9h 00m", status: "Present" },
-    { date: "Aug 30", checkIn: "10:15 AM", checkOut: "06:45 PM", hours: "8h 30m", status: "Late" },
-    { date: "Aug 29", checkIn: "—", checkOut: "—", hours: "—", status: "Leave" },
-    { date: "Aug 28", checkIn: "09:38 AM", checkOut: "06:40 PM", hours: "9h 02m", status: "Present" },
-  ];
+  const empId = user?.employeeId || user?.employeeNumber || user?.id;
+  const recentAttendance = (attendanceRecords || [])
+    .filter((x) => x.employeeId === empId || x.employeeId === user?.id)
+    .slice(0, 5)
+    .map((x) => ({
+      date: x.date || "Today",
+      checkIn: x.checkIn || "—",
+      checkOut: x.checkOut || "—",
+      hours: x.workingHours || "—",
+      status: x.status || (x.checkIn ? "Present" : "Not checked in"),
+    }));
 
-  const announcements = [
-    { title: "September Holiday Schedule", category: "HR", time: "1h ago" },
-    { title: "New Work From Home Policy", category: "Policy", time: "2d ago" },
-    { title: "Payroll Processed — August 2026", category: "Payroll", time: "1d ago" },
-    { title: "Company Anniversary Celebration", category: "Events", time: "3d ago" },
-  ];
+  const announcementItems = announcements || [];
 
-  const getMonth = (dateString) =>
-    new Date(`${dateString}T00:00:00`).toLocaleDateString("en-US", {
-      month: "short",
-    });
+  const getMonth = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString.includes("T") ? dateString : `${dateString}T00:00:00`);
+    return Number.isNaN(date.getTime()) ? "Hol" : date.toLocaleDateString("en-US", { month: "short" });
+  };
 
-  const getDay = (dateString) =>
-    new Date(`${dateString}T00:00:00`).getDate();
+  const getDay = (dateString) => {
+    if (!dateString) return "—";
+    const date = new Date(dateString.includes("T") ? dateString : `${dateString}T00:00:00`);
+    return Number.isNaN(date.getTime()) ? "—" : date.getDate();
+  };
 
   const leaveItems = [
     {
       key: "casual",
       label: "Casual Leave",
-      data: safeLeaveBalances.casual,
+      data: casualBal,
       tone: "blue",
     },
     {
       key: "sick",
       label: "Sick Leave",
-      data: safeLeaveBalances.sick,
+      data: sickBal,
       tone: "purple",
     },
     {
       key: "earned",
       label: "Earned Leave",
-      data: safeLeaveBalances.earned,
+      data: earnedBal,
       tone: "green",
     },
   ];
+
+  const userInitials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    : "EM";
 
   return (
     <EmployeeLayout title="Dashboard" breadcrumb="Employee Dashboard">
@@ -120,12 +106,12 @@ export default function EmployeeDashboard() {
               className="hrms-profile-avatar"
               style={{ background: user?.avatarBg || "#4f46e5" }}
             >
-              {user?.avatar || "RK"}
+              {user?.avatar || userInitials}
             </div>
 
             <div className="hrms-profile-copy">
               <div className="hrms-profile-name-row">
-                <h1>{user?.name || "Rahul Kumar"}</h1>
+                <h1>{user?.name || "Employee"}</h1>
                 <button
                   type="button"
                   className="hrms-profile-link"
@@ -251,40 +237,58 @@ export default function EmployeeDashboard() {
           {/* Payslip */}
           <article className="hrms-panel hrms-payslip-card">
             <div className="hrms-card-heading">
-              <h2>{latestPayslip.month} Payslip</h2>
-              <span className="hrms-status-pill hrms-status-present">
-                Processed
-              </span>
+              <h2>{latestPayslip ? `${latestPayslip.month} Payslip` : "Latest Payslip"}</h2>
+              {latestPayslip && (
+                <span className="hrms-status-pill hrms-status-present">
+                  Processed
+                </span>
+              )}
             </div>
 
-            <div className="hrms-salary-list">
-              <div className="hrms-salary-row">
-                <span>Gross Salary</span>
-                <strong className="hrms-money-green">
-                  {latestPayslip.grossSalary}
-                </strong>
-              </div>
-              <div className="hrms-salary-row">
-                <span>Deductions</span>
-                <strong className="hrms-money-red">
-                  {latestPayslip.deductions}
-                </strong>
-              </div>
-              <div className="hrms-salary-row">
-                <span>Net Salary</span>
-                <strong className="hrms-money-blue">
-                  {latestPayslip.netSalary}
-                </strong>
-              </div>
-            </div>
+            {latestPayslip ? (
+              <>
+                <div className="hrms-salary-list">
+                  <div className="hrms-salary-row">
+                    <span>Gross Salary</span>
+                    <strong className="hrms-money-green">
+                      ₹{Number(latestPayslip.grossSalary || 0).toLocaleString("en-IN")}
+                    </strong>
+                  </div>
+                  <div className="hrms-salary-row">
+                    <span>Deductions</span>
+                    <strong className="hrms-money-red">
+                      ₹{Number(latestPayslip.deductions || 0).toLocaleString("en-IN")}
+                    </strong>
+                  </div>
+                  <div className="hrms-salary-row">
+                    <span>Net Salary</span>
+                    <strong className="hrms-money-blue">
+                      ₹{Number(latestPayslip.netSalary || 0).toLocaleString("en-IN")}
+                    </strong>
+                  </div>
+                </div>
 
-            <button
-              type="button"
-              className="hrms-outline-button"
-              onClick={() => setShowPayslipModal(true)}
-            >
-              View Payslip
-            </button>
+                <button
+                  type="button"
+                  className="hrms-outline-button"
+                  onClick={() => setShowPayslipModal(true)}
+                >
+                  View Payslip
+                </button>
+              </>
+            ) : (
+              <div style={{ padding: "24px 0", color: "#64748b", textAlign: "center", fontSize: "14px" }}>
+                <p>No payslips generated yet.</p>
+                <button
+                  type="button"
+                  className="hrms-outline-button"
+                  style={{ marginTop: "12px" }}
+                  onClick={() => navigate("/employee/payslips")}
+                >
+                  Go to Payslips
+                </button>
+              </div>
+            )}
           </article>
 
           {/* Holidays */}
@@ -294,19 +298,25 @@ export default function EmployeeDashboard() {
             </div>
 
             <div className="hrms-holiday-list">
-              {safeHolidays.slice(0, 3).map((item) => (
-                <div className="hrms-holiday-item" key={item.id}>
-                  <div className="hrms-holiday-date">
-                    <strong>{getMonth(item.date)}</strong>
-                    <span>{getDay(item.date)}</span>
-                  </div>
+              {safeHolidays.length > 0 ? (
+                safeHolidays.slice(0, 3).map((item) => (
+                  <div className="hrms-holiday-item" key={item.id || item.name}>
+                    <div className="hrms-holiday-date">
+                      <strong>{getMonth(item.date)}</strong>
+                      <span>{getDay(item.date)}</span>
+                    </div>
 
-                  <div className="hrms-holiday-copy">
-                    <strong>{item.name}</strong>
-                    <span>{item.day}</span>
+                    <div className="hrms-holiday-copy">
+                      <strong>{item.name}</strong>
+                      <span>{item.day || "Holiday"}</span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div style={{ padding: "20px 0", color: "#64748b", textAlign: "center", fontSize: "14px" }}>
+                  <p>No upcoming holidays listed.</p>
                 </div>
-              ))}
+              )}
             </div>
           </article>
 
@@ -405,21 +415,29 @@ export default function EmployeeDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentAttendance.map((row) => (
-                  <tr key={`${row.date}-${row.status}`}>
-                    <td>{row.date}</td>
-                    <td className="hrms-table-green">{row.checkIn}</td>
-                    <td className="hrms-table-red">{row.checkOut}</td>
-                    <td>{row.hours}</td>
-                    <td>
-                      <span
-                        className={`hrms-table-status hrms-table-status-${row.status.toLowerCase()}`}
-                      >
-                        {row.status}
-                      </span>
+                {recentAttendance.length > 0 ? (
+                  recentAttendance.map((row, idx) => (
+                    <tr key={`${row.date}-${idx}`}>
+                      <td>{row.date}</td>
+                      <td className="hrms-table-green">{row.checkIn}</td>
+                      <td className="hrms-table-red">{row.checkOut}</td>
+                      <td>{row.hours}</td>
+                      <td>
+                        <span
+                          className={`hrms-table-status hrms-table-status-${String(row.status || "").toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          {row.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: "center", padding: "24px", color: "#64748b" }}>
+                      No recent attendance logs recorded yet.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -439,22 +457,29 @@ export default function EmployeeDashboard() {
           </div>
 
           <div className="hrms-announcement-list">
-            {announcements.map((item) => (
-              <button
-                type="button"
-                className="hrms-announcement-item"
-                key={item.title}
-              >
-                <span className="hrms-announcement-dot" />
-                <span className="hrms-announcement-content">
-                  <strong>{item.title}</strong>
-                  <span>
-                    <em>{item.category}</em>
-                    {item.time}
+            {announcementItems.length > 0 ? (
+              announcementItems.map((item, idx) => (
+                <button
+                  type="button"
+                  className="hrms-announcement-item"
+                  key={item.id || item.title || idx}
+                  onClick={() => navigate("/employee/announcements")}
+                >
+                  <span className="hrms-announcement-dot" />
+                  <span className="hrms-announcement-content">
+                    <strong>{item.title}</strong>
+                    <span>
+                      <em>{item.category || "Notice"}</em>
+                      {item.date || item.time || "Recent"}
+                    </span>
                   </span>
-                </span>
-              </button>
-            ))}
+                </button>
+              ))
+            ) : (
+              <div style={{ padding: "20px", color: "#64748b", textAlign: "center", fontSize: "14px" }}>
+                No active announcements published.
+              </div>
+            )}
           </div>
         </section>
       </div>
@@ -490,11 +515,11 @@ export default function EmployeeDashboard() {
               <div className="hrms-modal-employee">
                 <p>
                   <span>Employee Name</span>
-                  <strong>{user?.name || "Rahul Kumar"}</strong>
+                  <strong>{user?.fullName || user?.name || user?.username || "Employee"}</strong>
                 </p>
                 <p>
                   <span>Employee ID</span>
-                  <strong>{user?.employeeId || "EMP001"}</strong>
+                  <strong>{user?.employeeId || user?.employeeNumber || user?.id || "—"}</strong>
                 </p>
               </div>
 

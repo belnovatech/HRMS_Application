@@ -12,37 +12,6 @@ import {
 } from "react-icons/fi";
 import "./EmployeeRequests.css";
 
-const STATIC_REQUESTS = [
-  {
-    id: "REQ-2041",
-    type: "Attendance Correction",
-    details: "Attendance correction request",
-    date: "2026-09-01",
-    status: "Pending",
-  },
-  {
-    id: "REQ-2038",
-    type: "Leave Request",
-    details: "Leave request",
-    date: "2026-08-28",
-    status: "Approved",
-  },
-  {
-    id: "REQ-2030",
-    type: "Profile Update",
-    details: "Profile information update",
-    date: "2026-08-20",
-    status: "Resolved",
-  },
-  {
-    id: "REQ-2024",
-    type: "Document Verification",
-    details: "Document verification request",
-    date: "2026-08-15",
-    status: "In Progress",
-  },
-];
-
 const formatRequestDate = (value) => {
   if (!value) return "—";
 
@@ -77,7 +46,7 @@ const getRequestStatusClass = (status) => {
 };
 
 export default function EmployeeRequests() {
-  const { leaveRequests = [], user } = useAuth();
+  const { leaveRequests = [], helpTickets = [], user } = useAuth();
 
   const [createdRequests, setCreatedRequests] = useState([]);
   const [showRequestModal, setShowRequestModal] = useState(false);
@@ -89,35 +58,45 @@ export default function EmployeeRequests() {
   );
   const [requestDetails, setRequestDetails] = useState("");
 
-  /*
-   * Leave requests already coming from AuthContext are converted
-   * into the same structure used by this page.
-   */
+  const empId = user?.employeeId || user?.employeeNumber || user?.id;
+
   const leaveBasedRequests = useMemo(
     () =>
-      leaveRequests.map((leave, index) => ({
-        id: leave.id || `REQ-LEAVE-${index + 1}`,
-        type: "Leave Request",
-        details:
-          leave.reason ||
-          `${leave.leaveType || "Leave"} (${leave.startDate || "—"} to ${
-            leave.endDate || "—"
-          })`,
-        date: leave.appliedOn || leave.startDate || "",
-        status: leave.status || "Pending",
-      })),
-    [leaveRequests]
+      leaveRequests
+        .filter((l) => !l.employeeId || l.employeeId === empId || l.employeeId === user?.id)
+        .map((leave, index) => ({
+          id: leave.id || `REQ-LEAVE-${index + 1}`,
+          type: "Leave Request",
+          details:
+            leave.reason ||
+            `${leave.leaveType || "Leave"} (${leave.startDate || "—"} to ${
+              leave.endDate || "—"
+            })`,
+          date: leave.appliedOn || leave.startDate || "",
+          status: leave.status || "Pending",
+        })),
+    [leaveRequests, empId, user]
   );
 
-  /*
-   * Keep static demo records, AuthContext leave records,
-   * and requests created from this page together.
-   */
+  const ticketBasedRequests = useMemo(
+    () =>
+      helpTickets
+        .filter((t) => !t.employeeId || t.employeeId === empId || t.employeeId === user?.id)
+        .map((t, index) => ({
+          id: t.id || `REQ-TICKET-${index + 1}`,
+          type: t.category || "Helpdesk Ticket",
+          details: t.subject || t.description || "Support Request",
+          date: t.createdOn || t.date || "",
+          status: t.status || "Open",
+        })),
+    [helpTickets, empId, user]
+  );
+
   const allRequests = useMemo(() => {
     const combined = [
       ...createdRequests,
       ...leaveBasedRequests,
-      ...STATIC_REQUESTS,
+      ...ticketBasedRequests,
     ];
 
     const uniqueRequests = [];
@@ -131,7 +110,7 @@ export default function EmployeeRequests() {
     });
 
     return uniqueRequests;
-  }, [createdRequests, leaveBasedRequests]);
+  }, [createdRequests, leaveBasedRequests, ticketBasedRequests]);
 
   const requestTypes = useMemo(() => {
     return [

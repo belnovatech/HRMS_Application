@@ -33,7 +33,7 @@ export default function Employees() {
           email: emp.email || "—",
           department: emp.department || "Engineering",
           role: emp.designation || emp.role || "Employee",
-          status: typeof emp.status === "number" ? (emp.status === 0 ? "Active" : emp.status === 1 ? "On Leave" : "Inactive") : (emp.status || "Active"),
+          status: typeof emp.status === "number" ? (emp.status === 1 || emp.status === 0 ? "Active" : emp.status === 2 ? "On Leave" : "Inactive") : (emp.status || "Active"),
           joinDate: emp.createdAtUtc ? new Date(emp.createdAtUtc).toISOString().split("T")[0] : "2024-01-01"
         });
       });

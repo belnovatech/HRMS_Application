@@ -328,12 +328,12 @@ export default function EmployeeHolidays() {
             <div>
               <span>Next Holiday</span>
               <strong>
-                {upcomingHoliday?._daysUntil === 0
-                  ? "Today"
-                  : upcomingHoliday?._daysUntil === 1
-                  ? "1 day"
-                  : upcomingHoliday?._daysUntil !== null
-                  ? `${upcomingHoliday._daysUntil} days`
+                {upcomingHoliday && upcomingHoliday._daysUntil !== null && upcomingHoliday._daysUntil !== undefined
+                  ? upcomingHoliday._daysUntil === 0
+                    ? "Today"
+                    : upcomingHoliday._daysUntil === 1
+                    ? "1 day"
+                    : `${upcomingHoliday._daysUntil} days`
                   : "—"}
               </strong>
             </div>

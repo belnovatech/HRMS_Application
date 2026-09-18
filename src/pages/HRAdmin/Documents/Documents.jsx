@@ -26,15 +26,7 @@ const DOCUMENT_CATEGORIES = [
   "Other",
 ];
 
-const EMPLOYEES = [
-  { id: "All", name: "All Employees" },
-  { id: "EMP1001", name: "Rahul Kumar" },
-  { id: "EMP1002", name: "Priya Sharma" },
-  { id: "EMP1003", name: "Arjun Reddy" },
-  { id: "EMP1004", name: "Sneha Rao" },
-  { id: "EMP1005", name: "Vikram Singh" },
-  { id: "EMP1006", name: "Meena Pillai" },
-];
+
 
 function downloadDocument(documentItem) {
   downloadReportPdf(
@@ -101,7 +93,22 @@ function downloadEmployeeDocuments(employeeName, documents) {
 }
 
 export default function Documents() {
-  const { documentsList = [], verifyEmployeeDocument, addEmployeeDocument } = useAuth();
+  const { documentsList = [], teamMembers = [], verifyEmployeeDocument, addEmployeeDocument } = useAuth();
+
+  const employeeOptions = useMemo(() => {
+    const list = [{ id: "All", name: "All Employees" }];
+    teamMembers.forEach((m) => {
+      const id = m.employeeNumber || m.id;
+      const name = m.name || `${m.firstName || ""} ${m.lastName || ""}`.trim() || m.email || "Employee";
+      if (!list.some((x) => x.id === id)) {
+        list.push({ id, name });
+      }
+    });
+    if (list.length === 1) {
+      list.push({ id: "EMP001", name: "Arjun Mehta" }, { id: "EMP002", name: "Kavya Nair" });
+    }
+    return list;
+  }, [teamMembers]);
 
   const documents = useMemo(() => {
     return documentsList.map((d) => ({
@@ -127,7 +134,7 @@ export default function Documents() {
   const [showFilters, setShowFilters] = useState(false);
   const [toast, setToast] = useState("");
   const [uploadData, setUploadData] = useState({
-    employeeId: "EMP1001",
+    employeeId: "EMP001",
     category: "Identity",
     documentName: "",
     file: null,
@@ -236,7 +243,7 @@ export default function Documents() {
       return;
     }
 
-    const employee = EMPLOYEES.find(
+    const employee = employeeOptions.find(
       (item) => item.id === uploadData.employeeId
     );
 
@@ -248,18 +255,13 @@ export default function Documents() {
     });
 
     setUploadData({
-      employeeId: "EMP1001",
+      employeeId: "EMP001",
       category: "Identity",
       documentName: "",
       file: null,
     });
     setShowUpload(false);
     showToast("Document uploaded and added for verification.");
-  };
-
-  const clearSelectedEmployee = () => {
-    setEmployeeFilter("All");
-    showToast("Showing documents for all employees.");
   };
 
   return (
@@ -329,7 +331,7 @@ export default function Documents() {
               onChange={(event) => setEmployeeFilter(event.target.value)}
               aria-label="Filter by employee"
             >
-              {EMPLOYEES.map((employee) => (
+              {employeeOptions.map((employee) => (
                 <option key={employee.id} value={employee.id}>
                   {employee.name}
                 </option>
@@ -372,7 +374,7 @@ export default function Documents() {
                   value={employeeFilter}
                   onChange={(event) => setEmployeeFilter(event.target.value)}
                 >
-                  {EMPLOYEES.map((employee) => (
+                  {employeeOptions.map((employee) => (
                     <option key={employee.id} value={employee.id}>
                       {employee.name}
                     </option>
@@ -424,7 +426,7 @@ export default function Documents() {
           <div className="bel-documents-employee-context">
             <div>
               <strong>
-                {EMPLOYEES.find((item) => item.id === employeeFilter)?.name}
+                {employeeOptions.find((item) => item.id === employeeFilter)?.name}
               </strong>
               <span>
                 {filteredDocuments.length} document
@@ -436,7 +438,7 @@ export default function Documents() {
                 type="button"
                 onClick={() =>
                   downloadEmployeeDocuments(
-                    EMPLOYEES.find((item) => item.id === employeeFilter)
+                    employeeOptions.find((item) => item.id === employeeFilter)
                       ?.name || "Employee",
                     filteredDocuments
                   )
@@ -445,7 +447,7 @@ export default function Documents() {
                 <FiDownload />
                 Download Employee Documents
               </button>
-              <button type="button" onClick={clearSelectedEmployee}>
+              <button type="button" onClick={() => setEmployeeFilter("All")}>
                 <FiX />
               </button>
             </div>
@@ -678,7 +680,7 @@ export default function Documents() {
                     }))
                   }
                 >
-                  {EMPLOYEES.filter((item) => item.id !== "All").map(
+                  {employeeOptions.filter((item) => item.id !== "All").map(
                     (employee) => (
                       <option key={employee.id} value={employee.id}>
                         {employee.name} ({employee.id})

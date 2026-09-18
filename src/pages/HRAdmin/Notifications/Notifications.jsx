@@ -60,7 +60,7 @@ function getCategoryMeta(category) {
 }
 
 export default function Notifications() {
-  const { notificationsList = [], sendNotification, markAllNotificationsAsRead, markNotificationAsRead } = useAuth();
+  const { notificationsList = [], teamMembers = [], sendNotification, markAllNotificationsAsRead, markNotificationAsRead } = useAuth();
   
   const notifications = useMemo(() => {
     return notificationsList.map(n => ({
@@ -350,8 +350,11 @@ export default function Notifications() {
                 <option>All Employees</option>
                 <option>HR Administrators</option>
                 <option>All Portals</option>
-                <option>Rahul Kumar</option>
-                <option>Sneha Rao</option>
+                {teamMembers.map((m) => (
+                  <option key={m.id || m.employeeId || m.name} value={m.name}>
+                    {m.name}
+                  </option>
+                ))}
               </select>
             </label>
 
@@ -601,8 +604,11 @@ export default function Notifications() {
                     <option>All Employees</option>
                     <option>HR Administrators</option>
                     <option>All Portals</option>
-                    <option>Rahul Kumar</option>
-                    <option>Sneha Rao</option>
+                    {teamMembers.map((m) => (
+                      <option key={m.id || m.employeeId || m.name} value={m.name}>
+                        {m.name}
+                      </option>
+                    ))}
                   </select>
                 </label>
 

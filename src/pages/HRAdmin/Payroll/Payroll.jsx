@@ -14,59 +14,6 @@ import {
   FiX,
 } from "react-icons/fi";
 
-const EMPLOYEES = [
-  {
-    id: "EMP1001",
-    name: "Rahul Kumar",
-    department: "Engineering",
-    initials: "RK",
-    basic: 35000,
-    hra: 14000,
-    allowances: 8000,
-    deductions: 6500,
-  },
-  {
-    id: "EMP1002",
-    name: "Priya Sharma",
-    department: "HR",
-    initials: "PS",
-    basic: 28000,
-    hra: 11200,
-    allowances: 6000,
-    deductions: 5160,
-  },
-  {
-    id: "EMP1003",
-    name: "Arjun Reddy",
-    department: "Engineering",
-    initials: "AR",
-    basic: 55000,
-    hra: 22000,
-    allowances: 12000,
-    deductions: 12100,
-  },
-  {
-    id: "EMP1004",
-    name: "Sneha Rao",
-    department: "HR",
-    initials: "SR",
-    basic: 40000,
-    hra: 16000,
-    allowances: 9000,
-    deductions: 8000,
-  },
-  {
-    id: "EMP1005",
-    name: "Vikram Singh",
-    department: "Operations",
-    initials: "VS",
-    basic: 80000,
-    hra: 32000,
-    allowances: 18000,
-    deductions: 19400,
-  },
-];
-
 const PROCESS_STEPS = [
   "Select Month",
   "Fetch Attendance",
@@ -237,33 +184,55 @@ export default function Payroll() {
   const [processedEmployees, setProcessedEmployees] = useState({});
   const [processStep, setProcessStep] = useState(0);
   const [modal, setModal] = useState(null);
-  const [employeeList, setEmployeeList] = useState(EMPLOYEES);
+  const [employeeList, setEmployeeList] = useState([]);
 
   const fetchPayrollData = useCallback(async () => {
     try {
-      const [empRes, slipRes] = await Promise.allSettled([
+      const [empRes, accRes, slipRes] = await Promise.allSettled([
         api.get("/Employees"),
+        api.get("/Accounts"),
         api.get("/Payroll/payslips")
       ]);
 
-      if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data) && empRes.value.data.length > 0) {
-        const mapped = empRes.value.data.map((e, idx) => {
+      const list = [];
+      if (empRes.status === "fulfilled" && Array.isArray(empRes.value.data)) {
+        empRes.value.data.forEach((e, idx) => {
           const empNum = e.employeeNumber || e.id || `EMP${1001 + idx}`;
           const fullName = `${e.firstName || ""} ${e.lastName || ""}`.trim() || e.email || `Employee ${idx + 1}`;
           const initials = fullName.split(" ").map((n) => n[0]).join("").slice(0, 2);
-          return {
+          list.push({
             id: empNum,
             name: fullName,
             department: e.department || "Engineering",
             initials: initials || "EM",
-            basic: 35000 + (idx * 5000),
-            hra: 14000 + (idx * 2000),
+            basic: 40000 + (idx * 5000),
+            hra: 16000 + (idx * 2000),
             allowances: 8000 + (idx * 1000),
-            deductions: 6500 + (idx * 1000)
-          };
+            deductions: 6000 + (idx * 1000)
+          });
         });
-        setEmployeeList(mapped);
       }
+
+      if (accRes.status === "fulfilled" && Array.isArray(accRes.value.data)) {
+        accRes.value.data.forEach((a, idx) => {
+          if (!list.some(e => e.id === a.employeeNumber || e.id === a.id)) {
+            const fullName = a.name || a.username || `Employee ${idx + 1}`;
+            const initials = fullName.split(" ").map((n) => n[0]).join("").slice(0, 2);
+            list.push({
+              id: a.employeeNumber || a.id || `EMP${2001 + idx}`,
+              name: fullName,
+              department: a.department || "Staff",
+              initials: initials || "EM",
+              basic: 35000,
+              hra: 14000,
+              allowances: 6000,
+              deductions: 5000
+            });
+          }
+        });
+      }
+
+      setEmployeeList(list);
 
       if (slipRes.status === "fulfilled" && Array.isArray(slipRes.value.data) && slipRes.value.data.length > 0) {
         const processedMap = {};
@@ -320,17 +289,18 @@ export default function Payroll() {
 
   const previousMonths = useMemo(() => {
     const values = [];
+    const sampleEmp = employeeList[0] || { basic: 40000, hra: 16000, allowances: 8000, deductions: 6000 };
     for (let i = 5; i >= 0; i -= 1) {
       const date = new Date(selectedYear, selectedMonth - i, 1);
       values.push({
         label: MONTH_NAMES[date.getMonth()].slice(0, 3),
         year: date.getFullYear(),
         month: date.getMonth(),
-        value: calculateEmployee(EMPLOYEES[0], date.getFullYear(), date.getMonth()).gross,
+        value: calculateEmployee(sampleEmp, date.getFullYear(), date.getMonth()).gross,
       });
     }
     return values;
-  }, [selectedYear, selectedMonth]);
+  }, [selectedYear, selectedMonth, employeeList]);
 
   const closeModal = () => setModal(null);
 
@@ -544,7 +514,7 @@ export default function Payroll() {
           />
           <StatCard
             label="Employees Paid"
-            value={`${monthProcessedCount} / ${EMPLOYEES.length}`}
+            value={`${monthProcessedCount} / ${employeeList.length}`}
             tone="paid"
           />
         </section>

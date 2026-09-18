@@ -77,15 +77,15 @@ export default function ManagerDashboard() {
   };
 
   const goToAttendanceCorrections = () => {
-    navigate("/manager/attendance-corrections");
+    navigate("/manager/attendance");
   };
 
   const goToLeaveCalendar = () => {
-    navigate("/manager/leave-calendar");
+    navigate("/manager/leave-approvals");
   };
 
   const goToMyTeam = () => {
-    navigate("/manager/my-team");
+    navigate("/manager/team");
   };
 
   /* =========================

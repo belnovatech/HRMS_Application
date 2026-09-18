@@ -15,58 +15,6 @@ import {
 } from "react-icons/fi";
 import "./EmployeeAnnouncements.css";
 
-/*
- * Static notices shown by default.
- * Dynamic notices from HR / Manager / System are merged below
- * when AuthContext provides an announcements array.
- */
-const STATIC_ANNOUNCEMENTS = [
-  {
-    id: "static-holiday",
-    title: "September Holiday Schedule",
-    category: "HR",
-    date: "Sep 1",
-    content:
-      "Please note the upcoming holidays in September. Ganesh Chaturthi on Sep 7 is a mandatory holiday.",
-    important: false,
-    source: "HR",
-    priority: "Normal",
-  },
-  {
-    id: "static-wfh",
-    title: "New Work From Home Policy",
-    category: "Policy",
-    date: "Aug 30",
-    content:
-      "The company has updated its WFH policy. Employees can now work from home up to 3 days per week with manager approval.",
-    important: false,
-    source: "HR",
-    priority: "Normal",
-  },
-  {
-    id: "static-payroll",
-    title: "Payroll Processed — August 2026",
-    category: "Payroll",
-    date: "Aug 31",
-    content:
-      "August 2026 payroll has been processed. Salaries will be credited to your bank accounts within 2 working days.",
-    important: false,
-    source: "System",
-    priority: "Normal",
-  },
-  {
-    id: "static-maintenance",
-    title: "System Maintenance Alert",
-    category: "System",
-    date: "Aug 28",
-    content:
-      "Scheduled maintenance on Sep 5, 2026 between 2:00 AM – 4:00 AM IST. HRMS will be temporarily unavailable.",
-    important: true,
-    source: "System",
-    priority: "Urgent",
-  },
-];
-
 const normalizeAnnouncement = (item, index) => {
   const source =
     item.source ||
@@ -82,7 +30,7 @@ const normalizeAnnouncement = (item, index) => {
     id: item.id || `dynamic-${index}`,
     title: item.title || "Company Announcement",
     category: item.category || "General",
-    date: item.date || "Recent",
+    date: item.date || item.time || "Recent",
     content: item.content || item.message || "",
     important: Boolean(item.important),
     source,
@@ -143,24 +91,7 @@ export default function EmployeeAnnouncements() {
    * it is not duplicated based on title.
    */
   const allAnnouncements = useMemo(() => {
-    const dynamicItems = announcements.map(
-      normalizeAnnouncement
-    );
-
-    const dynamicTitles = new Set(
-      dynamicItems.map((item) =>
-        String(item.title).trim().toLowerCase()
-      )
-    );
-
-    const staticItems = STATIC_ANNOUNCEMENTS.filter(
-      (item) =>
-        !dynamicTitles.has(
-          String(item.title).trim().toLowerCase()
-        )
-    );
-
-    return [...dynamicItems, ...staticItems];
+    return announcements.map(normalizeAnnouncement);
   }, [announcements]);
 
   const filterOptions = useMemo(() => {

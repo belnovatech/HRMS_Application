@@ -357,7 +357,13 @@ export default function TeamReports() {
 
     if (format === "PDF") {
       const headers = ["Employee ID", "Name", "Department", "Designation", "Status"];
-      const rows = filteredMembers.map((m) => [m.id || "EMP-1001", m.name || "Arjun Mehta", m.department || "Engineering", m.designation || "Senior Engineer", m.status || "Active"]);
+      const rows = filteredMembers.map((m) => [
+        m.employeeNumber || m.id || "—",
+        m.name || `${m.firstName || ""} ${m.lastName || ""}`.trim() || "Employee",
+        m.department || "General",
+        m.designation || m.role || "Staff",
+        m.status || "Active"
+      ]);
       downloadReportPdf(report.title, selectedPeriod, headers, rows, `${report.title.toLowerCase().replace(/\s+/g, "-")}.pdf`);
       return;
     }

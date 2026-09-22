@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./Dashboard.css";
 import HRLayout from "../../layouts/HRLayout";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   FiUsers,
   FiCheckCircle,
@@ -19,75 +20,82 @@ import api from "../../api/axiosInstance";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { teamMembers = [], leaveRequests = [], holidays = [] } = useAuth();
   const [summary, setSummary] = useState(null);
 
   useEffect(() => {
+    let active = true;
     const fetchSummary = async () => {
       try {
         const res = await api.get("/dashboard/summary");
-        setSummary(res.data);
+        if (active) setSummary(res.data);
       } catch (err) {
-        setSummary({
-          total_employees: { count: 115 },
-          active_employees: { count: 98 },
-          inactive_employees: { count: 7 },
-          uninformed_leaves: { count: 4 },
-        });
+        if (active) setSummary(null);
       }
     };
     fetchSummary();
+    return () => { active = false; };
   }, []);
+
+  const totalEmployees = summary?.total_employees?.count ?? teamMembers.length;
+  const activeEmployees = summary?.active_employees?.count ?? teamMembers.filter(m => m.status !== "Inactive").length;
+  const pendingApprovalsCount = leaveRequests.filter(r => r.status === "Pending").length;
+  const approvedLeaveCount = leaveRequests.filter(r => r.status === "Approved").length;
 
   const stats = [
     {
       title: "TOTAL EMPLOYEES",
-      value: summary?.total_employees?.count ?? "115",
-      change: "+3 this month",
+      value: String(totalEmployees),
+      change: "Active in system",
       icon: <FiUsers />,
       bg: "#eaf2ff",
       color: "#2563eb",
     },
     {
       title: "ACTIVE EMPLOYEES",
-      value: summary?.active_employees?.count ?? "98",
-      change: "+5%",
+      value: String(activeEmployees),
+      change: "Currently Active",
       icon: <FiCheckCircle />,
       bg: "#eaf8ed",
       color: "#22c55e",
     },
     {
-      title: "INACTIVE / ABSENT",
-      value: summary?.inactive_employees?.count ?? "7",
-      change: "-2",
+      title: "ON LEAVE / ABSENT",
+      value: String(approvedLeaveCount),
+      change: "Approved leaves",
       icon: <FiX />,
       bg: "#fdecec",
       color: "#ef4444",
     },
     {
-      title: "UNINFORMED LEAVES",
-      value: summary?.uninformed_leaves?.count ?? "4",
-      change: "Needs action",
-      icon: <FiAlertCircle />,
-      bg: "#fff6e6",
-      color: "#f59e0b",
-    },
-    {
       title: "PENDING APPROVALS",
-      value: "14",
-      change: "+4",
+      value: String(pendingApprovalsCount),
+      change: pendingApprovalsCount > 0 ? "Needs action" : "All clear",
       icon: <FiAlertCircle />,
       bg: "#f3efff",
       color: "#8b5cf6",
     },
     {
+      title: "DEPARTMENTS",
+      value: String(new Set(teamMembers.map(m => m.department || "General")).size || 1),
+      change: "Active branches",
+      icon: <FiCalendar />,
+      bg: "#fff6e6",
+      color: "#f59e0b",
+    },
+    {
       title: "MONTHLY PAYROLL",
-      value: "₹31.2L",
-      change: "+8.2%",
+      value: `₹${((totalEmployees * 55000) / 100000).toFixed(1)}L`,
+      change: "Estimated gross",
       icon: <FiDollarSign />,
       bg: "#eaf2ff",
       color: "#2563eb",
     },
   ];
+
+  const recentLeaves = useMemo(() => {
+    return leaveRequests.slice(0, 4);
+  }, [leaveRequests]);
 
   return (
     <HRLayout title="Executive Dashboard" breadcrumb="Dashboard">
@@ -160,56 +168,35 @@ export default function Dashboard() {
           </div>
 
           <div className="widget">
-            <h3>Today's Celebrations 🎉</h3>
-            <div className="celebration-item">
-              <div className="cele-avatar green">AM</div>
-              <div>
-                <h4>Arjun Mehta</h4>
-                <p>Birthday 🎂</p>
-              </div>
-            </div>
-            <div className="celebration-item">
-              <div className="cele-avatar cyan">KN</div>
-              <div>
-                <h4>Kavya Nair</h4>
-                <p>Work Anniversary 🏆 3 years</p>
-              </div>
-            </div>
+            <h3>Holidays & Events</h3>
             <div className="holiday-section">
               <h4>Upcoming Holidays</h4>
-              <div className="holiday-item">
-                <span>Sep 15</span>
-                <span>Engineer's Day</span>
-              </div>
-              <div className="holiday-item">
-                <span>Oct 02</span>
-                <span>Gandhi Jayanti</span>
-              </div>
+              {holidays.length > 0 ? (
+                holidays.slice(0, 3).map((h, idx) => (
+                  <div className="holiday-item" key={h.id || idx}>
+                    <span>{h.date ? new Date(h.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}</span>
+                    <span>{h.name}</span>
+                  </div>
+                ))
+              ) : (
+                <div style={{ color: "#64748b", fontSize: "13px", padding: "8px 0" }}>No upcoming holidays scheduled.</div>
+              )}
             </div>
           </div>
 
           <div className="widget">
             <h3>Recent Activity</h3>
-            <div className="activity-item">
-              <strong>Employee added</strong>
-              <p>Vikram Singh joined Engineering</p>
-              <span>2h ago</span>
-            </div>
-            <div className="activity-item">
-              <strong>Leave approved</strong>
-              <p>Rahul Verma's earned leave approved</p>
-              <span>4h ago</span>
-            </div>
-            <div className="activity-item">
-              <strong>Payroll ran</strong>
-              <p>May payroll processed ₹31.2L</p>
-              <span>1d ago</span>
-            </div>
-            <div className="activity-item">
-              <strong>Attendance corrected</strong>
-              <p>Anita Roy correction for Jun 15</p>
-              <span>2d ago</span>
-            </div>
+            {recentLeaves.length > 0 ? (
+              recentLeaves.map((req, idx) => (
+                <div className="activity-item" key={req.id || idx}>
+                  <strong>Leave {req.status || "Pending"}</strong>
+                  <p>{req.employeeName || req.employee || "Employee"} applied for {req.leaveType || "Leave"}</p>
+                  <span>{req.appliedOn || "Recently"}</span>
+                </div>
+              ))
+            ) : (
+              <div style={{ color: "#64748b", fontSize: "13px", padding: "12px 0" }}>No recent activity records.</div>
+            )}
           </div>
         </div>
       </div>

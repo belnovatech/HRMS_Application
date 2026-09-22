@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./EmployeeDashboard.css";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
 import { useAuth } from "../../context/AuthContext";
@@ -12,6 +12,8 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+
+import { getOfficialHolidays } from "../../utils/holidayHelper";
 
 export default function EmployeeDashboard() {
   const navigate = useNavigate();
@@ -43,7 +45,19 @@ export default function EmployeeDashboard() {
     status: "Not checked in",
   };
 
-  const safeHolidays = holidays || [];
+  const currentYear = new Date().getFullYear();
+  const allHolidays = useMemo(() => {
+    if (holidays && holidays.length > 0) return holidays;
+    return getOfficialHolidays(currentYear);
+  }, [holidays, currentYear]);
+
+  const todayDateStr = new Date().toLocaleDateString("en-CA");
+  const safeHolidays = useMemo(() => {
+    const upcoming = allHolidays
+      .filter((h) => !h.date || h.date >= todayDateStr)
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+    return upcoming.length > 0 ? upcoming : allHolidays;
+  }, [allHolidays, todayDateStr]);
 
   const empId = user?.employeeId || user?.employeeNumber || user?.id;
   const recentAttendance = (attendanceRecords || [])
@@ -122,14 +136,14 @@ export default function EmployeeDashboard() {
               </div>
 
               <p className="hrms-profile-role">
-                {user?.designation || "Senior Software Engineer"}
+                {user?.designation || user?.role || "Team Member"}
               </p>
               <p className="hrms-profile-department">
-                {user?.department || "Engineering"} •{" "}
-                {user?.employeeId || "EMP001"}
+                {user?.department || "General"} •{" "}
+                {user?.employeeNumber || user?.employeeId || user?.id || "EMP"}
               </p>
               <p className="hrms-profile-reports">
-                Reports to: <strong>{user?.reportsTo || "Arjun Reddy"}</strong>
+                Reports to: <strong>{user?.reportsTo || user?.manager || "Management"}</strong>
               </p>
             </div>
           </div>

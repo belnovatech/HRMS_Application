@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import EmployeeLayout from "../../layouts/EmployeeLayout";
 import { useAuth } from "../../context/AuthContext";
+import { getOfficialHolidays } from "../../utils/holidayHelper";
 import {
   FiCalendar,
   FiChevronRight,
@@ -61,12 +62,26 @@ const getDaysUntil = (date) => {
 
 export default function EmployeeHolidays() {
   const { holidays = [] } = useAuth();
-
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("All");
 
+  const yearHolidays = useMemo(() => {
+    const fromContextForYear = holidays.filter((item) => {
+      const d = getHolidayDate(item.date);
+      return d && d.getFullYear() === selectedYear;
+    });
+
+    if (fromContextForYear.length > 0) {
+      return fromContextForYear;
+    }
+
+    return getOfficialHolidays(selectedYear);
+  }, [holidays, selectedYear]);
+
   const normalizedHolidays = useMemo(() => {
-    return holidays
+    return yearHolidays
       .map((item, index) => {
         const parsedDate = getHolidayDate(item.date);
 
@@ -77,7 +92,7 @@ export default function EmployeeHolidays() {
           _month: getMonthName(parsedDate),
           _monthShort: getMonthShort(parsedDate),
           _dayNumber: getDayNumber(parsedDate, item.date),
-          _year: getYear(parsedDate),
+          _year: getYear(parsedDate, selectedYear),
           _daysUntil: getDaysUntil(parsedDate),
         };
       })
@@ -87,7 +102,7 @@ export default function EmployeeHolidays() {
         if (!b._date) return -1;
         return a._date - b._date;
       });
-  }, [holidays]);
+  }, [yearHolidays, selectedYear]);
 
   const holidayTypes = useMemo(() => {
     const types = normalizedHolidays
@@ -139,14 +154,6 @@ export default function EmployeeHolidays() {
       String(item.type || "").toLowerCase() === "optional"
   ).length;
 
-  const year = useMemo(() => {
-    const firstDate = normalizedHolidays.find(
-      (item) => item._date
-    );
-
-    return firstDate?._year || new Date().getFullYear();
-  }, [normalizedHolidays]);
-
   const groupedByMonth = useMemo(() => {
     return filteredHolidays.reduce((groups, item) => {
       const key = item._date
@@ -191,13 +198,30 @@ export default function EmployeeHolidays() {
 
             <p>
               Plan ahead with the official company holiday
-              calendar and upcoming observances.
+              calendar and upcoming observances for {selectedYear}.
             </p>
           </div>
 
-          <div className="emp-holidays-year-badge">
+          <div className="emp-holidays-year-badge" style={{ padding: "4px 8px" }}>
             <FiCalendar />
-            <span>{year} Calendar</span>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              style={{
+                border: "none",
+                background: "transparent",
+                fontWeight: 700,
+                color: "#1e293b",
+                cursor: "pointer",
+                outline: "none",
+                fontSize: "13px",
+              }}
+            >
+              <option value={2025}>2025 Calendar</option>
+              <option value={2026}>2026 Calendar</option>
+              <option value={2027}>2027 Calendar</option>
+              <option value={2028}>2028 Calendar</option>
+            </select>
           </div>
         </section>
 

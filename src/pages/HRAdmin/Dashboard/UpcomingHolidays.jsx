@@ -1,20 +1,32 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./UpcomingHolidays.css";
 import { useAuth } from "../../../context/AuthContext";
+import { getOfficialHolidays } from "../../../utils/holidayHelper";
 
 export default function UpcomingHolidays() {
   const { holidays = [] } = useAuth();
+  const currentYear = new Date().getFullYear();
 
-  const formattedHolidays = holidays.map((h, idx) => {
-    const d = h.date ? new Date(h.date.includes("T") ? h.date : `${h.date}T00:00:00`) : null;
-    return {
-      id: h.id || `h-${idx}`,
-      month: d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { month: "short" }) : "Hol",
-      day: d && !Number.isNaN(d.getTime()) ? d.getDate() : "—",
-      name: h.name,
-      weekday: h.day || (d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { weekday: "long" }) : "Company Holiday")
-    };
-  });
+  const formattedHolidays = useMemo(() => {
+    const all = holidays.length > 0 ? holidays : getOfficialHolidays(currentYear);
+    const todayStr = new Date().toLocaleDateString("en-CA");
+    const upcoming = all
+      .filter((h) => !h.date || h.date >= todayStr)
+      .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")));
+
+    const list = upcoming.length > 0 ? upcoming : all;
+
+    return list.map((h, idx) => {
+      const d = h.date ? new Date(h.date.includes("T") ? h.date : `${h.date}T00:00:00`) : null;
+      return {
+        id: h.id || `h-${idx}`,
+        month: d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { month: "short" }) : "Hol",
+        day: d && !Number.isNaN(d.getTime()) ? d.getDate() : "—",
+        name: h.name,
+        weekday: h.day || (d && !Number.isNaN(d.getTime()) ? d.toLocaleDateString("en-US", { weekday: "long" }) : "Company Holiday")
+      };
+    });
+  }, [holidays, currentYear]);
 
   return (
     <div className="hradmin-dashboard-holidays-card">

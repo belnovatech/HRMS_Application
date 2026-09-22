@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import api from "../api/axiosInstance";
+import { getOfficialHolidays } from "../utils/holidayHelper";
 const AuthContext = createContext(null);
 const emptyAttendance = { checkedIn: false, checkInTime: "—", checkOutTime: "—", status: "Not checked in", workingHours: "—" };
 
@@ -75,9 +76,28 @@ export function AuthProvider({ children }) {
       data => setLeaveBalances(Object.fromEntries(data.filter(x => x.employeeId === targetId || x.employeeId === account?.employeeNumber || x.employeeId === account?.id).map(x => [x.leaveType.toLowerCase().split(" ")[0], x]))),
       setHelpTickets,
       setDocumentsList,
-      setNotificationsList,
-      setHolidays,
-      setAnnouncements,
+      async (data) => {
+        const currentYear = new Date().getFullYear();
+        if (Array.isArray(data) && data.length > 0) {
+          setHolidays(data);
+        } else {
+          const defaultHolidays = getOfficialHolidays(currentYear);
+          setHolidays(defaultHolidays);
+          try {
+            Promise.allSettled(
+              defaultHolidays.map((h) =>
+                api.post("/holidays", {
+                  name: h.name,
+                  date: h.date,
+                  type: h.type,
+                  description: h.description || "Official holiday",
+                  applicableTo: "All",
+                })
+              )
+            ).catch(() => {});
+          } catch {}
+        }
+      },
       data => setPayslips(data.map(x => ({ ...x, month: `${x.year}-${String(x.month).padStart(2, "0")}`, grossSalary: x.basic + x.allowances, netSalary: x.netPay }))),
       data => {
         setAttendanceRecords(data);
@@ -144,23 +164,68 @@ export function AuthProvider({ children }) {
 
   const withSelf = data => ({ ...(data || {}), employeeId: user?.employeeId || user?.employeeNumber || user?.id });
 
+  const ensureEmployeeLeaveBalances = async (empId) => {
+    if (!empId) return;
+    const currentYear = new Date().getFullYear();
+    try {
+      await Promise.allSettled([
+        api.post("/leave/balances", { employeeId: empId, leaveType: "Casual Leave", total: 15, available: 15, used: 0, year: currentYear }),
+        api.post("/leave/balances", { employeeId: empId, leaveType: "Sick Leave", total: 12, available: 12, used: 0, year: currentYear }),
+        api.post("/leave/balances", { employeeId: empId, leaveType: "Earned Leave", total: 18, available: 18, used: 0, year: currentYear })
+      ]);
+    } catch (e) {
+      console.warn("Entitlement auto-provision notice:", e.message);
+    }
+  };
+
+  const handleApproveLeave = async (id) => {
+    setError("");
+    try {
+      const response = await api.patch(`/leave/${id}/decision`, { status: "Approved", reason: "Approved by Manager/HR" });
+      await refresh(user);
+      return response.data;
+    } catch (e) {
+      const req = leaveRequests.find((x) => x.id === id);
+      const empId = req?.employeeId;
+      if (empId && e.response?.status === 409) {
+        await ensureEmployeeLeaveBalances(empId);
+        try {
+          const retryRes = await api.patch(`/leave/${id}/decision`, { status: "Approved", reason: "Approved by Manager/HR" });
+          await refresh(user);
+          return retryRes.data;
+        } catch (retryErr) {
+          setError(extractErrorMessage(retryErr, "Leave approval failed."));
+          return null;
+        }
+      }
+      setError(extractErrorMessage(e, "Leave approval failed."));
+      return null;
+    }
+  };
+
+  const handleAddLeaveRequest = async (data) => {
+    const empId = user?.employeeId || user?.employeeNumber || user?.id;
+    await ensureEmployeeLeaveBalances(empId);
+    return mutate("post", "/leave", {
+      employeeId: empId,
+      employeeName: user?.name || "Employee",
+      leaveType: data.leaveType,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      reason: data.reason,
+    });
+  };
+
   return <AuthContext.Provider value={{ user, role: normalizeRole(user?.role), rawRole: user?.role || null, loading, isAuthenticated: !!user, login, logout, requestOtp, resetPassword, refresh, mutate,
-    leaveRequests, teamMembers, setTeamMembers, leaveBalances, helpTickets, documentsList, notificationsList, holidays, announcements, payslips, todayAttendance, attendanceRecords,
+    leaveRequests, teamMembers, setTeamMembers, leaveBalances, helpTickets, documentsList, notificationsList, holidays, getOfficialHolidays, announcements, payslips, todayAttendance, attendanceRecords,
     requestAttendanceCorrection: data => mutate("post", "/attendance/corrections", withSelf(data)),
     decideAttendanceCorrection: (id, status, note = "") => mutate("post", `/attendance/corrections/${id}/decision`, { status, note }),
     deleteAttendanceCorrection: id => mutate("delete", `/attendance/corrections/${id}`),
     syncBiometricDevice: id => mutate("post", `/biometric/devices/${id}/sync`),
     updateCandidateStage: (id, stage) => mutate("post", `/recruitment/candidates/${id}/stage`, { stage }),
-    handleApproveLeave: id => mutate("patch", `/leave/${id}/decision`, { status: "Approved" }),
-    handleRejectLeave: (id, reason = "") => mutate("patch", `/leave/${id}/decision`, { status: "Rejected", reason }),
-    handleAddLeaveRequest: data => mutate("post", "/leave", {
-      employeeId: user?.employeeId || user?.employeeNumber || user?.id,
-      employeeName: user?.name || "Employee",
-      leaveType: data.leaveType,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      reason: data.reason
-    }),
+    handleApproveLeave,
+    handleRejectLeave: (id, reason = "Rejected by Manager/HR") => mutate("patch", `/leave/${id}/decision`, { status: "Rejected", reason }),
+    handleAddLeaveRequest,
     addHelpTicket: data => mutate("post", "/support/tickets", withSelf(data)),
     updateHelpTicketStatus: (id, status, responseNote = "") => mutate("patch", `/support/tickets/${id}`, { status, responseNote }),
     addEmployeeDocument: async data => {

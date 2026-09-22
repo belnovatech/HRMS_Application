@@ -104,23 +104,20 @@ export default function Documents() {
         list.push({ id, name });
       }
     });
-    if (list.length === 1) {
-      list.push({ id: "EMP001", name: "Arjun Mehta" }, { id: "EMP002", name: "Kavya Nair" });
-    }
     return list;
   }, [teamMembers]);
 
   const documents = useMemo(() => {
     return documentsList.map((d) => ({
       id: d.id,
-      employeeId: d.employeeId || "EMP001",
+      employeeId: d.employeeId || "",
       employee: d.employee || "Employee",
       category: d.category || "General",
       title: d.title || d.name,
-      fileName: d.fileName || `${d.title}.pdf`,
+      fileName: d.fileName || `${d.title || "document"}.pdf`,
       type: d.fileName?.split(".").pop()?.toUpperCase() || "PDF",
       size: d.size || "1.5 MB",
-      uploaded: d.uploaded || d.uploadDate || "2026-09-01",
+      uploaded: d.uploaded || d.uploadDate || new Date().toISOString().slice(0, 10),
       status: d.status || "Pending",
     }));
   }, [documentsList]);
@@ -134,7 +131,7 @@ export default function Documents() {
   const [showFilters, setShowFilters] = useState(false);
   const [toast, setToast] = useState("");
   const [uploadData, setUploadData] = useState({
-    employeeId: "EMP001",
+    employeeId: teamMembers[0]?.employeeNumber || teamMembers[0]?.id || "",
     category: "Identity",
     documentName: "",
     file: null,
@@ -255,7 +252,7 @@ export default function Documents() {
     });
 
     setUploadData({
-      employeeId: "EMP001",
+      employeeId: teamMembers[0]?.employeeNumber || teamMembers[0]?.id || "",
       category: "Identity",
       documentName: "",
       file: null,

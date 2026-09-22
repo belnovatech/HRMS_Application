@@ -10,20 +10,21 @@ import {
   FiChevronRight,
   FiUserPlus,
   FiTrendingUp,
-  FiDollarSign,
   FiGrid,
   FiBarChart2,
   FiMoreHorizontal,
+  FiDollarSign,
 } from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function Organization() {
+  const { teamMembers = [] } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("All");
   const [expandedDepartments, setExpandedDepartments] = useState({
     Engineering: true,
     HR: true,
-    Finance: true,
-    Sales: true,
+    Design: true,
   });
   const [departments, setDepartments] = useState([]);
 
@@ -32,11 +33,39 @@ export default function Organization() {
       const deptRes = await api.get("/organization/departments").catch(() => null);
       if (deptRes && Array.isArray(deptRes.data) && deptRes.data.length > 0) {
         setDepartments(deptRes.data);
+      } else if (teamMembers.length > 0) {
+        const groups = {};
+        teamMembers.forEach((m) => {
+          const dept = m.department || "Engineering";
+          if (!groups[dept]) {
+            groups[dept] = {
+              name: dept,
+              shortName: dept.slice(0, 4).toUpperCase(),
+              head: m.name,
+              role: m.designation || m.role || "Department Lead",
+              total: 0,
+              openPositions: 1,
+              budget: "₹18.5L",
+              employees: [],
+            };
+          }
+          groups[dept].total += 1;
+          groups[dept].employees.push({
+            id: m.id || m.employeeId || m.employeeNumber,
+            name: m.name,
+            role: m.designation || m.role || "Specialist",
+            email: m.email || `${(m.username || "emp").toLowerCase()}@belnova.com`,
+            status: m.status === 2 ? "On Leave" : "Active",
+            initials: (m.name || "EM").split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase(),
+            color: "#2563eb",
+          });
+        });
+        setDepartments(Object.values(groups));
       }
     } catch (err) {
       console.warn("Organization fetch notice:", err.message);
     }
-  }, []);
+  }, [teamMembers]);
 
   useEffect(() => {
     fetchOrgData();

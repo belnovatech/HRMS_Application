@@ -5,6 +5,7 @@ const api = axios.create({
     process.env.REACT_APP_API_BASE_URL ||
     process.env.REACT_APP_API_URL ||
     "https://belnova-hrms-api.onrender.com/api",
+  timeout: 5000,
   headers: { "Content-Type": "application/json" },
 });
 

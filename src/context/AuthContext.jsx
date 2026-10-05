@@ -115,7 +115,7 @@ export function AuthProvider({ children }) {
     }
   });
   const [holidays, setHolidays] = useState(() => getOfficialHolidays(new Date().getFullYear()) || HOLIDAYS_LIST);
-  const [announcements, setAnnouncements] = useState(ANNOUNCEMENTS_LIST);
+  const [announcements] = useState(ANNOUNCEMENTS_LIST);
   const [payslips, setPayslips] = useState(PAYSLIPS_LIST);
   const [todayAttendance, setTodayAttendance] = useState(() => {
     try {
